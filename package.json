@@ -11,9 +11,12 @@
       "require": "./dist/cjs/index.js"
     }
   },
-  "files": [ "dist" ],
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "rollup -c && npm link"
+    "build": "rollup -c && npm link",
+    "start": "npm run build && cd demo && npm link approval-flow && npm run dev"
   },
   "author": "Choco Leong",
   "license": "ISC",
@@ -26,7 +29,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rollup": "^3.29.4",
+    "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-dts": "^6.1.0",
+    "rollup-plugin-node-externals": "^6.1.2",
     "rollup-plugin-postcss": "^4.0.2",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3"

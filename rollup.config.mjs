@@ -6,14 +6,14 @@ import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
 import dts from "rollup-plugin-dts";
 import postcss from "rollup-plugin-postcss";
-
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import del from 'rollup-plugin-delete'
 const pkg = JSON.parse(readFileSync('./package.json'));
 
 export default [
   {
     input: "./src/index.ts",
     output: [
-
       {
         file: pkg.main,
         format: "cjs",
@@ -31,12 +31,19 @@ export default [
       typescript({ tsconfig: "./tsconfig.json", declaration: true,
       declarationDir: 'dist',}),
       postcss(),
+      nodeResolve(),
     ],
+    external: ['react', './src/demo']
   },
   {
     input: "./dist/esm/index.d.ts",
     output: [{ file: "./dist/index.d.ts", format: "esm" }],
-    plugins: [dts()],
+    plugins: [
+      dts(),
+      del({
+       targets: ['dist/esm/demo', 'dist/cjs/demo'],
+      })
+    ],
     external: [/\.(css|less|scss)$/],
   }
 ];
