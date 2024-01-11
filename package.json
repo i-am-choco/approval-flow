@@ -21,8 +21,13 @@
   "author": "Choco Leong",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/preset-env": "^7.23.8",
+    "@babel/preset-react": "^7.23.3",
+    "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.5",
     "@types/react": "^18.2.46",
     "postcss": "^8.4.33",
@@ -38,5 +43,9 @@
   },
   "engines": {
     "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.10",
+    "reactflow": "^11.10.1"
   }
 }

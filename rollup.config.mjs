@@ -12,13 +12,9 @@ const pkg = JSON.parse(readFileSync('./package.json'));
 
 export default [
   {
-    input: "./src/index.ts",
+  external: ['react',"react-dom", 'dayjs', "reactflow"],
+  input: "./src/index.ts",
     output: [
-      {
-        file: pkg.main,
-        format: "cjs",
-        sourcemap: true,
-      },
       {
         file:  pkg.module,
         format: "esm",
@@ -28,12 +24,14 @@ export default [
     plugins: [
       resolve(),
       commonjs(),
-      typescript({ tsconfig: "./tsconfig.json", declaration: true,
-      declarationDir: 'dist',}),
+      typescript({ 
+        tsconfig: "./tsconfig.json", 
+        declaration: true,
+        declarationDir: 'dist',
+      }),
       postcss(),
       nodeResolve(),
     ],
-    external: ['react', './src/demo']
   },
   {
     input: "./dist/esm/index.d.ts",
