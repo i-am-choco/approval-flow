@@ -1,1 +1,1 @@
-export * from "./approvalFlow";
+export * from "./approval-flow";
