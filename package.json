@@ -15,8 +15,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c && npm link",
-    "start": "npm run build && cd demo && npm link approval-flow && npm run dev"
+    "build": "rollup -c"
   },
   "author": "Choco Leong",
   "license": "ISC",
