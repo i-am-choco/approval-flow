@@ -57,8 +57,11 @@
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-unicorn": "^50.0.1",
     "prettier": "^3.1.1",
-    "reactflow": "^11.10.1"
+    "reactflow": "^11.10.1",
+    "dagre": "^0.8.5",
+    "@types/dagre": "^0.7.52"
   },
+  "keywords": ["flow", "aprroval-flow"],
   "homepage": "https://github.com/i-am-choco/approval-flow#readme",
   "publishConfig": {
     "registry": "https://registry.npmmirror.com/"
