@@ -10,7 +10,7 @@ const pkg = JSON.parse(readFileSync("./package.json"));
 
 export default [
   {
-    external: ["react", "react-dom", "dayjs", "reactflow"],
+    external: ["react", "react-dom", "dayjs", "reactflow", "dagre"],
     input: "./src/index.ts",
     output: [
       {
