@@ -1,0 +1,4 @@
+{
+    "extends": ["plugin:@sj-distributor/react/recommended"],
+    "ignorePatterns": ["dist"]
+  }
