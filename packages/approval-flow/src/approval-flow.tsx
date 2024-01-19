@@ -3,64 +3,90 @@ import "reactflow/dist/style.css";
 import React, { useCallback, useEffect, useState } from "react";
 import ReactFlow, { Edge, Node } from "reactflow";
 
-import { DataType } from "./approval-flow.types";
+import { BaseDataType } from "./approval-flow.types";
+import {
+  bfs,
+  buidlNode,
+  getDagreTree,
+  getRootNodes,
+} from "./approval-flow-util";
 
-interface IApprovalFlowProps {
-  data: DataType[];
+interface IApprovalFlowProps<T> {
+  data: T[];
+  roots?: T[];
+  direction: "TB" | "LR";
 }
 
-export const ApprovalFlow = (props: IApprovalFlowProps) => {
-  const { data } = props;
+export interface IBaseOptionType {
+  disabled?: boolean;
+}
+
+export const ApprovalFlow = <T extends BaseDataType>(
+  props: IApprovalFlowProps<T>,
+) => {
+  const { data, direction, roots } = props;
 
   const [nodes, setNodes] = useState<Node[]>([]);
 
   const [edges, setEdges] = useState<Edge[]>([]);
 
-  /**
-   * @param data Data to be processed
-   * @returns If data is empty, return an null.Or after processing, return a root node.
-   */
-  const getRootNode = (data: DataType[]): Node | null => {
-    return (
-      (data.length && {
-        id: "1",
-        position: { x: 0, y: 0 },
-        data: data[0],
-      }) ||
-      null
-    );
-  };
+  const transform = useCallback(
+    (data: T[], direction: "TB" | "LR", roots?: T[]) => {
+      const root: Node[] =
+        (roots && getRootNodes(roots)) ??
+        ((data.length && [buidlNode("1", 0, 0, data[0])]) || []);
 
-  const bfs = (root: Node, leaf: DataType[], tree: Node[], branch: Edge[]) => {
-    return {
-      currentNode: tree,
-      currentEdge: branch,
-    };
-  };
+      /**
+       * @description Each tree needs its own root.If root is not exist, will throw an error.
+       */
+      if (!root.length) {
+        throw new Error("Can not find root node");
+      }
 
-  const transform = useCallback((data: DataType[]) => {
-    const root = getRootNode(data);
+      const endNode = buidlNode("end", 0, 0, {
+        id: "end",
+        parentId: "",
+        label: "end",
+      });
 
-    /**
-     * @description Each tree needs its own root.If root is not exist, will throw an error.
-     */
-    if (!root) {
-      throw new Error("Can not find root node");
-    }
+      const tree: Node[] = [endNode];
 
-    const { currentNode, currentEdge } = bfs(root, data, [], []);
+      const branch: Edge[] = [];
 
-    setNodes(currentNode);
-    setEdges(currentEdge);
-  }, []);
+      root.map((root: Node) => {
+        const { currentNode, currentEdge } = bfs(root, data);
+
+        tree.push(root, ...currentNode);
+        branch.push(...currentEdge);
+      });
+
+      const [dagreNodes, dagreEdges] = getDagreTree(
+        tree,
+        branch,
+        260,
+        70,
+        direction,
+      );
+
+      setNodes(dagreNodes);
+      setEdges(dagreEdges);
+    },
+    [],
+  );
 
   useEffect(() => {
-    transform(data);
-  }, [data, transform]);
+    transform(data, direction, roots);
+  }, [data, direction, roots, transform]);
+
+  const defaultViewport = { x: 650, y: 80, zoom: 1 };
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      <ReactFlow nodes={nodes} edges={edges} />
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        defaultViewport={defaultViewport}
+      />
     </div>
   );
 };
