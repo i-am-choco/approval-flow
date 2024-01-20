@@ -1,24 +1,35 @@
 import "reactflow/dist/style.css";
 
 import React, { useCallback, useEffect, useState } from "react";
-import ReactFlow, { Edge, Node } from "reactflow";
+import ReactFlow, { Edge, Node, NodeProps } from "reactflow";
 
-import { BaseDataType, IApprovalFlowProps } from "../types/approval-flow.types";
+import { Approver } from "./components/nodes/approver";
+import { CarbonCopy } from "./components/nodes/carbon-copy";
+import { Condition } from "./components/nodes/condition";
+import { Sponsor } from "./components/nodes/sponsor";
+import { BaseDataType, IApprovalFlowProps } from "./types/index.types";
 import {
   bfs,
   buidlNode,
   getDagreTree,
   getRootNodes,
-} from "../utils/approval-flow-util";
+} from "./utils/approval-flow-util";
 
 export const ApprovalFlow = <T extends BaseDataType>(
   props: IApprovalFlowProps<T>,
 ) => {
-  const { data, direction, roots } = props;
+  const { data, direction, roots, sponsorProps } = props;
 
   const [nodes, setNodes] = useState<Node[]>([]);
 
   const [edges, setEdges] = useState<Edge[]>([]);
+
+  const nodeTypes = {
+    Sponsor: (rest: NodeProps<T>) => <Sponsor {...rest} {...sponsorProps} />,
+    Approver,
+    CarbonCopy,
+    Condition,
+  };
 
   const transform = useCallback(
     (data: T[], direction: "TB" | "LR", roots?: T[]) => {
@@ -68,5 +79,7 @@ export const ApprovalFlow = <T extends BaseDataType>(
     transform(data, direction, roots);
   }, [data, direction, roots, transform]);
 
-  return <ReactFlow nodes={nodes} edges={edges} fitView />;
+  return (
+    <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView />
+  );
 };

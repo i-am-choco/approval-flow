@@ -1,0 +1,21 @@
+.sponsor {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
+  .title {
+    padding: 8px;
+    min-width: 200px;
+    color: #fff;
+    text-align: left;
+    background: rgb(158, 170, 242);
+    border-radius: 4px 4px 0 0;
+    font-size: 16px;
+    border: 0px;
+  }
+  .content {
+    padding: 8px;
+    text-align: left;
+    color: #ccc;
+    font-size: 14px;
+  }
+}
