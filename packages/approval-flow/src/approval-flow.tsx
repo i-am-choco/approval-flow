@@ -78,15 +78,5 @@ export const ApprovalFlow = <T extends BaseDataType>(
     transform(data, direction, roots);
   }, [data, direction, roots, transform]);
 
-  const defaultViewport = { x: 650, y: 80, zoom: 1 };
-
-  return (
-    <div style={{ width: "100vw", height: "100vh" }}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        defaultViewport={defaultViewport}
-      />
-    </div>
-  );
+  return <ReactFlow nodes={nodes} edges={edges} fitView />;
 };

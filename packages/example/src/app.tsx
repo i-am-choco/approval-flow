@@ -12,7 +12,9 @@ export const App = () => {
     <div className="App">
       <button onClick={() => setState("TB")}>TB</button>
       <button onClick={() => setState("LR")}>LR</button>
-      <ApprovalFlow data={data.data} direction={state} />
+      <div style={{ width: 600, height: 600 }}>
+        <ApprovalFlow data={data.data} direction={state} />
+      </div>
     </div>
   );
 };
