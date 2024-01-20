@@ -3,23 +3,13 @@ import "reactflow/dist/style.css";
 import React, { useCallback, useEffect, useState } from "react";
 import ReactFlow, { Edge, Node } from "reactflow";
 
-import { BaseDataType } from "./approval-flow.types";
+import { BaseDataType, IApprovalFlowProps } from "../types/approval-flow.types";
 import {
   bfs,
   buidlNode,
   getDagreTree,
   getRootNodes,
-} from "./approval-flow-util";
-
-interface IApprovalFlowProps<T> {
-  data: T[];
-  roots?: T[];
-  direction: "TB" | "LR";
-}
-
-export interface IBaseOptionType {
-  disabled?: boolean;
-}
+} from "../utils/approval-flow-util";
 
 export const ApprovalFlow = <T extends BaseDataType>(
   props: IApprovalFlowProps<T>,
