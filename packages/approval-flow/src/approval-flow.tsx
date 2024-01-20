@@ -18,17 +18,29 @@ import {
 export const ApprovalFlow = <T extends BaseDataType>(
   props: IApprovalFlowProps<T>,
 ) => {
-  const { data, direction, roots, sponsorProps } = props;
+  const {
+    data,
+    direction,
+    roots,
+    sponsorProps,
+    approverProps,
+    carbonCopyProps,
+    conditionProps,
+  } = props;
 
   const [nodes, setNodes] = useState<Node[]>([]);
 
   const [edges, setEdges] = useState<Edge[]>([]);
 
-  const nodeTypes = {
+  const NodeTypes = {
     Sponsor: (rest: NodeProps<T>) => <Sponsor {...rest} {...sponsorProps} />,
-    Approver,
-    CarbonCopy,
-    Condition,
+    Approver: (rest: NodeProps<T>) => <Approver {...rest} {...approverProps} />,
+    CarbonCopy: (rest: NodeProps<T>) => (
+      <CarbonCopy {...rest} {...carbonCopyProps} />
+    ),
+    Condition: (rest: NodeProps<T>) => (
+      <Condition {...rest} {...conditionProps} />
+    ),
   };
 
   const transform = useCallback(
@@ -80,6 +92,6 @@ export const ApprovalFlow = <T extends BaseDataType>(
   }, [data, direction, roots, transform]);
 
   return (
-    <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} fitView />
+    <ReactFlow nodes={nodes} edges={edges} nodeTypes={NodeTypes} fitView />
   );
 };

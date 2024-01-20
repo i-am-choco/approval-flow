@@ -1,28 +1,18 @@
 import "./index.css";
 
 import React from "react";
-import { Handle, NodeProps, Position } from "reactflow";
+import { NodeProps } from "reactflow";
 
-import { BaseDataType, SponsorType } from "../../types/index.types";
+import { BaseDataType, CardType } from "../../types/index.types";
+import { Card } from "../card/card";
 
 export const Sponsor = <T extends BaseDataType>(
-  props: NodeProps<T> & SponsorType,
-) => {
-  const description = () => <div>{props.data?.description}</div>;
-
-  return (
-    <>
-      <div className={props.className || "sponsor"} style={props.styles}>
-        <div className="title">{props.data.title || "Sponsor"}</div>
-        <div className="content">
-          {(props.render && props.render()) || description()}
-        </div>
-      </div>
-      <Handle
-        type="source"
-        position={props.sourcePosition || Position.Bottom}
-        isConnectable={false}
-      />
-    </>
-  );
-};
+  props: NodeProps<T> & CardType,
+) => (
+  <Card
+    title="Sponsor"
+    {...props}
+    className={`${props.className} sponsor`}
+    targetPosition={undefined}
+  />
+);

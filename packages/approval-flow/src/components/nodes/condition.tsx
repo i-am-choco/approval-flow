@@ -1,4 +1,16 @@
+import "./index.css";
+
 import React from "react";
-export const Condition = () => {
-  return <div>condition</div>;
-};
+import { NodeProps } from "reactflow";
+
+import { BaseDataType, CardType } from "../../types/index.types";
+import { Card } from "../card/card";
+export const Condition = <T extends BaseDataType>(
+  props: NodeProps<T> & CardType,
+) => (
+  <Card
+    title="Condition"
+    {...props}
+    className={`${props.className} condition`}
+  />
+);
