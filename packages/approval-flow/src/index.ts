@@ -1,3 +1,4 @@
 export * from "./approval-flow";
-export * from "./approval-flow.types";
-export * from "./approval-flow-util";
+export * from "./components/card/card";
+export * from "./types/index.types";
+export * from "./utils/approval-flow-util";

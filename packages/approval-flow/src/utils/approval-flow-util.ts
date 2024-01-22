@@ -1,7 +1,7 @@
 import dagre from "dagre";
 import { Edge, Node, Position } from "reactflow";
 
-import { BaseDataType } from "./approval-flow.types";
+import { BaseDataType } from "../types/index.types";
 
 export const buidlNode = <T extends BaseDataType>(
   id: string,
@@ -12,6 +12,7 @@ export const buidlNode = <T extends BaseDataType>(
   id,
   position: { x: positionX, y: positionY },
   data,
+  type: data.type,
 });
 
 export const buidlEdge = (
