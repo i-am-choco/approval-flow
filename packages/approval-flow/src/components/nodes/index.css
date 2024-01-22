@@ -33,3 +33,9 @@
 .condition .title {
   background-color: rgb(172, 226, 155) ;
 }
+
+.end{
+  padding: 8px;
+  min-width: 200px;
+  
+}

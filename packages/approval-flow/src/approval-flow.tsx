@@ -6,6 +6,7 @@ import ReactFlow, { Edge, Node, NodeProps } from "reactflow";
 import { Approver } from "./components/nodes/approver";
 import { CarbonCopy } from "./components/nodes/carbon-copy";
 import { Condition } from "./components/nodes/condition";
+import { End } from "./components/nodes/end";
 import { Sponsor } from "./components/nodes/sponsor";
 import { BaseDataType, IApprovalFlowProps } from "./types/index.types";
 import {
@@ -32,6 +33,7 @@ export const ApprovalFlow = <T extends BaseDataType>(
 
   const [edges, setEdges] = useState<Edge[]>([]);
 
+  // discussion： 我认为其实这里可以全部都自定义，然后抛出增删改方法即可
   const NodeTypes = {
     Sponsor: (rest: NodeProps<T>) => <Sponsor {...rest} {...sponsorProps} />,
     Approver: (rest: NodeProps<T>) => <Approver {...rest} {...approverProps} />,
@@ -41,6 +43,7 @@ export const ApprovalFlow = <T extends BaseDataType>(
     Condition: (rest: NodeProps<T>) => (
       <Condition {...rest} {...conditionProps} />
     ),
+    End,
   };
 
   const transform = useCallback(
@@ -60,6 +63,7 @@ export const ApprovalFlow = <T extends BaseDataType>(
         id: "end",
         parentId: "",
         label: "end",
+        type: "End",
       });
 
       const tree: Node[] = [endNode];
