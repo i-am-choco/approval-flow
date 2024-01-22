@@ -19,10 +19,12 @@ export const buidlEdge = (
   id: string,
   source: string,
   target: string,
+  type?: string,
 ): Edge => ({
   id,
   source,
   target,
+  type,
 });
 
 export const getRootNodes = <T extends BaseDataType>(roots: T[]): Node[] => {
@@ -31,7 +33,11 @@ export const getRootNodes = <T extends BaseDataType>(roots: T[]): Node[] => {
   );
 };
 
-export const bfs = <T extends BaseDataType>(root: Node, leaf: Array<T>) => {
+export const bfs = <T extends BaseDataType>(
+  root: Node,
+  leaf: Array<T>,
+  rank: number,
+) => {
   const children = leaf.filter((item) => item.parentId === root.data.id);
 
   const tree: Node[] = [];
@@ -42,24 +48,32 @@ export const bfs = <T extends BaseDataType>(root: Node, leaf: Array<T>) => {
     branch.push(buidlEdge(`s${root.id}tend`, root.id, "end"));
   }
 
-  children.map((item, index) => {
-    const currentRoot = buidlNode(`${root.id}-${index + 1}`, 0, 0, item);
+  const rankList: number[] = children.map((item, index) => {
+    const currentRoot = buidlNode(`${root.id}-${index + 1}`, 0, rank + 1, item);
 
     const currentBranch = buidlEdge(
       `s${root.id}t${currentRoot.id}`,
       root.id,
       currentRoot.id,
+      "AddEdge",
     );
 
-    const { currentNode, currentEdge } = bfs(currentRoot, leaf);
+    const { currentNode, currentEdge, currentRank } = bfs(
+      currentRoot,
+      leaf,
+      rank + 1,
+    );
 
     tree.push(currentRoot, ...currentNode);
     branch.push(currentBranch, ...currentEdge);
+
+    return currentRank;
   });
 
   return {
     currentNode: tree,
     currentEdge: branch,
+    currentRank: Math.max(...rankList, rank),
   };
 };
 export const getDagreTree = (
@@ -74,10 +88,18 @@ export const getDagreTree = (
   const isHorizontal = rankdir === "LR";
 
   dagreGraph.setDefaultEdgeLabel(() => ({}));
-  dagreGraph.setGraph({ rankdir });
+  dagreGraph.setGraph({
+    rankdir,
+    nodesep: 100,
+    ranksep: 100,
+  });
 
   nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
+    dagreGraph.setNode(node.id, {
+      width: nodeWidth,
+      height: nodeHeight,
+      rank: node.position.y,
+    });
   });
 
   edges.forEach((edge) => {
@@ -89,11 +111,13 @@ export const getDagreTree = (
   nodes.forEach((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
 
+    const rootHeight = dagreGraph.node("1").y;
+
     node.targetPosition = isHorizontal ? Position.Left : Position.Top;
     node.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
 
     node.position.x = nodeWithPosition.x - nodeWidth / 2;
-    node.position.y = nodeWithPosition.y - nodeHeight / 2;
+    node.position.y = rootHeight + (node.position.y - 1) * (100 + nodeHeight);
 
     return node;
   });

@@ -1,0 +1,10 @@
+.add {
+    position: absolute;
+    background-color: #fff;
+    color: #ccc;
+    height: 14px;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid #ccc;
+}

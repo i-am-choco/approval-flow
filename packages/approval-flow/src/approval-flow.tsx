@@ -3,6 +3,7 @@ import "reactflow/dist/style.css";
 import React, { useCallback, useEffect, useState } from "react";
 import ReactFlow, { Edge, Node, NodeProps } from "reactflow";
 
+import { AddEdge } from "./components/edges/add-edge";
 import { Approver } from "./components/nodes/approver";
 import { CarbonCopy } from "./components/nodes/carbon-copy";
 import { Condition } from "./components/nodes/condition";
@@ -46,11 +47,15 @@ export const ApprovalFlow = <T extends BaseDataType>(
     End,
   };
 
+  const edgeTypes = {
+    AddEdge,
+  };
+
   const transform = useCallback(
     (data: T[], direction: "TB" | "LR", roots?: T[]) => {
       const root: Node[] =
         (roots && getRootNodes(roots)) ??
-        ((data.length && [buidlNode("1", 0, 0, data[0])]) || []);
+        ((data.length && [buidlNode("1", 0, 1, data[0])]) || []);
 
       /**
        * @description Each tree needs its own root.If root is not exist, will throw an error.
@@ -59,21 +64,21 @@ export const ApprovalFlow = <T extends BaseDataType>(
         throw new Error("Can not find root node");
       }
 
-      const endNode = buidlNode("end", 0, 0, {
-        id: "end",
-        parentId: "",
-        label: "end",
-        type: "End",
-      });
-
-      const tree: Node[] = [endNode];
+      const tree: Node[] = [];
 
       const branch: Edge[] = [];
 
       root.map((root: Node) => {
-        const { currentNode, currentEdge } = bfs(root, data);
+        const { currentNode, currentEdge, currentRank } = bfs(root, data, 1);
 
-        tree.push(root, ...currentNode);
+        const endNode = buidlNode("end", 0, currentRank + 1, {
+          id: "end",
+          parentId: "",
+          label: "end",
+          type: "End",
+        });
+
+        tree.push(root, ...currentNode, endNode);
         branch.push(...currentEdge);
       });
 
@@ -96,6 +101,12 @@ export const ApprovalFlow = <T extends BaseDataType>(
   }, [data, direction, roots, transform]);
 
   return (
-    <ReactFlow nodes={nodes} edges={edges} nodeTypes={NodeTypes} fitView />
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={NodeTypes}
+      edgeTypes={edgeTypes}
+      fitView
+    />
   );
 };

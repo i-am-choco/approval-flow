@@ -5,25 +5,43 @@
         "parentId": "",
         "label": "1",
         "type": "Sponsor",
-        "description": "AABBCD EFG"
+        "description": "AABBCD EFG",
+        "rank": "1"
     },
     {
         "id": "1-1",
         "parentId": "1",
         "label": "1-1",
-        "type": "Approver"
+        "type": "Approver",
+        "rank": "2"
+    },
+    {
+        "id": "1-1-1",
+        "parentId": "1-1",
+        "label": "1-1-1",
+        "type": "Approver",
+        "rank": "3"
+    },
+    {
+        "id": "1-1-2",
+        "parentId": "1-1",
+        "label": "1-1-2",
+        "type": "Approver",
+        "rank": "3"
     },
     {
         "id": "1-2",
         "parentId": "1",
         "label": "1-2",
-        "type": "Condition"
+        "type": "Condition",
+        "rank": "2"
     },
     {
         "id": "1-3",
         "parentId": "1",
         "label": "1-3",
-        "type": "CarbonCopy"
+        "type": "CarbonCopy",
+        "rank": "2"
     }
 ]
 }
