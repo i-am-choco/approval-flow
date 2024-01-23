@@ -1,9 +1,10 @@
-import { DrawerProps } from "antd";
 import { ReactNode } from "react";
 import { EdgeProps, NodeProps } from "reactflow";
 
-export interface IFunctionProps {
-  onAdd?: () => void;
+export interface IAddProps {
+  name: string;
+  parentId: string;
+  type: string;
 }
 
 export interface ICardProps {
@@ -19,18 +20,6 @@ export type CardType = {
   render?: () => ReactNode;
 };
 
-export interface IApprovalFlowProps<T> {
-  data: T[];
-  direction: "TB" | "LR";
-  nodeWidth: number;
-  nodeHeight: number;
-  roots?: T[];
-  sponsorProps?: CardType;
-  approverProps?: CardType;
-  carbonCopyProps?: CardType;
-  conditionProps?: CardType;
-}
-
 export type BaseDataType = {
   id: string;
   parentId: string;
@@ -43,13 +32,28 @@ export type BaseDataType = {
 export type AddEdgeOptionsType = {
   title?: string;
   color?: string;
-  renderForm: (open: boolean, onClose?: () => void) => ReactNode;
-  onAdd: () => void;
-  validateFields?: boolean;
+  renderForm: (
+    open: boolean,
+    onClose?: () => void,
+    onAdd?: (value: IAddProps) => void,
+  ) => ReactNode;
 };
 
 export interface IAddEdgeProps {
   edge: EdgeProps;
   cards: Array<AddEdgeOptionsType>;
-  drawerProps?: Omit<DrawerProps, "open">;
+  onAdd?: (value: IAddProps) => void;
+}
+
+export interface IApprovalFlowProps<T> {
+  data: T[];
+  direction: "TB" | "LR";
+  nodeWidth: number;
+  nodeHeight: number;
+  roots?: T[];
+  sponsorProps?: CardType;
+  approverProps?: CardType;
+  carbonCopyProps?: CardType;
+  conditionProps?: CardType;
+  onAdd?: (value: IAddProps) => void;
 }

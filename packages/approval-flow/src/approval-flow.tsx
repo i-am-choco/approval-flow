@@ -9,11 +9,7 @@ import { CarbonCopy } from "./components/nodes/carbon-copy";
 import { Condition } from "./components/nodes/condition";
 import { End } from "./components/nodes/end";
 import { Sponsor } from "./components/nodes/sponsor";
-import {
-  BaseDataType,
-  IApprovalFlowProps,
-  IFunctionProps,
-} from "./types/index.types";
+import { BaseDataType, IApprovalFlowProps } from "./types/index.types";
 import {
   bfs,
   buidlNode,
@@ -22,10 +18,15 @@ import {
 } from "./utils/approval-flow-util";
 
 export const ApprovalFlow = <T extends BaseDataType>(
-  props: IApprovalFlowProps<T> & IFunctionProps,
+  props: IApprovalFlowProps<T>,
 ) => {
-  const { sponsorProps, approverProps, carbonCopyProps, conditionProps } =
-    props;
+  const {
+    sponsorProps,
+    approverProps,
+    carbonCopyProps,
+    conditionProps,
+    onAdd,
+  } = props;
 
   const [nodes, setNodes] = useState<Node[]>([]);
 
@@ -44,22 +45,17 @@ export const ApprovalFlow = <T extends BaseDataType>(
     End,
   };
 
+  const addEdgeCards = [
+    {
+      title: "Sponor",
+      color: "#abc",
+      renderForm: () => <></>,
+    },
+  ];
+
   const edgeTypes = {
     AddEdge: (rest: EdgeProps) => (
-      <AddEdge
-        edge={rest}
-        cards={Object.keys(nodeTypes).map((item) => ({
-          title: item,
-          color: "#ccc",
-          renderForm: (open, onCLose) =>
-            open && (
-              <div style={{ pointerEvents: "all" }} onClick={onCLose}>
-                123
-              </div>
-            ),
-          onAdd: () => {},
-        }))}
-      />
+      <AddEdge edge={rest} cards={addEdgeCards} onAdd={onAdd} />
     ),
   };
 

@@ -40,7 +40,11 @@ export const AddEdge = React.forwardRef((props: IAddEdgeProps) => {
 
   return (
     <>
-      <BaseEdge id={props.edge.id} path={edgePath} />
+      <BaseEdge
+        id={props.edge.id}
+        path={edgePath}
+        markerEnd={props.edge.markerEnd}
+      />
       <EdgeLabelRenderer>
         <Popover
           content={content}
@@ -67,7 +71,7 @@ export const AddEdge = React.forwardRef((props: IAddEdgeProps) => {
             </svg>
           </div>
         </Popover>
-        {value?.renderForm(formOpen, handleClose)}
+        {value?.renderForm(formOpen, handleClose, props.onAdd)}
       </EdgeLabelRenderer>
     </>
   );

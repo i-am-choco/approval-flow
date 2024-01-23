@@ -1,5 +1,5 @@
 import dagre from "dagre";
-import { Edge, Node, Position } from "reactflow";
+import { Edge, MarkerType, Node, Position } from "reactflow";
 
 import { BaseDataType } from "../types/index.types";
 
@@ -25,6 +25,7 @@ export const buidlEdge = (
   source,
   target,
   type,
+  markerEnd: { type: MarkerType.ArrowClosed },
 });
 
 export const getRootNodes = <T extends BaseDataType>(roots: T[]): Node[] => {
