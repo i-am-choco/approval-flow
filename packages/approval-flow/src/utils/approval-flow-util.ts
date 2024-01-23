@@ -45,7 +45,7 @@ export const bfs = <T extends BaseDataType>(
   const branch: Edge[] = [];
 
   if (!children.length) {
-    branch.push(buidlEdge(`s${root.id}tend`, root.id, "end"));
+    branch.push(buidlEdge(`s${root.id}tend`, root.id, "end", "smoothstep"));
   }
 
   const rankList: number[] = children.map((item, index) => {
@@ -111,13 +111,17 @@ export const getDagreTree = (
   nodes.forEach((node) => {
     const nodeWithPosition = dagreGraph.node(node.id);
 
-    const rootHeight = dagreGraph.node("1").y;
+    const root = dagreGraph.node("1");
 
     node.targetPosition = isHorizontal ? Position.Left : Position.Top;
     node.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
 
-    node.position.x = nodeWithPosition.x - nodeWidth / 2;
-    node.position.y = rootHeight + (node.position.y - 1) * (100 + nodeHeight);
+    node.position.x = isHorizontal
+      ? root.x + (node.position.y - 1) * (100 + nodeWidth)
+      : nodeWithPosition.x - nodeWidth / 2;
+    node.position.y = isHorizontal
+      ? nodeWithPosition.y - nodeHeight / 2
+      : root.y + (node.position.y - 1) * (100 + nodeHeight);
 
     return node;
   });

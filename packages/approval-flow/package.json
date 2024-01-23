@@ -45,8 +45,11 @@
   },
   "dependencies": {
     "@sj-distributor/eslint-plugin-react": "^0.7.1",
+    "@types/dagre": "^0.7.52",
     "@typescript-eslint/eslint-plugin": "^6.18.1",
     "@typescript-eslint/parser": "^6.18.1",
+    "antd": "^5.13.2",
+    "dagre": "^0.8.5",
     "dayjs": "^1.11.10",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
@@ -57,11 +60,12 @@
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-unicorn": "^50.0.1",
     "prettier": "^3.1.1",
-    "reactflow": "^11.10.1",
-    "dagre": "^0.8.5",
-    "@types/dagre": "^0.7.52"
+    "reactflow": "^11.10.1"
   },
-  "keywords": ["flow", "aprroval-flow"],
+  "keywords": [
+    "flow",
+    "aprroval-flow"
+  ],
   "homepage": "https://github.com/i-am-choco/approval-flow#readme",
   "publishConfig": {
     "registry": "https://registry.npmmirror.com/"

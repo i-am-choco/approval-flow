@@ -14,6 +14,8 @@ export const App = () => {
       <button onClick={() => setState("LR")}>LR</button>
       <div style={{ width: "100vw", height: "100vh" }}>
         <ApprovalFlow
+          nodeHeight={70}
+          nodeWidth={260}
           data={data.data}
           direction={state}
           sponsorProps={{ render: () => <span>nod</span> }}
