@@ -41,7 +41,9 @@ export type AddEdgeOptionsType = {
 
 export interface IAddEdgeProps {
   edge: EdgeProps;
+  direction: "TB" | "LR";
   cards: Array<AddEdgeOptionsType>;
+  isCondition?: boolean;
   onAdd?: (value: IAddProps) => void;
 }
 

@@ -5,9 +5,28 @@ import React, { useState } from "react";
 import { BaseEdge, EdgeLabelRenderer, getSmoothStepPath } from "reactflow";
 
 import { AddEdgeOptionsType, IAddEdgeProps } from "../../../types/index.types";
-export const AddEdge = React.forwardRef((props: IAddEdgeProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [edgePath, labelX, labelY] = getSmoothStepPath(props.edge);
+export const AddEdge = React.memo((props: IAddEdgeProps) => {
+  const { edge, direction, cards, isCondition, onAdd } = props;
+
+  const [edgePath, labelX, labelY] = getSmoothStepPath(edge);
+
+  const isHorizontal = direction === "TB";
+
+  const translateX = isHorizontal
+    ? edge.sourceX
+    : isCondition
+      ? edge.sourceX + (labelX - edge.sourceX) / 2
+      : labelX;
+
+  const translateY = isHorizontal
+    ? isCondition
+      ? edge.sourceY + (labelY - edge.sourceY) / 2
+      : labelY
+    : edge.sourceY;
+
+  const translateConditionX = direction === "TB" ? edge.sourceX : labelX;
+
+  const translateConditionY = direction === "TB" ? labelY : edge.sourceY;
 
   const [open, setOpen] = useState<boolean>(false);
 
@@ -17,7 +36,7 @@ export const AddEdge = React.forwardRef((props: IAddEdgeProps) => {
 
   const content = (
     <div className="add-edge-content">
-      {props.cards.map((item, key) => (
+      {cards.map((item, key) => (
         <div
           key={key}
           className="add-edge-title"
@@ -40,11 +59,7 @@ export const AddEdge = React.forwardRef((props: IAddEdgeProps) => {
 
   return (
     <>
-      <BaseEdge
-        id={props.edge.id}
-        path={edgePath}
-        markerEnd={props.edge.markerEnd}
-      />
+      <BaseEdge id={edge.id} path={edgePath} markerEnd={edge.markerEnd} />
       <EdgeLabelRenderer>
         <Popover
           content={content}
@@ -53,9 +68,9 @@ export const AddEdge = React.forwardRef((props: IAddEdgeProps) => {
           placement="right"
         >
           <div
-            className="add"
+            className="add-edge"
             style={{
-              transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+              transform: `translate(-50%, -50%) translate(${translateX}px,${translateY}px)`,
             }}
           >
             <svg
@@ -71,7 +86,21 @@ export const AddEdge = React.forwardRef((props: IAddEdgeProps) => {
             </svg>
           </div>
         </Popover>
-        {value?.renderForm(formOpen, handleClose, props.onAdd)}
+        {isCondition && (
+          <div
+            className={
+              isHorizontal
+                ? "condition-edge-horizon"
+                : "condition-edge-vertical"
+            }
+            style={{
+              transform: `translate(-50%, -50%) translate(${translateConditionX}px,${translateConditionY}px)`,
+            }}
+          >
+            Add Condition
+          </div>
+        )}
+        {value?.renderForm(formOpen, handleClose, onAdd)}
       </EdgeLabelRenderer>
     </>
   );

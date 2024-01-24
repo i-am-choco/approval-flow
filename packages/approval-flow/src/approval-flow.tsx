@@ -25,6 +25,7 @@ export const ApprovalFlow = <T extends BaseDataType>(
     approverProps,
     carbonCopyProps,
     conditionProps,
+    direction,
     onAdd,
   } = props;
 
@@ -55,7 +56,21 @@ export const ApprovalFlow = <T extends BaseDataType>(
 
   const edgeTypes = {
     AddEdge: (rest: EdgeProps) => (
-      <AddEdge edge={rest} cards={addEdgeCards} onAdd={onAdd} />
+      <AddEdge
+        edge={rest}
+        direction={direction}
+        cards={addEdgeCards}
+        onAdd={onAdd}
+      />
+    ),
+    ConditionEdge: (rest: EdgeProps) => (
+      <AddEdge
+        edge={rest}
+        direction={direction}
+        cards={addEdgeCards}
+        isCondition={true}
+        onAdd={onAdd}
+      />
     ),
   };
 

@@ -56,7 +56,7 @@ export const bfs = <T extends BaseDataType>(
       `s${root.id}t${currentRoot.id}`,
       root.id,
       currentRoot.id,
-      "AddEdge",
+      currentRoot.data.type === "Condition" ? "ConditionEdge" : "AddEdge",
     );
 
     const { currentNode, currentEdge, currentRank } = bfs(
