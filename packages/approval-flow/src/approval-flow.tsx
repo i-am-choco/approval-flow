@@ -26,6 +26,7 @@ export const ApprovalFlow = <T extends BaseDataType>(
     carbonCopyProps,
     conditionProps,
     direction,
+    addEdgeCards,
     onAdd,
   } = props;
 
@@ -45,14 +46,6 @@ export const ApprovalFlow = <T extends BaseDataType>(
     ),
     End,
   };
-
-  const addEdgeCards = [
-    {
-      title: "Sponor",
-      color: "#abc",
-      renderForm: () => <></>,
-    },
-  ];
 
   const edgeTypes = {
     AddEdge: (rest: EdgeProps) => (

@@ -32,7 +32,15 @@ export type BaseDataType = {
 export type AddEdgeOptionsType = {
   title?: string;
   color?: string;
+  /** todo: 先切入业务测试再决定下述参数调整 */
   renderForm: (
+    edge: EdgeProps,
+    open: boolean,
+    onClose?: () => void,
+    onAdd?: (value: IAddProps) => void,
+  ) => ReactNode;
+  renderConditionForm: (
+    edge: EdgeProps,
     open: boolean,
     onClose?: () => void,
     onAdd?: (value: IAddProps) => void,
@@ -52,6 +60,7 @@ export interface IApprovalFlowProps<T> {
   direction: "TB" | "LR";
   nodeWidth: number;
   nodeHeight: number;
+  addEdgeCards: Array<AddEdgeOptionsType>;
   roots?: T[];
   sponsorProps?: CardType;
   approverProps?: CardType;

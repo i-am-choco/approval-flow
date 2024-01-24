@@ -18,6 +18,7 @@ export const App = () => {
           nodeWidth={260}
           data={data.data}
           direction={state}
+          addEdgeCards={[]}
           sponsorProps={{ render: () => <span>nod</span> }}
         />
       </div>

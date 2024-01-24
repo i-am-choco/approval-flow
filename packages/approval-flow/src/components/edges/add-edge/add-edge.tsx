@@ -32,6 +32,8 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
 
   const [formOpen, setFormOpen] = useState<boolean>(false);
 
+  const [conditionFormOpen, setConditionFormOpen] = useState<boolean>(false);
+
   const [value, setValue] = useState<AddEdgeOptionsType | undefined>();
 
   const content = (
@@ -54,7 +56,8 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
   );
 
   const handleClose = () => {
-    setFormOpen(false);
+    formOpen && setFormOpen(false);
+    conditionFormOpen && setConditionFormOpen(false);
   };
 
   return (
@@ -96,11 +99,18 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
             style={{
               transform: `translate(-50%, -50%) translate(${translateConditionX}px,${translateConditionY}px)`,
             }}
+            onClick={() => setConditionFormOpen(true)}
           >
             Add Condition
           </div>
         )}
-        {value?.renderForm(formOpen, handleClose, onAdd)}
+        {value?.renderForm(edge, formOpen, handleClose, onAdd)}
+        {value?.renderConditionForm(
+          edge,
+          conditionFormOpen,
+          handleClose,
+          onAdd,
+        )}
       </EdgeLabelRenderer>
     </>
   );
