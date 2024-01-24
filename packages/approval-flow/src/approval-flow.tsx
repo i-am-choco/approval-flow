@@ -1,8 +1,9 @@
 import "reactflow/dist/style.css";
 
 import React, { useCallback, useEffect, useState } from "react";
-import ReactFlow, { Edge, Node, NodeProps } from "reactflow";
+import ReactFlow, { Edge, EdgeProps, Node, NodeProps } from "reactflow";
 
+import { AddEdge } from "./components/edges";
 import { Approver } from "./components/nodes/approver";
 import { CarbonCopy } from "./components/nodes/carbon-copy";
 import { Condition } from "./components/nodes/condition";
@@ -20,13 +21,13 @@ export const ApprovalFlow = <T extends BaseDataType>(
   props: IApprovalFlowProps<T>,
 ) => {
   const {
-    data,
-    direction,
-    roots,
     sponsorProps,
     approverProps,
     carbonCopyProps,
     conditionProps,
+    direction,
+    addEdgeCards,
+    onAdd,
   } = props;
 
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -34,7 +35,7 @@ export const ApprovalFlow = <T extends BaseDataType>(
   const [edges, setEdges] = useState<Edge[]>([]);
 
   // discussion： 我认为其实这里可以全部都自定义，然后抛出增删改方法即可
-  const NodeTypes = {
+  const nodeTypes = {
     Sponsor: (rest: NodeProps<T>) => <Sponsor {...rest} {...sponsorProps} />,
     Approver: (rest: NodeProps<T>) => <Approver {...rest} {...approverProps} />,
     CarbonCopy: (rest: NodeProps<T>) => (
@@ -46,11 +47,39 @@ export const ApprovalFlow = <T extends BaseDataType>(
     End,
   };
 
+  const edgeTypes = {
+    AddEdge: (rest: EdgeProps) => (
+      <AddEdge
+        edge={rest}
+        direction={direction}
+        cards={addEdgeCards}
+        onAdd={onAdd}
+      />
+    ),
+    ConditionEdge: (rest: EdgeProps) => (
+      <AddEdge
+        edge={rest}
+        direction={direction}
+        cards={addEdgeCards}
+        isCondition={true}
+        onAdd={onAdd}
+      />
+    ),
+  };
+
   const transform = useCallback(
-    (data: T[], direction: "TB" | "LR", roots?: T[]) => {
+    (params: {
+      data: T[];
+      direction: "TB" | "LR";
+      nodeWidth: number;
+      nodeHeight: number;
+      roots?: T[];
+    }) => {
+      const { data, direction, nodeWidth, nodeHeight, roots } = params;
+
       const root: Node[] =
         (roots && getRootNodes(roots)) ??
-        ((data.length && [buidlNode("1", 0, 0, data[0])]) || []);
+        ((data.length && [buidlNode("1", 0, 1, data[0])]) || []);
 
       /**
        * @description Each tree needs its own root.If root is not exist, will throw an error.
@@ -59,29 +88,29 @@ export const ApprovalFlow = <T extends BaseDataType>(
         throw new Error("Can not find root node");
       }
 
-      const endNode = buidlNode("end", 0, 0, {
-        id: "end",
-        parentId: "",
-        label: "end",
-        type: "End",
-      });
-
-      const tree: Node[] = [endNode];
+      const tree: Node[] = [];
 
       const branch: Edge[] = [];
 
       root.map((root: Node) => {
-        const { currentNode, currentEdge } = bfs(root, data);
+        const { currentNode, currentEdge, currentRank } = bfs(root, data, 1);
 
-        tree.push(root, ...currentNode);
+        const endNode = buidlNode("end", 0, currentRank + 1, {
+          id: "end",
+          parentId: "",
+          label: "end",
+          type: "End",
+        });
+
+        tree.push(root, ...currentNode, endNode);
         branch.push(...currentEdge);
       });
 
       const [dagreNodes, dagreEdges] = getDagreTree(
         tree,
         branch,
-        260,
-        70,
+        nodeWidth,
+        nodeHeight,
         direction,
       );
 
@@ -92,10 +121,16 @@ export const ApprovalFlow = <T extends BaseDataType>(
   );
 
   useEffect(() => {
-    transform(data, direction, roots);
-  }, [data, direction, roots, transform]);
+    transform(props);
+  }, [props, transform]);
 
   return (
-    <ReactFlow nodes={nodes} edges={edges} nodeTypes={NodeTypes} fitView />
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
+      fitView
+    />
   );
 };
