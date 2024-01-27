@@ -6,7 +6,7 @@ import { BaseEdge, EdgeLabelRenderer, getSmoothStepPath } from "reactflow";
 
 import { AddEdgeOptionsType, IAddEdgeProps } from "../../../types/index.types";
 export const AddEdge = React.memo((props: IAddEdgeProps) => {
-  const { edge, direction, cards, isCondition, onAdd } = props;
+  const { edge, direction, cards, isCondition } = props;
 
   const [edgePath, labelX, labelY] = getSmoothStepPath(edge);
 
@@ -52,6 +52,9 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
           {item.title}
         </div>
       ))}
+      <div className="add-edge-close" onClick={() => setOpen(false)}>
+        x
+      </div>
     </div>
   );
 
@@ -104,13 +107,10 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
             Add Condition
           </div>
         )}
-        {value?.renderForm(edge, formOpen, handleClose, onAdd)}
-        {value?.renderConditionForm(
-          edge,
-          conditionFormOpen,
-          handleClose,
-          onAdd,
-        )}
+        {value?.renderForm &&
+          value.renderForm(value.type, edge, formOpen, handleClose)}
+        {value?.renderConditionForm &&
+          value.renderConditionForm(edge, conditionFormOpen, handleClose)}
       </EdgeLabelRenderer>
     </>
   );

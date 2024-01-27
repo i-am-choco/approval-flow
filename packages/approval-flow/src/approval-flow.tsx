@@ -27,7 +27,6 @@ export const ApprovalFlow = <T extends BaseDataType>(
     conditionProps,
     direction,
     addEdgeCards,
-    onAdd,
   } = props;
 
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -36,9 +35,13 @@ export const ApprovalFlow = <T extends BaseDataType>(
 
   // discussion： 我认为其实这里可以全部都自定义，然后抛出增删改方法即可
   const nodeTypes = {
-    Sponsor: (rest: NodeProps<T>) => <Sponsor {...rest} {...sponsorProps} />,
-    Approver: (rest: NodeProps<T>) => <Approver {...rest} {...approverProps} />,
-    CarbonCopy: (rest: NodeProps<T>) => (
+    InitiatorNode: (rest: NodeProps<T>) => (
+      <Sponsor {...rest} {...sponsorProps} />
+    ),
+    ApproverNode: (rest: NodeProps<T>) => (
+      <Approver {...rest} {...approverProps} />
+    ),
+    CcRecipientNode: (rest: NodeProps<T>) => (
       <CarbonCopy {...rest} {...carbonCopyProps} />
     ),
     Condition: (rest: NodeProps<T>) => (
@@ -49,12 +52,7 @@ export const ApprovalFlow = <T extends BaseDataType>(
 
   const edgeTypes = {
     AddEdge: (rest: EdgeProps) => (
-      <AddEdge
-        edge={rest}
-        direction={direction}
-        cards={addEdgeCards}
-        onAdd={onAdd}
-      />
+      <AddEdge edge={rest} direction={direction} cards={addEdgeCards} />
     ),
     ConditionEdge: (rest: EdgeProps) => (
       <AddEdge
@@ -62,7 +60,6 @@ export const ApprovalFlow = <T extends BaseDataType>(
         direction={direction}
         cards={addEdgeCards}
         isCondition={true}
-        onAdd={onAdd}
       />
     ),
   };
