@@ -27,3 +27,9 @@ export const getFlowsDetail = async (id: string): Promise<types.DetailType> => {
 
   return transform(response.data.data);
 };
+
+export const saveApi = async (id: string, params: any) => {
+  const response = await api.post(`/api/flows/${id}/nodes`, params);
+
+  return response.data.message;
+};
