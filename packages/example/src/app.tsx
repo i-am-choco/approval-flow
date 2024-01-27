@@ -1,27 +1,20 @@
 import "./app.css";
 
-import { ApprovalFlow } from "approval-flow";
-import React, { useState } from "react";
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import data from "./data.json";
+import { Demo } from "./demo/demo";
+import { Flow } from "./demo/flow";
 
 export const App = () => {
-  const [state, setState] = useState<"TB" | "LR">("TB");
-
   return (
     <div className="App">
-      <button onClick={() => setState("TB")}>TB</button>
-      <button onClick={() => setState("LR")}>LR</button>
-      <div style={{ width: "100vw", height: "100vh" }}>
-        <ApprovalFlow
-          nodeHeight={70}
-          nodeWidth={260}
-          data={data.data}
-          direction={state}
-          addEdgeCards={[]}
-          sponsorProps={{ render: () => <span>nod</span> }}
-        />
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Demo />} />
+          <Route path="/flow/:id" element={<Flow />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 };

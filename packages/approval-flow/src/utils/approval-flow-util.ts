@@ -20,11 +20,13 @@ export const buidlEdge = (
   source: string,
   target: string,
   type?: string,
+  data?: { source: Node; target?: Node },
 ): Edge => ({
   id,
   source,
   target,
   type,
+  data,
   markerEnd: { type: MarkerType.ArrowClosed },
 });
 
@@ -46,7 +48,11 @@ export const bfs = <T extends BaseDataType>(
   const branch: Edge[] = [];
 
   if (!children.length) {
-    branch.push(buidlEdge(`s${root.id}tend`, root.id, "end", "smoothstep"));
+    branch.push(
+      buidlEdge(`s${root.id}tend`, root.id, "end", "smoothstep", {
+        source: root,
+      }),
+    );
   }
 
   const rankList: number[] = children.map((item, index) => {
@@ -57,6 +63,10 @@ export const bfs = <T extends BaseDataType>(
       root.id,
       currentRoot.id,
       currentRoot.data.type === "Condition" ? "ConditionEdge" : "AddEdge",
+      {
+        source: root,
+        target: currentRoot,
+      },
     );
 
     const { currentNode, currentEdge, currentRank } = bfs(

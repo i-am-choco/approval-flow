@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { EdgeProps, NodeProps } from "reactflow";
+import { EdgeProps, Node, NodeProps } from "reactflow";
 
 export interface IAddProps {
   name: string;
@@ -29,21 +29,25 @@ export type BaseDataType = {
   render?: <T extends BaseDataType>(props: NodeProps<T>) => ReactNode;
 };
 
+export type EdgeDataType = {
+  source?: Node;
+  target?: Node;
+};
+
 export type AddEdgeOptionsType = {
+  type: string;
   title?: string;
   color?: string;
-  /** todo: 先切入业务测试再决定下述参数调整 */
-  renderForm: (
-    edge: EdgeProps,
+  renderForm?: (
+    type: string,
+    edge: EdgeProps<EdgeDataType>,
     open: boolean,
     onClose?: () => void,
-    onAdd?: (value: IAddProps) => void,
   ) => ReactNode;
-  renderConditionForm: (
-    edge: EdgeProps,
+  renderConditionForm?: (
+    edge: EdgeProps<EdgeDataType>,
     open: boolean,
     onClose?: () => void,
-    onAdd?: (value: IAddProps) => void,
   ) => ReactNode;
 };
 

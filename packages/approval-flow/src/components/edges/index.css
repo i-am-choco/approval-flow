@@ -42,10 +42,18 @@
 .add-edge-content {
   display: flex;
   flex-direction: row;
+  position: relative;
 }
 .add-edge-title {
   font-size: 14px;
   border-radius: 4px;
   padding: 2px 8px;
   margin-right: 8px;
+}
+
+.add-edge-close{
+  position: absolute;
+  cursor: pointer;
+  top: -12px;
+  right: -4px;
 }
