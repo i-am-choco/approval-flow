@@ -3,12 +3,12 @@ import "./index.css";
 import React from "react";
 import { Handle, NodeProps } from "reactflow";
 
-import { BaseDataType, ICardProps } from "../../types/index.types";
+import { BaseDataType, CardType } from "../../types/index.types";
 
 export const Card = React.memo(
-  <T extends BaseDataType>(props: ICardProps & NodeProps<T>) => (
+  <T extends BaseDataType>(props: CardType & NodeProps<T>) => (
     <>
-      <div className={`${props.className ?? ""} card`} style={props.styles}>
+      <div className={`card ${props.className ?? ""}`} style={props.styles}>
         <div className="title">{props.data.title || props.title}</div>
         <div className="content">
           {(props.render && props.render()) || props.data?.description}

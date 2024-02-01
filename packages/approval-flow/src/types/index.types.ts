@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { EdgeProps, Node, NodeProps } from "reactflow";
+import { EdgeProps, Node, NodeProps, NodeTypes } from "reactflow";
 
 export interface IAddProps {
   name: string;
@@ -7,14 +7,8 @@ export interface IAddProps {
   type: string;
 }
 
-export interface ICardProps {
-  title: string;
-  className?: string;
-  styles?: React.CSSProperties;
-  render?: () => ReactNode;
-}
-
 export type CardType = {
+  title: string;
   className?: string;
   styles?: React.CSSProperties;
   render?: () => ReactNode;
@@ -64,11 +58,10 @@ export interface IApprovalFlowProps<T> {
   direction: "TB" | "LR";
   nodeWidth: number;
   nodeHeight: number;
+  nodeTypes: NodeTypes;
   addEdgeCards: Array<AddEdgeOptionsType>;
   roots?: T[];
-  sponsorProps?: CardType;
-  approverProps?: CardType;
-  carbonCopyProps?: CardType;
-  conditionProps?: CardType;
   onAdd?: (value: IAddProps) => void;
 }
+
+export { NodeProps };

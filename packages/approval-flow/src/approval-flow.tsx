@@ -1,14 +1,10 @@
 import "reactflow/dist/style.css";
 
 import React, { useCallback, useEffect, useState } from "react";
-import ReactFlow, { Edge, EdgeProps, Node, NodeProps } from "reactflow";
+import ReactFlow, { Edge, EdgeProps, Node } from "reactflow";
 
 import { AddEdge } from "./components/edges";
-import { Approver } from "./components/nodes/approver";
-import { CarbonCopy } from "./components/nodes/carbon-copy";
-import { Condition } from "./components/nodes/condition";
 import { End } from "./components/nodes/end";
-import { Sponsor } from "./components/nodes/sponsor";
 import { BaseDataType, IApprovalFlowProps } from "./types/index.types";
 import {
   bfs,
@@ -20,35 +16,11 @@ import {
 export const ApprovalFlow = <T extends BaseDataType>(
   props: IApprovalFlowProps<T>,
 ) => {
-  const {
-    sponsorProps,
-    approverProps,
-    carbonCopyProps,
-    conditionProps,
-    direction,
-    addEdgeCards,
-  } = props;
+  const { direction, addEdgeCards, nodeTypes } = props;
 
   const [nodes, setNodes] = useState<Node[]>([]);
 
   const [edges, setEdges] = useState<Edge[]>([]);
-
-  // discussion： 我认为其实这里可以全部都自定义，然后抛出增删改方法即可
-  const nodeTypes = {
-    InitiatorNode: (rest: NodeProps<T>) => (
-      <Sponsor {...rest} {...sponsorProps} />
-    ),
-    ApproverNode: (rest: NodeProps<T>) => (
-      <Approver {...rest} {...approverProps} />
-    ),
-    CcRecipientNode: (rest: NodeProps<T>) => (
-      <CarbonCopy {...rest} {...carbonCopyProps} />
-    ),
-    Condition: (rest: NodeProps<T>) => (
-      <Condition {...rest} {...conditionProps} />
-    ),
-    End,
-  };
 
   const edgeTypes = {
     AddEdge: (rest: EdgeProps) => (
@@ -125,7 +97,7 @@ export const ApprovalFlow = <T extends BaseDataType>(
     <ReactFlow
       nodes={nodes}
       edges={edges}
-      nodeTypes={nodeTypes}
+      nodeTypes={{ ...nodeTypes, End }}
       edgeTypes={edgeTypes}
       fitView
     />

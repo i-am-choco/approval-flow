@@ -1,41 +1,9 @@
-.content {
-  padding: 8px;
-  text-align: left;
-  color: #ccc;
-  font-size: 14px;
-}
-.title {
-  padding: 8px;
-  min-width: 200px;
-  color: #fff;
-  text-align: left;
-  border-radius: 4px 4px 0 0;
-  font-size: 16px;
-  border: 0px;
-}
 .card {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-.sponsor .title {
-  background-color: rgb(158, 170, 242);
-}
-
-.approver .title {
-  background-color: rgb(254, 188, 110);
-}
-
-.carbonCopy .title {
-  background-color: rgb(248, 145, 138);
-}
-
-.condition .title {
-  background-color: rgb(172, 226, 155) ;
-}
-
-.end{
+.end {
   padding: 8px;
   min-width: 200px;
-  
 }
