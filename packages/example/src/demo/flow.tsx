@@ -1,6 +1,11 @@
 /* eslint-disable camelcase */
 import { Button, Layout, Modal } from "antd";
-import { AddEdgeOptionsType, ApprovalFlow } from "approval-flow";
+import {
+  AddEdgeOptionsType,
+  ApprovalFlow,
+  Card,
+  NodeProps,
+} from "approval-flow";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -50,6 +55,15 @@ export const Flow = () => {
     id && getDetail();
   }, [getDetail, id]);
 
+  const nodeTypes = {
+    InitiatorNode: (rest: NodeProps) => (
+      <Card {...rest} targetPosition={undefined} title="发起人" />
+    ),
+    ApproverNode: (rest: NodeProps) => <Card {...rest} title="审批人" />,
+    CcRecipientNode: (rest: NodeProps) => <Card {...rest} title="抄送人" />,
+    Condition: (rest: NodeProps) => <Card {...rest} title="条件" />,
+  };
+
   const addEdgeCards: AddEdgeOptionsType[] = [
     {
       type: "ApproverNode",
@@ -90,7 +104,7 @@ export const Flow = () => {
             data={nodes}
             direction={direction}
             addEdgeCards={addEdgeCards}
-            sponsorProps={{ render: () => <span>nod</span> }}
+            nodeTypes={nodeTypes}
           />
         )}
       </Content>

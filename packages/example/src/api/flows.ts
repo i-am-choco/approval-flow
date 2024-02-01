@@ -23,8 +23,6 @@ const transform = (value: types.DetailResponseType): types.DetailType => ({
 export const getFlowsDetail = async (id: string): Promise<types.DetailType> => {
   const response = await api.get(`/api/flows/${id}`);
 
-  console.log(response);
-
   return transform(response.data.data);
 };
 
