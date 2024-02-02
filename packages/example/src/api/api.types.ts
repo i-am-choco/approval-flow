@@ -10,7 +10,7 @@ export type NodesResponseType = {
   handler: null;
   expression_init: null;
   setting: null;
-  sort_number: 1;
+  sort_number: number;
 };
 
 export type DetailResponseType = {
@@ -38,7 +38,7 @@ export type NodesType = {
   handler: null;
   expressionInit: null;
   setting: null;
-  sort_number: 1;
+  sortNumber: number;
 };
 
 export type DetailType = {

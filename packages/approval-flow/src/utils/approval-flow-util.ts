@@ -13,6 +13,7 @@ export const buidlNode = <T extends BaseDataType>(
   position: { x: positionX, y: positionY },
   data,
   type: data.type,
+  draggable: true,
 });
 
 export const buidlEdge = (
@@ -41,7 +42,9 @@ export const bfs = <T extends BaseDataType>(
   leaf: Array<T>,
   rank: number,
 ) => {
-  const children = leaf.filter((item) => item.parentId === root.data.id);
+  const children = leaf
+    .filter((item) => item.parentId === root.data.id)
+    ?.sort((a, b) => (a?.sortNumber || 0) - (b?.sortNumber || 0));
 
   const tree: Node[] = [];
 

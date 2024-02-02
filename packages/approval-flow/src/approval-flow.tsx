@@ -1,7 +1,15 @@
 import "reactflow/dist/style.css";
 
 import React, { useCallback, useEffect, useState } from "react";
-import ReactFlow, { Edge, EdgeProps, Node } from "reactflow";
+import ReactFlow, {
+  Edge,
+  EdgeProps,
+  Node,
+  NodeChange,
+  NodePositionChange,
+  NodeTypes,
+  useNodesState,
+} from "reactflow";
 
 import { AddEdge } from "./components/edges";
 import { End } from "./components/nodes/end";
@@ -16,11 +24,13 @@ import {
 export const ApprovalFlow = <T extends BaseDataType>(
   props: IApprovalFlowProps<T>,
 ) => {
-  const { direction, addEdgeCards, nodeTypes } = props;
+  const { direction, addEdgeCards, nodeTypes, onSort } = props;
 
-  const [nodes, setNodes] = useState<Node[]>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<T>([]);
 
   const [edges, setEdges] = useState<Edge[]>([]);
+
+  const [types] = useState<NodeTypes>({ ...nodeTypes, End });
 
   const edgeTypes = {
     AddEdge: (rest: EdgeProps) => (
@@ -86,19 +96,67 @@ export const ApprovalFlow = <T extends BaseDataType>(
       setNodes(dagreNodes);
       setEdges(dagreEdges);
     },
-    [],
+    [setNodes],
   );
 
   useEffect(() => {
     transform(props);
   }, [props, transform]);
 
+  const handlePositionChange = (changes: NodeChange[]) => {
+    const result = changes.map((item) => {
+      const data = item as NodePositionChange;
+
+      const currentNode = nodes.find((value) => value.id === data.id);
+
+      if (!currentNode || data.type !== "position") return item;
+
+      const isHorizontal = direction === "TB";
+
+      currentNode.position = isHorizontal
+        ? {
+            x: data.position?.x ?? currentNode?.position.x,
+            y: currentNode?.position.y,
+          }
+        : {
+            x: currentNode?.position.x,
+            y: data.position?.y ?? currentNode?.position.y,
+          };
+
+      return currentNode;
+    });
+
+    onNodesChange(result as NodeChange[]);
+  };
+
+  const handleDragStop = (
+    e: React.MouseEvent<Element, MouseEvent>,
+    node: Node<T>,
+  ) => {
+    const result: Record<string, number> = {};
+
+    nodes
+      .filter((item) => item.data.parentId === node.data.parentId)
+      .sort((a, b) =>
+        direction === "TB"
+          ? a.position.x - b.position.x
+          : a.position.y - b.position.y,
+      )
+      .map((item, index) => {
+        result[item.data.id] = index + 1;
+      });
+
+    onSort && onSort(result);
+  };
+
   return (
     <ReactFlow
       nodes={nodes}
       edges={edges}
-      nodeTypes={{ ...nodeTypes, End }}
+      nodeTypes={types}
       edgeTypes={edgeTypes}
+      onNodesChange={handlePositionChange}
+      onNodeDragStop={handleDragStop}
       fitView
     />
   );
