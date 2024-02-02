@@ -20,6 +20,7 @@ export type BaseDataType = {
   type?: string;
   title?: string;
   description?: string;
+  sortNumber?: number;
   render?: <T extends BaseDataType>(props: NodeProps<T>) => ReactNode;
 };
 
@@ -62,6 +63,7 @@ export interface IApprovalFlowProps<T> {
   addEdgeCards: Array<AddEdgeOptionsType>;
   roots?: T[];
   onAdd?: (value: IAddProps) => void;
+  onSort?: (value: Record<string, number>) => void;
 }
 
 export { NodeProps };

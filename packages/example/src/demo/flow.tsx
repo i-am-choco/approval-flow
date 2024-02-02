@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { NodesType } from "../api/api.types";
-import { getFlowsDetail, saveApi } from "../api/flows";
+import { getFlowsDetail, saveApi, sortApi } from "../api/flows";
 const { Header, Content } = Layout;
 
 export const Flow = () => {
@@ -84,6 +84,13 @@ export const Flow = () => {
     },
   ];
 
+  const handleSort = async (value: Record<string, number>) => {
+    if (!id) return;
+    await sortApi(id, value);
+
+    await getDetail();
+  };
+
   return (
     <Layout>
       <Header
@@ -105,6 +112,7 @@ export const Flow = () => {
             direction={direction}
             addEdgeCards={addEdgeCards}
             nodeTypes={nodeTypes}
+            onSort={handleSort}
           />
         )}
       </Content>

@@ -17,6 +17,7 @@ const transform = (value: types.DetailResponseType): types.DetailType => ({
     ...item,
     parentId: item.parent_id,
     expressionInit: item.expression_init,
+    sortNumber: item.sort_number,
   })),
 });
 
@@ -30,4 +31,8 @@ export const saveApi = async (id: string, params: any) => {
   const response = await api.post(`/api/flows/${id}/nodes`, params);
 
   return response.data.message;
+};
+
+export const sortApi = async (id: string, nodes: Record<string, number>) => {
+  return await api.put(`/api/flows/${id}/nodes/sorted`, { nodes });
 };
