@@ -14,6 +14,7 @@ export const buidlNode = <T extends BaseDataType>(
   data,
   type: data.type,
   draggable: true,
+  zIndex: 100,
 });
 
 export const buidlEdge = (
@@ -52,7 +53,7 @@ export const bfs = <T extends BaseDataType>(
 
   if (!children.length) {
     branch.push(
-      buidlEdge(`s${root.id}tend`, root.id, "end", "smoothstep", {
+      buidlEdge(`s${root.id}tend`, root.id, "end", "EndEdge", {
         source: root,
       }),
     );
@@ -132,9 +133,9 @@ export const getDagreTree = (
 
     node.position.x = isHorizontal
       ? root.x + (node.position.y - 1) * (100 + nodeWidth)
-      : nodeWithPosition.x - nodeWidth / 2;
+      : (node.id === "end" ? root.x : nodeWithPosition.x) - nodeWidth / 2;
     node.position.y = isHorizontal
-      ? nodeWithPosition.y - nodeHeight / 2
+      ? (node.id === "end" ? root.y : nodeWithPosition.y) - nodeHeight / 2
       : root.y + (node.position.y - 1) * (100 + nodeHeight);
 
     return node;
