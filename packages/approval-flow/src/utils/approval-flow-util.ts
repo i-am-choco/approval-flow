@@ -14,6 +14,7 @@ export const buidlNode = <T extends BaseDataType>(
   data,
   type: data.type,
   draggable: true,
+  zIndex: 100,
 });
 
 export const buidlEdge = (
@@ -52,7 +53,7 @@ export const bfs = <T extends BaseDataType>(
 
   if (!children.length) {
     branch.push(
-      buidlEdge(`s${root.id}tend`, root.id, "end", "smoothstep", {
+      buidlEdge(`s${root.id}tend`, root.id, "end", "EndEdge", {
         source: root,
       }),
     );

@@ -12,6 +12,7 @@ import ReactFlow, {
 } from "reactflow";
 
 import { AddEdge } from "./components/edges";
+import { EndEdge } from "./components/edges/end-edge/end-edge";
 import { End } from "./components/nodes/end";
 import { BaseDataType, IApprovalFlowProps } from "./types/index.types";
 import {
@@ -44,6 +45,7 @@ export const ApprovalFlow = <T extends BaseDataType>(
         isCondition={true}
       />
     ),
+    EndEdge,
   };
 
   const transform = useCallback(
