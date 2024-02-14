@@ -13,6 +13,7 @@ export const buidlNode = <T extends BaseDataType>(
   position: { x: positionX, y: positionY },
   data,
   type: data.type,
+  // todo: 此处应该带上是否为默认条件
   draggable: data.type === "Condition",
   zIndex: 100,
 });

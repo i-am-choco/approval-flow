@@ -183,7 +183,13 @@ export const ApprovalFlow = <T extends BaseDataType>(
         result[item.data.id] = index + 1;
       });
 
-    onSort && onSort(result);
+    const flag = nodes.some(
+      (value) =>
+        !!result[value.data.id] &&
+        value.data.sortNumber !== result[value.data.id],
+    );
+
+    flag && onSort && onSort(result);
   };
 
   return (
