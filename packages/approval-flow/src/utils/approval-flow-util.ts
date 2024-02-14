@@ -13,7 +13,7 @@ export const buidlNode = <T extends BaseDataType>(
   position: { x: positionX, y: positionY },
   data,
   type: data.type,
-  draggable: true,
+  draggable: data.type === "Condition",
   zIndex: 100,
 });
 

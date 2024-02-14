@@ -7,10 +7,12 @@ import ReactFlow, {
   Node,
   NodeChange,
   NodePositionChange,
+  NodeProps,
   NodeTypes,
   useNodesState,
 } from "reactflow";
 
+import { Card } from "./components/card/card";
 import { AddEdge } from "./components/edges";
 import { EndEdge } from "./components/edges/end-edge/end-edge";
 import { End } from "./components/nodes/end";
@@ -25,13 +27,46 @@ import {
 export const ApprovalFlow = <T extends BaseDataType>(
   props: IApprovalFlowProps<T>,
 ) => {
-  const { direction, addEdgeCards, nodeTypes, onSort } = props;
+  const { direction, addEdgeCards, onSort } = props;
 
   const [nodes, setNodes, onNodesChange] = useNodesState<T>([]);
 
   const [edges, setEdges] = useState<Edge[]>([]);
 
-  const [types] = useState<NodeTypes>({ ...nodeTypes, End });
+  const nodeTypes = {
+    InitiatorNode: (rest: NodeProps) => (
+      <Card
+        {...rest}
+        targetPosition={undefined}
+        titleStyles={{ background: "rgb(158, 170, 242)" }}
+        title="发起人"
+      />
+    ),
+    ApproverNode: (rest: NodeProps) => (
+      <Card
+        {...rest}
+        titleStyles={{ background: "rgb(254, 188, 110)" }}
+        title="审批人"
+      />
+    ),
+    CcRecipientNode: (rest: NodeProps) => (
+      <Card
+        {...rest}
+        titleStyles={{ background: "rgb(248, 145, 138)" }}
+        title="抄送人"
+      />
+    ),
+    Condition: (rest: NodeProps) => (
+      <Card
+        {...rest}
+        titleStyles={{ background: "rgb(172, 226, 155)" }}
+        title="条件"
+      />
+    ),
+    End,
+  };
+
+  const [types] = useState<NodeTypes>(nodeTypes);
 
   const edgeTypes = {
     AddEdge: (rest: EdgeProps) => (

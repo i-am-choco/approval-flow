@@ -4,6 +4,7 @@
   color: #ccc;
   font-size: 14px;
   background: #fff;
+  border-radius: 0 0 4px 4px;
 }
 .title {
   padding: 8px;

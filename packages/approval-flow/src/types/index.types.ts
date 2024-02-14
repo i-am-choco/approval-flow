@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { EdgeProps, Node, NodeProps, NodeTypes } from "reactflow";
+import { EdgeProps, Node, NodeProps } from "reactflow";
 
 export interface IAddProps {
   name: string;
@@ -11,6 +11,7 @@ export type CardType = {
   title: string;
   className?: string;
   styles?: React.CSSProperties;
+  titleStyles?: React.CSSProperties;
   render?: () => ReactNode;
 };
 
@@ -30,7 +31,12 @@ export type EdgeDataType = {
 };
 
 export type AddEdgeOptionsType = {
-  type: string;
+  type:
+    | "InitiatorNode"
+    | "ApproverNode"
+    | "CcRecipientNode"
+    | "Condition"
+    | string;
   title?: string;
   color?: string;
   renderForm?: (
@@ -59,7 +65,6 @@ export interface IApprovalFlowProps<T> {
   direction: "TB" | "LR";
   nodeWidth: number;
   nodeHeight: number;
-  nodeTypes: NodeTypes;
   addEdgeCards: Array<AddEdgeOptionsType>;
   roots?: T[];
   onAdd?: (value: IAddProps) => void;
