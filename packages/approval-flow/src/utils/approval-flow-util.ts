@@ -12,7 +12,7 @@ export const buidlNode = <T extends BaseDataType>(
 ): Node => ({
   id,
   position: { x: positionX, y: positionY },
-  data,
+  data: { ...data, draggable },
   type: data.type,
   draggable,
   zIndex: 100,
@@ -144,8 +144,6 @@ export const getDagreTree = (
     node.position.y = isHorizontal
       ? (node.id === "end" ? root.y : nodeWithPosition.y) - nodeHeight / 2
       : root.y + (node.position.y - 1) * (100 + nodeHeight);
-
-    return node;
   });
 
   return [nodes, edges];

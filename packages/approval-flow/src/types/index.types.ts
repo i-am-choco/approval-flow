@@ -9,9 +9,12 @@ export interface IAddProps {
 
 export type CardType = {
   title: string;
+  displayDelete?: boolean;
+  displayCopy?: boolean;
   className?: string;
   styles?: React.CSSProperties;
   titleStyles?: React.CSSProperties;
+  onDelete?: (nodeId: string) => void;
   render?: () => ReactNode;
 };
 
@@ -19,9 +22,10 @@ export type BaseDataType = {
   id: string;
   parentId: string;
   type?: string;
-  title?: string;
+  name?: string;
   description?: string;
   sortNumber?: number;
+  draggable?: boolean;
   render?: <T extends BaseDataType>(props: NodeProps<T>) => ReactNode;
 };
 
@@ -74,6 +78,7 @@ export interface IApprovalFlowProps<T> {
   addEdgeProps: IApprovalAddEdgeProps;
   roots?: T[];
   onSort?: (value: Record<string, number>) => void;
+  onDelete?: (nodeId: string) => void;
 }
 
 export { NodeProps };
