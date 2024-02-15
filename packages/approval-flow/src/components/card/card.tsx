@@ -9,7 +9,9 @@ export const Card = React.memo(
   <T extends BaseDataType>(props: CardType & NodeProps<T>) => (
     <>
       <div className={`card ${props.className ?? ""}`} style={props.styles}>
-        <div className="title">{props.data.title || props.title}</div>
+        <div className="title" style={props.titleStyles}>
+          {props.data.title || props.title}
+        </div>
         <div className="content">
           {(props.render && props.render()) || props.data?.description}
         </div>

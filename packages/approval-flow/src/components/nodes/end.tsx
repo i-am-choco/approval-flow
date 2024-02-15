@@ -11,6 +11,6 @@ export const End = (props: NodeProps) => (
         isConnectable={false}
       />
     )}
-    End
+    结束
   </div>
 );

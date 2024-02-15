@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { EdgeProps, Node, NodeProps, NodeTypes } from "reactflow";
+import { EdgeProps, Node, NodeProps } from "reactflow";
 
 export interface IAddProps {
   name: string;
@@ -11,6 +11,7 @@ export type CardType = {
   title: string;
   className?: string;
   styles?: React.CSSProperties;
+  titleStyles?: React.CSSProperties;
   render?: () => ReactNode;
 };
 
@@ -30,11 +31,24 @@ export type EdgeDataType = {
 };
 
 export type AddEdgeOptionsType = {
-  type: string;
+  type: "ApproverNode" | "CcRecipientNode" | "Condition";
   title?: string;
   color?: string;
   renderForm?: (
-    type: string,
+    edge: EdgeProps<EdgeDataType>,
+    open: boolean,
+    onClose?: () => void,
+  ) => ReactNode;
+};
+
+export interface IApprovalAddEdgeProps {
+  onAdd?: (value: IAddProps) => void;
+  renderApproverForm?: (
+    edge: EdgeProps<EdgeDataType>,
+    open: boolean,
+    onClose?: () => void,
+  ) => ReactNode;
+  renderCcRecipientForm?: (
     edge: EdgeProps<EdgeDataType>,
     open: boolean,
     onClose?: () => void,
@@ -44,14 +58,12 @@ export type AddEdgeOptionsType = {
     open: boolean,
     onClose?: () => void,
   ) => ReactNode;
-};
+}
 
-export interface IAddEdgeProps {
+export interface IAddEdgeProps extends IApprovalAddEdgeProps {
   edge: EdgeProps;
   direction: "TB" | "LR";
-  cards: Array<AddEdgeOptionsType>;
   isCondition?: boolean;
-  onAdd?: (value: IAddProps) => void;
 }
 
 export interface IApprovalFlowProps<T> {
@@ -59,10 +71,8 @@ export interface IApprovalFlowProps<T> {
   direction: "TB" | "LR";
   nodeWidth: number;
   nodeHeight: number;
-  nodeTypes: NodeTypes;
-  addEdgeCards: Array<AddEdgeOptionsType>;
+  addEdgeProps: IApprovalAddEdgeProps;
   roots?: T[];
-  onAdd?: (value: IAddProps) => void;
   onSort?: (value: Record<string, number>) => void;
 }
 

@@ -1,11 +1,6 @@
 /* eslint-disable camelcase */
 import { Button, Layout, Modal } from "antd";
-import {
-  AddEdgeOptionsType,
-  ApprovalFlow,
-  Card,
-  NodeProps,
-} from "approval-flow";
+import { ApprovalFlow } from "approval-flow";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -39,9 +34,44 @@ export const Flow = () => {
       handler: null,
       expression_init: null,
       setting: {
-        approver_type: 2,
-        superior_level: 1,
-        approval_type: 1,
+        priority: 1,
+        query: {
+          combinator: "and",
+          rules: [
+            {
+              field: "units",
+              operator: "in",
+              value: "{% mock 'guid' %},{% mock 'guid' %}",
+            },
+            {
+              field: "groups",
+              operator: "in",
+              value: "{% mock 'guid' %},{% mock 'guid' %}",
+            },
+          ],
+        },
+      },
+      created_by: new Date().toLocaleDateString(),
+    });
+
+    if (response === "success") {
+      getDetail();
+    }
+  };
+
+  const handleCondition = async (parentId: string) => {
+    if (!id) return;
+    const response = await saveApi(id, {
+      parent_id: parentId,
+      name: "条件1",
+      description: "其他条件进入此流程",
+      icon: null,
+      type: "ConditionNode",
+      handler: null,
+      expression_init: null,
+      setting: {
+        priority: 2,
+        query: {},
       },
       created_by: new Date().toLocaleDateString(),
     });
@@ -54,35 +84,6 @@ export const Flow = () => {
   useEffect(() => {
     id && getDetail();
   }, [getDetail, id]);
-
-  const nodeTypes = {
-    InitiatorNode: (rest: NodeProps) => (
-      <Card {...rest} targetPosition={undefined} title="发起人" />
-    ),
-    ApproverNode: (rest: NodeProps) => <Card {...rest} title="审批人" />,
-    CcRecipientNode: (rest: NodeProps) => <Card {...rest} title="抄送人" />,
-    Condition: (rest: NodeProps) => <Card {...rest} title="条件" />,
-  };
-
-  const addEdgeCards: AddEdgeOptionsType[] = [
-    {
-      type: "ApproverNode",
-      title: "审批人",
-      renderForm: (type, edge, open, onClose) => {
-        return (
-          <Modal
-            open={open}
-            onCancel={() => {
-              onClose && onClose();
-            }}
-            onOk={() => {
-              edge.data?.source && handlAdd(type, edge.data.source.data.id);
-            }}
-          />
-        );
-      },
-    },
-  ];
 
   const handleSort = async (value: Record<string, number>) => {
     if (!id) return;
@@ -110,8 +111,50 @@ export const Flow = () => {
             nodeWidth={260}
             data={nodes}
             direction={direction}
-            addEdgeCards={addEdgeCards}
-            nodeTypes={nodeTypes}
+            addEdgeProps={{
+              renderApproverForm: (edge, open, onClose) => {
+                return (
+                  <Modal
+                    open={open}
+                    onCancel={() => {
+                      onClose && onClose();
+                    }}
+                    onOk={() => {
+                      edge.data?.source &&
+                        handlAdd("ApproverNode", edge.data.source.data.id);
+                    }}
+                  />
+                );
+              },
+              renderCcRecipientForm: (edge, open, onClose) => {
+                return (
+                  <Modal
+                    open={open}
+                    onCancel={() => {
+                      onClose && onClose();
+                    }}
+                    onOk={() => {
+                      edge.data?.source &&
+                        handlAdd("ApproverNode", edge.data.source.data.id);
+                    }}
+                  />
+                );
+              },
+              renderConditionForm: (edge, open, onClose) => {
+                return (
+                  <Modal
+                    open={open}
+                    onCancel={() => {
+                      onClose && onClose();
+                    }}
+                    onOk={() => {
+                      edge.data?.source &&
+                        handleCondition(edge.data.source.data.id);
+                    }}
+                  />
+                );
+              },
+            }}
             onSort={handleSort}
           />
         )}

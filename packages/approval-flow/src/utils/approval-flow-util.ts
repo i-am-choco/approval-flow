@@ -8,12 +8,13 @@ export const buidlNode = <T extends BaseDataType>(
   positionX: number,
   positionY: number,
   data: T,
+  draggable: boolean,
 ): Node => ({
   id,
   position: { x: positionX, y: positionY },
   data,
   type: data.type,
-  draggable: true,
+  draggable,
   zIndex: 100,
 });
 
@@ -34,7 +35,7 @@ export const buidlEdge = (
 
 export const getRootNodes = <T extends BaseDataType>(roots: T[]): Node[] => {
   return roots.map((item, index) =>
-    buidlNode((index + 1).toString(), 0, 0, item),
+    buidlNode((index + 1).toString(), 0, 0, item, false),
   );
 };
 
@@ -60,13 +61,19 @@ export const bfs = <T extends BaseDataType>(
   }
 
   const rankList: number[] = children.map((item, index) => {
-    const currentRoot = buidlNode(`${root.id}-${index + 1}`, 0, rank + 1, item);
+    const currentRoot = buidlNode(
+      `${root.id}-${index + 1}`,
+      0,
+      rank + 1,
+      item,
+      item.type === "ConditionNode" && index !== children.length - 1,
+    );
 
     const currentBranch = buidlEdge(
       `s${root.id}t${currentRoot.id}`,
       root.id,
       currentRoot.id,
-      currentRoot.data.type === "Condition" ? "ConditionEdge" : "AddEdge",
+      currentRoot.data.type === "ConditionNode" ? "ConditionEdge" : "AddEdge",
       {
         source: root,
         target: currentRoot,
