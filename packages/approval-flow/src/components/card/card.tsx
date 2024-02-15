@@ -14,6 +14,10 @@ export const Card = React.memo(
       props.onDelete && props.onDelete(props.data.id);
     };
 
+    const handleCopy = () => {
+      props.onCopy && props.onCopy(props.data.id);
+    };
+
     return (
       <>
         <div
@@ -22,13 +26,15 @@ export const Card = React.memo(
           onMouseOver={() => setHidden(false)}
           onMouseLeave={() => setHidden(true)}
         >
-          <div className="title" style={props.titleStyles}>
+          <div className="title " style={props.titleStyles}>
             {props.data.name || props.title}
             <div
-              className="button"
+              className="button nodrag"
               style={{ display: hidden ? "none" : "flex" }}
             >
-              {props.displayCopy && <CopyOutlined style={{ marginRight: 4 }} />}
+              {props.displayCopy && (
+                <CopyOutlined style={{ marginRight: 4 }} onClick={handleCopy} />
+              )}
               {props.displayDelete && <CloseOutlined onClick={handleDelete} />}
             </div>
           </div>

@@ -60,37 +60,42 @@ export const bfs = <T extends BaseDataType>(
     );
   }
 
-  const rankList: number[] = children.map((item, index) => {
-    const currentRoot = buidlNode(
-      `${root.id}-${index + 1}`,
-      0,
-      rank + 1,
-      item,
-      item.type === "ConditionNode" && index !== children.length - 1,
-    );
+  const rankList: number[] = children
+    .sort(
+      (a, b) =>
+        (a?.sortNumber && b?.sortNumber && a.sortNumber - b?.sortNumber) || 0,
+    )
+    .map((item, index) => {
+      const currentRoot = buidlNode(
+        `${root.id}-${index + 1}`,
+        0,
+        rank + 1,
+        item,
+        item.type === "ConditionNode" && index !== children.length - 1,
+      );
 
-    const currentBranch = buidlEdge(
-      `s${root.id}t${currentRoot.id}`,
-      root.id,
-      currentRoot.id,
-      currentRoot.data.type === "ConditionNode" ? "ConditionEdge" : "AddEdge",
-      {
-        source: root,
-        target: currentRoot,
-      },
-    );
+      const currentBranch = buidlEdge(
+        `s${root.id}t${currentRoot.id}`,
+        root.id,
+        currentRoot.id,
+        currentRoot.data.type === "ConditionNode" ? "ConditionEdge" : "AddEdge",
+        {
+          source: root,
+          target: currentRoot,
+        },
+      );
 
-    const { currentNode, currentEdge, currentRank } = bfs(
-      currentRoot,
-      leaf,
-      rank + 1,
-    );
+      const { currentNode, currentEdge, currentRank } = bfs(
+        currentRoot,
+        leaf,
+        rank + 1,
+      );
 
-    tree.push(currentRoot, ...currentNode);
-    branch.push(currentBranch, ...currentEdge);
+      tree.push(currentRoot, ...currentNode);
+      branch.push(currentBranch, ...currentEdge);
 
-    return currentRank;
-  });
+      return currentRank;
+    });
 
   return {
     currentNode: tree,
