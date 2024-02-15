@@ -1,12 +1,13 @@
 import "../index.css";
 
+import { CloseOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Popover } from "antd";
 import React, { useState } from "react";
 import { BaseEdge, EdgeLabelRenderer, getSmoothStepPath } from "reactflow";
 
 import { AddEdgeOptionsType, IAddEdgeProps } from "../../../types/index.types";
 export const AddEdge = React.memo((props: IAddEdgeProps) => {
-  const { edge, direction, cards, isCondition } = props;
+  const { edge, direction, isCondition } = props;
 
   const [edgePath, labelX, labelY] = getSmoothStepPath(edge);
 
@@ -32,20 +33,39 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
 
   const [formOpen, setFormOpen] = useState<boolean>(false);
 
-  const [conditionFormOpen, setConditionFormOpen] = useState<boolean>(false);
-
   const [value, setValue] = useState<AddEdgeOptionsType | undefined>();
+
+  const nodeTypes: AddEdgeOptionsType[] = [
+    {
+      type: "Condition",
+      title: "条件",
+      color: "rgb(172, 226, 155)",
+      renderForm: props.renderConditionForm,
+    },
+    {
+      type: "ApproverNode",
+      title: "审批人",
+      color: "rgb(254, 188, 110)",
+      renderForm: props.renderApproverForm,
+    },
+    {
+      type: "CcRecipientNode",
+      title: "抄送人",
+      color: "rgb(248, 145, 138)",
+      renderForm: props.renderConditionForm,
+    },
+  ];
 
   const content = (
     <div className="add-edge-content">
-      {cards.map((item, key) => (
+      {nodeTypes.map((item, key) => (
         <div
           key={key}
           className="add-edge-title"
           style={{ background: item.color || "#ccc" }}
           onClick={() => {
             setOpen(false);
-            setFormOpen(true);
+            item.renderForm && setFormOpen(true);
             setValue(item);
           }}
         >
@@ -53,14 +73,13 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
         </div>
       ))}
       <div className="add-edge-close" onClick={() => setOpen(false)}>
-        x
+        <CloseOutlined style={{ fontSize: 8 }} />
       </div>
     </div>
   );
 
   const handleClose = () => {
     formOpen && setFormOpen(false);
-    conditionFormOpen && setConditionFormOpen(false);
   };
 
   return (
@@ -79,17 +98,10 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
               transform: `translate(-50%, -50%) translate(${translateX}px,${translateY}px)`,
             }}
           >
-            <svg
-              viewBox="0 0 1024 1024"
-              width="14px"
-              height="14px"
+            <PlusCircleOutlined
               onClick={() => setOpen(true)}
-            >
-              <path
-                d="M128 512a42.666667 42.666667 0 0 1 42.666667-42.666667h289.194666V180.138667a42.666667 42.666667 0 1 1 85.333334 0V469.333333h289.194666a42.666667 42.666667 0 0 1 0 85.333334h-289.194666v289.194666a42.666667 42.666667 0 1 1-85.333334 0V554.666667H170.666667a42.666667 42.666667 0 0 1-42.666667-42.666667z"
-                fill="#ccc"
-              />
-            </svg>
+              style={{ background: "#fff", borderRadius: "50%" }}
+            />
           </div>
         </Popover>
         {isCondition && (
@@ -102,15 +114,12 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
             style={{
               transform: `translate(-50%, -50%) translate(${translateConditionX}px,${translateConditionY}px)`,
             }}
-            onClick={() => setConditionFormOpen(true)}
+            onClick={() => setValue(nodeTypes[0])}
           >
-            Add Condition
+            添加条件
           </div>
         )}
-        {value?.renderForm &&
-          value.renderForm(value.type, edge, formOpen, handleClose)}
-        {value?.renderConditionForm &&
-          value.renderConditionForm(edge, conditionFormOpen, handleClose)}
+        {value?.renderForm && value.renderForm(edge, formOpen, handleClose)}
       </EdgeLabelRenderer>
     </>
   );

@@ -27,7 +27,7 @@ import {
 export const ApprovalFlow = <T extends BaseDataType>(
   props: IApprovalFlowProps<T>,
 ) => {
-  const { direction, addEdgeCards, onSort } = props;
+  const { direction, addEdgeProps, onSort } = props;
 
   const [nodes, setNodes, onNodesChange] = useNodesState<T>([]);
 
@@ -70,14 +70,14 @@ export const ApprovalFlow = <T extends BaseDataType>(
 
   const edgeTypes = {
     AddEdge: (rest: EdgeProps) => (
-      <AddEdge edge={rest} direction={direction} cards={addEdgeCards} />
+      <AddEdge edge={rest} direction={direction} {...addEdgeProps} />
     ),
     ConditionEdge: (rest: EdgeProps) => (
       <AddEdge
         edge={rest}
         direction={direction}
-        cards={addEdgeCards}
         isCondition={true}
+        {...addEdgeProps}
       />
     ),
     EndEdge,
@@ -95,7 +95,7 @@ export const ApprovalFlow = <T extends BaseDataType>(
 
       const root: Node[] =
         (roots && getRootNodes(roots)) ??
-        ((data.length && [buidlNode("1", 0, 1, data[0])]) || []);
+        ((data.length && [buidlNode("1", 0, 1, data[0], false)]) || []);
 
       /**
        * @description Each tree needs its own root.If root is not exist, will throw an error.
@@ -111,12 +111,18 @@ export const ApprovalFlow = <T extends BaseDataType>(
       root.map((root: Node) => {
         const { currentNode, currentEdge, currentRank } = bfs(root, data, 1);
 
-        const endNode = buidlNode("end", 0, currentRank + 1, {
-          id: "end",
-          parentId: "",
-          label: "end",
-          type: "End",
-        });
+        const endNode = buidlNode(
+          "end",
+          0,
+          currentRank + 1,
+          {
+            id: "end",
+            parentId: "",
+            label: "end",
+            type: "End",
+          },
+          false,
+        );
 
         tree.push(root, ...currentNode, endNode);
         branch.push(...currentEdge);

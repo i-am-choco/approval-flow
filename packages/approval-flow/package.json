@@ -44,6 +44,7 @@
     "node": ">=16.0.0"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.0",
     "@sj-distributor/eslint-plugin-react": "^0.7.1",
     "@types/dagre": "^0.7.52",
     "@typescript-eslint/eslint-plugin": "^6.18.1",

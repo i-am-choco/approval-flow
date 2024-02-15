@@ -1,12 +1,8 @@
 .add-edge {
   position: absolute;
-  background-color: #fff;
   color: #ccc;
-  height: 14px;
-  border-radius: 50%;
   font-size: 14px;
   font-weight: 600;
-  border: 1px solid #ccc;
   pointer-events: all;
   z-index: 100;
 }
@@ -49,6 +45,7 @@
   border-radius: 4px;
   padding: 2px 8px;
   margin-right: 8px;
+  color: #fff;
 }
 
 .add-edge-close{
