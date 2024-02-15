@@ -40,3 +40,7 @@ export const sortApi = async (id: string, nodes: Record<string, number>) => {
 export const deleteApi = async (flowId: string, nodeId: string) => {
   return await api.delete(`/api/flows/${flowId}/nodes/${nodeId}`);
 };
+
+export const copyApi = async (flowId: string, nodeId: string) => {
+  return await api.post(`/api/flows/${flowId}/nodes/${nodeId}/copy`);
+};
