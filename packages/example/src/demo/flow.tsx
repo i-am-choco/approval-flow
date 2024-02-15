@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { NodesType } from "../api/api.types";
-import { getFlowsDetail, saveApi, sortApi } from "../api/flows";
+import { deleteApi, getFlowsDetail, saveApi, sortApi } from "../api/flows";
 const { Header, Content } = Layout;
 
 export const Flow = () => {
@@ -92,6 +92,14 @@ export const Flow = () => {
     await getDetail();
   };
 
+  const handleDelete = async (nodeId: string) => {
+    if (!id) return;
+
+    await deleteApi(id, nodeId);
+
+    await getDetail();
+  };
+
   return (
     <Layout>
       <Header
@@ -156,6 +164,7 @@ export const Flow = () => {
               },
             }}
             onSort={handleSort}
+            onDelete={handleDelete}
           />
         )}
       </Content>

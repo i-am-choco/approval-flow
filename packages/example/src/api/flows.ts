@@ -36,3 +36,7 @@ export const saveApi = async (id: string, params: any) => {
 export const sortApi = async (id: string, nodes: Record<string, number>) => {
   return await api.put(`/api/flows/${id}/nodes/sorted`, { nodes });
 };
+
+export const deleteApi = async (flowId: string, nodeId: string) => {
+  return await api.delete(`/api/flows/${flowId}/nodes/${nodeId}`);
+};

@@ -27,7 +27,7 @@ import {
 export const ApprovalFlow = <T extends BaseDataType>(
   props: IApprovalFlowProps<T>,
 ) => {
-  const { direction, addEdgeProps, onSort } = props;
+  const { direction, addEdgeProps, onSort, onDelete } = props;
 
   const [nodes, setNodes, onNodesChange] = useNodesState<T>([]);
 
@@ -47,6 +47,8 @@ export const ApprovalFlow = <T extends BaseDataType>(
         {...rest}
         titleStyles={{ background: "rgb(254, 188, 110)" }}
         title="审批人"
+        displayDelete={true}
+        onDelete={onDelete}
       />
     ),
     CcRecipientNode: (rest: NodeProps) => (
@@ -54,13 +56,17 @@ export const ApprovalFlow = <T extends BaseDataType>(
         {...rest}
         titleStyles={{ background: "rgb(248, 145, 138)" }}
         title="抄送人"
+        displayDelete={true}
+        onDelete={onDelete}
       />
     ),
-    ConditionNode: (rest: NodeProps) => (
+    ConditionNode: (rest: NodeProps<T>) => (
       <Card
         {...rest}
         titleStyles={{ background: "rgb(172, 226, 155)" }}
         title={rest.data.name || "条件"}
+        displayDelete={rest.data.draggable}
+        onDelete={onDelete}
       />
     ),
     End,
