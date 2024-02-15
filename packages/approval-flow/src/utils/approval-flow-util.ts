@@ -66,14 +66,14 @@ export const bfs = <T extends BaseDataType>(
       0,
       rank + 1,
       item,
-      item.type === "Condition" && index !== children.length - 1,
+      item.type === "ConditionNode" && index !== children.length - 1,
     );
 
     const currentBranch = buidlEdge(
       `s${root.id}t${currentRoot.id}`,
       root.id,
       currentRoot.id,
-      currentRoot.data.type === "Condition" ? "ConditionEdge" : "AddEdge",
+      currentRoot.data.type === "ConditionNode" ? "ConditionEdge" : "AddEdge",
       {
         source: root,
         target: currentRoot,

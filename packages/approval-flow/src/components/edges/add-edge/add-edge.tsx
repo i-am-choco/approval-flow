@@ -82,6 +82,11 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
     formOpen && setFormOpen(false);
   };
 
+  const handleConditionOpen = () => {
+    setValue(nodeTypes[0]);
+    nodeTypes[0].renderForm && setFormOpen(true);
+  };
+
   return (
     <>
       <BaseEdge id={edge.id} path={edgePath} markerEnd={edge.markerEnd} />
@@ -114,7 +119,7 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
             style={{
               transform: `translate(-50%, -50%) translate(${translateConditionX}px,${translateConditionY}px)`,
             }}
-            onClick={() => setValue(nodeTypes[0])}
+            onClick={handleConditionOpen}
           >
             添加条件
           </div>

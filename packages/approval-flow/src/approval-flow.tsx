@@ -56,11 +56,11 @@ export const ApprovalFlow = <T extends BaseDataType>(
         title="抄送人"
       />
     ),
-    Condition: (rest: NodeProps) => (
+    ConditionNode: (rest: NodeProps) => (
       <Card
         {...rest}
         titleStyles={{ background: "rgb(172, 226, 155)" }}
-        title="条件"
+        title={rest.data.name || "条件"}
       />
     ),
     End,
