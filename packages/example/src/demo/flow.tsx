@@ -5,7 +5,13 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { NodesType } from "../api/api.types";
-import { deleteApi, getFlowsDetail, saveApi, sortApi } from "../api/flows";
+import {
+  copyApi,
+  deleteApi,
+  getFlowsDetail,
+  saveApi,
+  sortApi,
+} from "../api/flows";
 const { Header, Content } = Layout;
 
 export const Flow = () => {
@@ -70,7 +76,7 @@ export const Flow = () => {
       handler: null,
       expression_init: null,
       setting: {
-        priority: 2,
+        priority: 1,
         query: {},
       },
       created_by: new Date().toLocaleDateString(),
@@ -97,6 +103,12 @@ export const Flow = () => {
 
     await deleteApi(id, nodeId);
 
+    await getDetail();
+  };
+
+  const handleCopy = async (nodeId: string) => {
+    if (!id) return;
+    await copyApi(id, nodeId);
     await getDetail();
   };
 
@@ -165,6 +177,7 @@ export const Flow = () => {
             }}
             onSort={handleSort}
             onDelete={handleDelete}
+            onCopy={handleCopy}
           />
         )}
       </Content>

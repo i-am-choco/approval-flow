@@ -15,6 +15,7 @@ export type CardType = {
   styles?: React.CSSProperties;
   titleStyles?: React.CSSProperties;
   onDelete?: (nodeId: string) => void;
+  onCopy?: (nodeId: string) => void;
   render?: () => ReactNode;
 };
 
@@ -79,6 +80,7 @@ export interface IApprovalFlowProps<T> {
   roots?: T[];
   onSort?: (value: Record<string, number>) => void;
   onDelete?: (nodeId: string) => void;
+  onCopy?: (nodeId: string) => void;
 }
 
 export { NodeProps };

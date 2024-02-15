@@ -27,7 +27,7 @@ import {
 export const ApprovalFlow = <T extends BaseDataType>(
   props: IApprovalFlowProps<T>,
 ) => {
-  const { direction, addEdgeProps, onSort, onDelete } = props;
+  const { direction, addEdgeProps, onSort, onDelete, onCopy } = props;
 
   const [nodes, setNodes, onNodesChange] = useNodesState<T>([]);
 
@@ -65,8 +65,10 @@ export const ApprovalFlow = <T extends BaseDataType>(
         {...rest}
         titleStyles={{ background: "rgb(172, 226, 155)" }}
         title={rest.data.name || "条件"}
+        displayCopy={rest.data.draggable}
         displayDelete={rest.data.draggable}
         onDelete={onDelete}
+        onCopy={onCopy}
       />
     ),
     End,
