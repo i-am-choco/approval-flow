@@ -142,6 +142,7 @@ export const Flow = () => {
                     onOk={() => {
                       edge.data?.source &&
                         handlAdd("ApproverNode", edge.data.source.data.id);
+                      onClose && onClose();
                     }}
                   />
                 );
@@ -156,6 +157,7 @@ export const Flow = () => {
                     onOk={() => {
                       edge.data?.source &&
                         handlAdd("ApproverNode", edge.data.source.data.id);
+                      onClose && onClose();
                     }}
                   />
                 );
@@ -170,6 +172,7 @@ export const Flow = () => {
                     onOk={() => {
                       edge.data?.source &&
                         handleCondition(edge.data.source.data.id);
+                      onClose && onClose();
                     }}
                   />
                 );
