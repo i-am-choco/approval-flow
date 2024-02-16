@@ -149,6 +149,8 @@ export const getDagreTree = (
     node.position.y = isHorizontal
       ? (node.id === "end" ? root.y : nodeWithPosition.y) - nodeHeight / 2
       : root.y + (node.position.y - 1) * (100 + nodeHeight);
+
+    node.data.position = node.position;
   });
 
   return [nodes, edges];

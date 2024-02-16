@@ -27,6 +27,7 @@ export type BaseDataType = {
   description?: string;
   sortNumber?: number;
   draggable?: boolean;
+  position?: { x: number; y: number };
   render?: <T extends BaseDataType>(props: NodeProps<T>) => ReactNode;
 };
 
