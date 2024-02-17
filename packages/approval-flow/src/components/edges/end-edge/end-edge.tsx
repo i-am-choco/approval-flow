@@ -11,5 +11,25 @@ export const EndEdge = React.memo((props: EdgeProps) => {
     targetPosition: props.targetPosition,
   });
 
-  return <BaseEdge id={props.id} path={edgePath} markerEnd={props.markerEnd} />;
+  const getEdgeColor = (status?: "error" | "warning" | "success") => {
+    switch (status) {
+      case "error":
+        return "#FF3B30";
+      case "warning":
+        return "yellow";
+      case "success":
+        return "green";
+      default:
+        return "#ccc";
+    }
+  };
+
+  return (
+    <BaseEdge
+      id={props.id}
+      path={edgePath}
+      markerEnd={props.markerEnd}
+      style={{ stroke: getEdgeColor(props.data?.status) }}
+    />
+  );
 });

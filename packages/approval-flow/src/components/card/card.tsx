@@ -18,10 +18,25 @@ export const Card = React.memo(
       props.onCopy && props.onCopy(props.data.id);
     };
 
+    const getCardStatusClassName = (
+      status?: "error" | "warning" | "success",
+    ) => {
+      switch (status) {
+        case "success":
+          return "card-success";
+        case "error":
+          return "card-error";
+        case "warning":
+          return "card-warning";
+        default:
+          return "";
+      }
+    };
+
     return (
       <>
         <div
-          className={`card ${props.className ?? ""}`}
+          className={`card ${getCardStatusClassName(props.data.status)} ${props.className ?? ""}`}
           style={props.styles}
           onMouseOver={() => setHidden(false)}
           onMouseLeave={() => setHidden(true)}
