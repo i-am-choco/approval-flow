@@ -22,6 +22,9 @@ export type CardType = {
 export type BaseDataType = {
   id: string;
   parentId: string;
+  status?: "error" | "warning" | "success";
+  message?: string;
+  setting?: any;
   type?: string;
   name?: string;
   description?: string;
@@ -34,6 +37,8 @@ export type BaseDataType = {
 export type EdgeDataType = {
   source?: Node;
   target?: Node;
+  status?: "error" | "warning" | "success";
+  message?: string;
 };
 
 export type AddEdgeOptionsType = {
@@ -66,8 +71,12 @@ export interface IApprovalAddEdgeProps {
   ) => ReactNode;
 }
 
+export type ApprovalFlowRefType = {
+  verify: () => { status: string; message: string[] };
+};
+
 export interface IAddEdgeProps extends IApprovalAddEdgeProps {
-  edge: EdgeProps;
+  edge: EdgeProps<EdgeDataType>;
   direction: "TB" | "LR";
   isCondition?: boolean;
 }
@@ -83,5 +92,3 @@ export interface IApprovalFlowProps<T> {
   onDelete?: (nodeId: string) => void;
   onCopy?: (nodeId: string) => void;
 }
-
-export { NodeProps };
