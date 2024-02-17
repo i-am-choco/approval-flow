@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { Button, Layout, Modal } from "antd";
 import { ApprovalFlow } from "approval-flow";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { NodesType } from "../api/api.types";
@@ -112,6 +112,14 @@ export const Flow = () => {
     await getDetail();
   };
 
+  const approvalRef = useRef<any>(null);
+
+  const handleSave = () => {
+    const res = approvalRef.current?.verify();
+
+    console.log(res?.message);
+  };
+
   return (
     <Layout>
       <Header
@@ -123,10 +131,13 @@ export const Flow = () => {
       >
         <Button onClick={() => setDirection("TB")}>TB</Button>
         <Button onClick={() => setDirection("LR")}>LR</Button>
+
+        <Button onClick={handleSave}>save</Button>
       </Header>
       <Content style={{ height: "800px" }}>
         {!!nodes.length && (
           <ApprovalFlow
+            ref={approvalRef}
             nodeHeight={70}
             nodeWidth={260}
             data={nodes}
