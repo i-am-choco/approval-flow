@@ -1,6 +1,6 @@
 {
   "name": "@choco_leong/approval-flow",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Just a component for approval flow",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
