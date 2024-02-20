@@ -10,7 +10,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build:approval-flow": "lerna exec --scope=approval-flow -- npm run build",
+    "build:approval-flow": "lerna exec --scope=@choco_leong/approval-flow -- npm run build",
     "dev:example": "lerna exec --scope=example -- npm run start",
     "lint": "lerna exec -- eslint ."
   },

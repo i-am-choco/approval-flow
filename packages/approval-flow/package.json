@@ -77,5 +77,8 @@
   },
   "bugs": {
     "url": "https://github.com/i-am-choco/approval-flow/issues"
+  },
+  "directories": {
+    "lib": "dist"
   }
 }

@@ -287,7 +287,7 @@ export const ApprovalFlow = React.forwardRef(
       const errorNode: Node<T>[] = [];
 
       // 汇总所有错误信息
-      const message = [];
+      const message: string[] = [];
 
       // 获取条件分支
       const conditionRoot: Node<T>[] = edges
