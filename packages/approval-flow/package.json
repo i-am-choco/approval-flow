@@ -1,6 +1,6 @@
 {
   "name": "@choco_leong/approval-flow",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Just a component for approval flow",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -69,7 +69,8 @@
   ],
   "homepage": "https://github.com/i-am-choco/approval-flow#readme",
   "publishConfig": {
-    "registry": "https://registry.npmmirror.com/"
+    "registry": "https://registry.npmmirror.com/",
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -80,5 +81,6 @@
   },
   "directories": {
     "lib": "dist"
-  }
+  },
+  "gitHead": "54f1b2d4dcfb1d3776e7cc6a1ffedb8f4ff0a0ad"
 }
