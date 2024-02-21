@@ -17,6 +17,12 @@ export type CardType = {
   onDelete?: (nodeId: string) => void;
   onCopy?: (nodeId: string) => void;
   render?: () => ReactNode;
+  renderForm?: (
+    parentId: string,
+    currentId: string,
+    open: boolean,
+    onClose?: () => void,
+  ) => ReactNode;
 };
 
 export type BaseDataType = {
@@ -46,7 +52,8 @@ export type AddEdgeOptionsType = {
   title?: string;
   color?: string;
   renderForm?: (
-    edge: EdgeProps<EdgeDataType>,
+    parentId: string,
+    currentId: string,
     open: boolean,
     onClose?: () => void,
   ) => ReactNode;
@@ -54,18 +61,27 @@ export type AddEdgeOptionsType = {
 
 export interface IApprovalAddEdgeProps {
   onAdd?: (value: IAddProps) => void;
+  renderInitiatorForm?: (
+    parentId: string,
+    currentId: string,
+    open: boolean,
+    onClose?: () => void,
+  ) => ReactNode;
   renderApproverForm?: (
-    edge: EdgeProps<EdgeDataType>,
+    parentId: string,
+    currentId: string,
     open: boolean,
     onClose?: () => void,
   ) => ReactNode;
   renderCcRecipientForm?: (
-    edge: EdgeProps<EdgeDataType>,
+    parentId: string,
+    currentId: string,
     open: boolean,
     onClose?: () => void,
   ) => ReactNode;
   renderConditionForm?: (
-    edge: EdgeProps<EdgeDataType>,
+    parentId: string,
+    currentId: string,
     open: boolean,
     onClose?: () => void,
   ) => ReactNode;

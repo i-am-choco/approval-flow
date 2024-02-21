@@ -143,7 +143,7 @@ export const Flow = () => {
             data={nodes}
             direction={direction}
             addEdgeProps={{
-              renderApproverForm: (edge, open, onClose) => {
+              renderApproverForm: (parentId, currentId, open, onClose) => {
                 return (
                   <Modal
                     open={open}
@@ -151,14 +151,13 @@ export const Flow = () => {
                       onClose && onClose();
                     }}
                     onOk={() => {
-                      edge.data?.source &&
-                        handlAdd("ApproverNode", edge.data.source.data.id);
+                      parentId && handlAdd("ApproverNode", parentId);
                       onClose && onClose();
                     }}
                   />
                 );
               },
-              renderCcRecipientForm: (edge, open, onClose) => {
+              renderCcRecipientForm: (parentId, currentId, open, onClose) => {
                 return (
                   <Modal
                     open={open}
@@ -166,14 +165,13 @@ export const Flow = () => {
                       onClose && onClose();
                     }}
                     onOk={() => {
-                      edge.data?.source &&
-                        handlAdd("ApproverNode", edge.data.source.data.id);
+                      parentId && handlAdd("ApproverNode", parentId);
                       onClose && onClose();
                     }}
                   />
                 );
               },
-              renderConditionForm: (edge, open, onClose) => {
+              renderConditionForm: (parentId, currentId, open, onClose) => {
                 return (
                   <Modal
                     open={open}
@@ -181,8 +179,7 @@ export const Flow = () => {
                       onClose && onClose();
                     }}
                     onOk={() => {
-                      edge.data?.source &&
-                        handleCondition(edge.data.source.data.id);
+                      parentId && handleCondition(parentId);
                       onClose && onClose();
                     }}
                   />

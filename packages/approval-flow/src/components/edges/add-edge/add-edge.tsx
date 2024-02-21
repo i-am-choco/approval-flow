@@ -142,7 +142,13 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
             添加条件
           </div>
         )}
-        {value?.renderForm && value.renderForm(edge, formOpen, handleClose)}
+        {value?.renderForm &&
+          value.renderForm(
+            edge.data?.source?.data.id,
+            edge.data?.target?.data.id,
+            formOpen,
+            handleClose,
+          )}
       </EdgeLabelRenderer>
     </>
   );

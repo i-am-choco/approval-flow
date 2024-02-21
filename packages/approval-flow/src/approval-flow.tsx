@@ -41,6 +41,13 @@ export const ApprovalFlow = React.forwardRef(
   ) => {
     const { direction, addEdgeProps, onSort, onDelete, onCopy } = props;
 
+    const {
+      renderInitiatorForm,
+      renderConditionForm,
+      renderApproverForm,
+      renderCcRecipientForm,
+    } = addEdgeProps;
+
     const [nodes, setNodes, onNodesChange] = useNodesState<T>([]);
 
     const [edges, setEdges] = useState<Edge[]>([]);
@@ -53,6 +60,7 @@ export const ApprovalFlow = React.forwardRef(
             targetPosition={undefined}
             titleStyles={{ background: "rgb(158, 170, 242)" }}
             title="发起人"
+            renderForm={renderInitiatorForm}
           />
         ),
         ApproverNode: (rest: NodeProps) => (
@@ -62,6 +70,7 @@ export const ApprovalFlow = React.forwardRef(
             title="审批人"
             displayDelete={true}
             onDelete={onDelete}
+            renderForm={renderApproverForm}
           />
         ),
         CcRecipientNode: (rest: NodeProps) => (
@@ -71,6 +80,7 @@ export const ApprovalFlow = React.forwardRef(
             title="抄送人"
             displayDelete={true}
             onDelete={onDelete}
+            renderForm={renderCcRecipientForm}
           />
         ),
         ConditionNode: (rest: NodeProps<T>) => (
@@ -82,6 +92,7 @@ export const ApprovalFlow = React.forwardRef(
             displayDelete={rest.data.draggable}
             onDelete={onDelete}
             onCopy={onCopy}
+            renderForm={renderConditionForm}
           />
         ),
         End,

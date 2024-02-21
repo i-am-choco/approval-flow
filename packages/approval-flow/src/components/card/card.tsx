@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { CloseOutlined, CopyOutlined } from "@ant-design/icons";
+import { CloseOutlined, CopyOutlined, RightOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import { Handle, NodeProps } from "reactflow";
 
@@ -9,6 +9,8 @@ import { BaseDataType, CardType } from "../../types/index.types";
 export const Card = React.memo(
   <T extends BaseDataType>(props: CardType & NodeProps<T>) => {
     const [hidden, setHidden] = useState<boolean>(true);
+
+    const [open, setOpen] = useState<boolean>(false);
 
     const handleDelete = () => {
       props.onDelete && props.onDelete(props.data.id);
@@ -33,6 +35,10 @@ export const Card = React.memo(
       }
     };
 
+    const handleClose = () => {
+      open && setOpen(false);
+    };
+
     return (
       <>
         <div
@@ -55,6 +61,12 @@ export const Card = React.memo(
           </div>
           <div className="content">
             {(props.render && props.render()) || props.data?.description}
+            {props?.renderForm && (
+              <RightOutlined
+                style={{ float: "right", cursor: "pointer" }}
+                onClick={() => setOpen(true)}
+              />
+            )}
           </div>
         </div>
         {props.targetPosition && (
@@ -71,6 +83,13 @@ export const Card = React.memo(
             isConnectable={false}
           />
         )}
+        {props?.renderForm &&
+          props.renderForm(
+            props.data.parentId,
+            props.data.id,
+            open,
+            handleClose,
+          )}
       </>
     );
   },
