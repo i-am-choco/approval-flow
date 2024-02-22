@@ -1,8 +1,10 @@
 import "./index.css";
 
-import { Button, InputNumber } from "antd";
-import React, { useState } from "react";
+import { Button, InputNumber, Row } from "antd";
+import React, { useRef, useState } from "react";
 export const CustomForm = React.memo(() => {
+  const canvasRef = useRef<HTMLDivElement | null>(null);
+
   const [x, setX] = useState<number>(375);
 
   const [y, setY] = useState<number>(600);
@@ -29,6 +31,15 @@ export const CustomForm = React.memo(() => {
     }
   };
 
+  const handleCanvasDragOver = (e: React.DragEvent<HTMLElement>) => {
+    e.preventDefault();
+    const draggingElement = document.getElementById(draggingId);
+
+    if (draggingId && draggingElement) {
+      draggingElement.style.cursor = "grabbing";
+    }
+  };
+
   const handleComponentDragStart = (id: string) => {
     setDraggingId(id);
     const draggableElement = document.getElementById(id);
@@ -38,13 +49,30 @@ export const CustomForm = React.memo(() => {
     }
   };
 
-  const handleComponentDragEnd = (item: {
-    id: string;
-    render: () => React.ReactNode;
-  }) => {
+  const handleComponentDragEnd = (
+    e: React.DragEvent<HTMLElement>,
+    item: {
+      id: string;
+      render: () => React.ReactNode;
+    },
+  ) => {
     const draggingElement = document.getElementById(draggingId);
 
-    if (draggingId && draggingElement) {
+    if (draggingId && draggingElement && canvasRef.current) {
+      const { top, bottom, left, right } =
+        canvasRef.current.getBoundingClientRect();
+
+      // 限制只能在画布范围内放置组件
+      if (
+        !(
+          e.clientX >= left &&
+          e.clientX <= right &&
+          e.clientY >= top &&
+          e.clientY <= bottom
+        )
+      ) {
+        return;
+      }
       draggingElement.style.cursor = "grab";
       setComponent([...component, item]);
     }
@@ -59,8 +87,8 @@ export const CustomForm = React.memo(() => {
           draggable
           style={{ cursor: "grab" }}
           onDragStart={() => handleComponentDragStart("custom-form-button")}
-          onDragEnd={() =>
-            handleComponentDragEnd({
+          onDragEnd={(e) =>
+            handleComponentDragEnd(e, {
               id: "custom-form-button",
               render: () => <Button>按钮</Button>,
             })
@@ -78,7 +106,11 @@ export const CustomForm = React.memo(() => {
             max={800}
           />
           <span style={{ marginLeft: 8 }}>画布y宽度：</span>
-          <InputNumber value={y} onChange={(value) => setY(value || 0)} />
+          <InputNumber
+            key="y"
+            value={y}
+            onChange={(value) => setY(value || 0)}
+          />
         </div>
         <div
           id="custom-form-canvas"
@@ -86,8 +118,12 @@ export const CustomForm = React.memo(() => {
           style={{ width: x, height: y }}
           onDragEnter={handleCanvasDragEnter}
           onDragLeave={handleCanvasDragLeave}
+          onDragOver={handleCanvasDragOver}
+          ref={canvasRef}
         >
-          {component.map((item) => item.render())}
+          {component.map((item, index) => (
+            <Row key={index}>{item.render()}</Row>
+          ))}
         </div>
       </div>
       <div className="right-sider">sider</div>
