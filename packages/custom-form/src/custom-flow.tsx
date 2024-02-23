@@ -16,18 +16,8 @@ export const CustomForm = React.memo(() => {
 
   const [component, setComponent] = useState<FormItemType[]>([]);
 
-  /** --------------------------  画布事件处理  -------------------------- */
-
-  const handleCanvasDragLeave = () => {
-    const element = draggingId && document.getElementById(draggingId);
-
-    if (element) {
-      element.style.cursor = "not-allowed";
-    }
-  };
-
-  const handleCanvasDragOver = (e: React.DragEvent<HTMLElement>) => {
-    e.preventDefault();
+  // 拖拽游标为抓手
+  const handleCursorGrabbing = () => {
     const element = draggingId && document.getElementById(draggingId);
 
     if (element) {
@@ -35,8 +25,23 @@ export const CustomForm = React.memo(() => {
     }
   };
 
+  // 拖拽游标为禁用
+  const handleCursorNotAllowed = () => {
+    const element = draggingId && document.getElementById(draggingId);
+
+    if (element) {
+      element.style.cursor = "not-allowed";
+    }
+  };
+
+  /** --------------------------  画布事件处理  -------------------------- */
+
+  const handleCanvasDragOver = (e: React.DragEvent<HTMLElement>) => {
+    e.preventDefault();
+    handleCursorGrabbing();
+  };
+
   const handleCanvasDrop = () => {
-    console.log("canvas drop");
     if (component.every((item) => item.id !== draggingId)) {
       // 新增组件
       setComponent([
@@ -67,11 +72,7 @@ export const CustomForm = React.memo(() => {
   /** --------------------------  组件库组件事件处理  -------------------------- */
   const handleComponentDragStart = (id: string) => {
     setDraggingId(id);
-    const element = document.getElementById(id);
-
-    if (element) {
-      element.style.cursor = "not-allowed";
-    }
+    handleCursorGrabbing();
   };
 
   /** --------------------------  画布组件事件处理  -------------------------- */
@@ -108,20 +109,12 @@ export const CustomForm = React.memo(() => {
     e: React.DragEvent<HTMLDivElement>,
   ) => {
     e.preventDefault();
-    const element = draggingId && document.getElementById(draggingId);
-
-    if (element) {
-      element.style.cursor = droppable ? "grabbing" : "not-allowed";
-    }
+    droppable ? handleCursorGrabbing() : handleCursorNotAllowed();
   };
 
   const hanldeDragStart = (id: string) => {
     setDraggingId(id);
-    const element = draggingId && document.getElementById(draggingId);
-
-    if (element) {
-      element.style.cursor = "grabbing";
-    }
+    handleCursorGrabbing();
   };
 
   return (
@@ -156,7 +149,7 @@ export const CustomForm = React.memo(() => {
           id="custom-form-canvas"
           className="canvas"
           style={{ width: x, height: y }}
-          onDragLeave={handleCanvasDragLeave}
+          onDragLeave={handleCursorNotAllowed}
           onDragOver={handleCanvasDragOver}
           ref={canvasRef}
           onDrop={handleCanvasDrop}
