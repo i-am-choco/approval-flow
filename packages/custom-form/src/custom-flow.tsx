@@ -1,10 +1,11 @@
 import "./index.css";
 
-import { Button, InputNumber } from "antd";
+import { InputNumber } from "antd";
 import * as R from "ramda";
 import React, { useRef, useState } from "react";
 
-import { FormItemType } from "./types/index.types";
+import { compoents, getFormItem } from "./compoents";
+import { FormItemConfigType } from "./types/index.types";
 export const CustomForm = React.memo(() => {
   const canvasRef = useRef<HTMLDivElement | null>(null);
 
@@ -14,7 +15,7 @@ export const CustomForm = React.memo(() => {
 
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
-  const [component, setComponent] = useState<FormItemType[]>([]);
+  const [form, setForm] = useState<FormItemConfigType[]>([]);
 
   // 拖拽游标为抓手
   const handleCursorGrabbing = () => {
@@ -42,30 +43,34 @@ export const CustomForm = React.memo(() => {
   };
 
   const handleCanvasDrop = () => {
-    if (component.every((item) => item.id !== draggingId)) {
+    if (form.every((item) => item.customFormId !== draggingId)) {
       // 新增组件
-      setComponent([
-        ...component,
+      setForm([
+        ...form,
         {
-          id: `custom-form-${component.length}`,
-          render: () => <Button>按钮</Button>,
+          id: crypto.randomUUID(),
+          customFormId: `custom-form-${form.length}`,
+          type: "Input",
           droppable: true,
         },
       ]);
-      setDraggingId(`custom-form-${component.length}`);
-    } else if (component.some((item) => item.id === draggingId)) {
+      setDraggingId(`custom-form-${form.length}`);
+    } else if (form.some((item) => item.customFormId === draggingId)) {
       // 当前组件移动到画布的最后
-      const index = R.findIndex((value) => value.id === draggingId, component);
+      const index = R.findIndex(
+        (value) => value.customFormId === draggingId,
+        form,
+      );
 
-      const result = R.move(index, -1, component);
+      const result = R.move(index, -1, form);
 
-      setComponent(
+      setForm(
         result.map((item, index) => ({
           ...item,
-          id: `custom-form-${index}`,
+          customFormId: `custom-form-${index}`,
         })),
       );
-      setDraggingId(`custom-form-${component.length - 1}`);
+      setDraggingId(`custom-form-${form.length - 1}`);
     }
   };
 
@@ -84,39 +89,49 @@ export const CustomForm = React.memo(() => {
   ) => {
     e.stopPropagation();
     if (!droppable || !draggingId) return;
-    if (component.every((item) => item.id !== draggingId)) {
+    if (form.every((item) => item.customFormId !== draggingId)) {
       // 新增组件
-      const currentIndex = R.findIndex((value) => value.id === id, component);
+      const currentIndex = R.findIndex(
+        (value) => value.customFormId === id,
+        form,
+      );
 
       const result = R.insert(
         currentIndex,
         {
-          id: `custom-form-${component.length}`,
-          render: () => <Button>按钮</Button>,
+          id: crypto.randomUUID(),
+          customFormId: `custom-form-${form.length}`,
+          type: "Input",
           droppable: true,
         },
-        component,
+        form,
       );
 
-      setComponent(
+      setForm(
         result.map((item, index) => ({
           ...item,
-          id: `custom-form-${index}`,
+          customFormId: `custom-form-${index}`,
         })),
       );
       setDraggingId(`custom-form-${currentIndex}`);
-    } else if (component.some((item) => item.id === draggingId)) {
+    } else if (form.some((item) => item.customFormId === draggingId)) {
       // 移动组件模块，组件内部组件不接收处理
-      const currentIndex = R.findIndex((value) => value.id === id, component);
+      const currentIndex = R.findIndex(
+        (value) => value.customFormId === id,
+        form,
+      );
 
-      const index = R.findIndex((value) => value.id === draggingId, component);
+      const index = R.findIndex(
+        (value) => value.customFormId === draggingId,
+        form,
+      );
 
-      const result = R.move(index, currentIndex, component);
+      const result = R.move(index, currentIndex, form);
 
-      setComponent(
+      setForm(
         result.map((item, index) => ({
           ...item,
-          id: `custom-form-${index}`,
+          customFormId: `custom-form-${index}`,
         })),
       );
       setDraggingId(`custom-form-${currentIndex}`);
@@ -139,15 +154,19 @@ export const CustomForm = React.memo(() => {
   return (
     <div className="custom-form-layout">
       <div className="left-sider">
-        {/* todo: 后续此处为组件列表render */}
-        <Button
-          id="custom-form-button"
-          draggable
-          style={{ cursor: "grab" }}
-          onDragStart={() => handleComponentDragStart("custom-form-button")}
-        >
-          按钮
-        </Button>
+        {compoents.map((item) => {
+          return (
+            <div
+              key={item.type}
+              id={item.id}
+              draggable
+              style={{ cursor: "grab" }}
+              onDragStart={() => handleComponentDragStart(item.id)}
+            >
+              {item.title}
+            </div>
+          );
+        })}
       </div>
       <div className="main">
         <div className="header">
@@ -173,17 +192,17 @@ export const CustomForm = React.memo(() => {
           ref={canvasRef}
           onDrop={handleCanvasDrop}
         >
-          {component.map((item, index) => (
+          {form.map((item) => (
             <div
-              className={`custom-form-item ${draggingId === item.id ? "custom-form-item-selected" : ""}`}
+              className={`${item.id} custom-form-item ${draggingId === item.customFormId ? "custom-form-item-selected" : ""}`}
               draggable
-              key={index}
-              onDrop={(e) => handleDrop(item.id, item.droppable, e)}
+              key={item.id}
+              onDrop={(e) => handleDrop(item.customFormId, item.droppable, e)}
               onDragOver={(e) => handleDragOver(item.droppable, e)}
-              onDragStart={() => hanldeDragStart(item.id)}
-              onMouseDown={() => setDraggingId(item.id)}
+              onDragStart={() => hanldeDragStart(item.customFormId)}
+              onMouseDown={() => setDraggingId(item.customFormId)}
             >
-              {item.render()}
+              {getFormItem(item.type)}
             </div>
           ))}
         </div>
