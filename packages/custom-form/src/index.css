@@ -1,41 +1,61 @@
-.custom-form-layout{
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    width: 100vw;
-    height: 100vh;
+.custom-form-layout {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
 }
-.left-sider{
-    width: 25%;
-    height: 100%;
+.left-sider {
+  width: 25%;
+  height: 100%;
 }
-.main{
-    width: 50%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #ccc;
-    cursor: not-allowed;
+.main {
+  width: 50%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ccc;
+  cursor: not-allowed;
 }
-.header{
-    position: absolute;
-    width: 100%;
-    top: 0;
-    height: 48px;
-    background: #fff;
+.header {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  height: 48px;
+  background: #fff;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+.canvas {
+  padding: 8px;
+  background: #fff;
+  cursor: grab;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+.custom-form-item {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: start;
+  margin-bottom: 8px;
+}
+.canvas .custom-form-item:last-child {
+  margin-bottom: 0px;
+}
+.canvas::-webkit-scrollbar{
+    width: 1px;
+}
+.custom-form-item-selected {
     border: 1px solid #ccc;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-}
-.canvas{
-    display: flex;
-    background: #fff;
     cursor: grab;
 }
-.right{
-    width: 25%;
-    height: 100%;
+.right {
+  width: 25%;
+  height: 100%;
 }

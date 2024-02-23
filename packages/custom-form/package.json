@@ -50,6 +50,8 @@
     "@typescript-eslint/parser": "^6.18.1",
     "antd": "^5.13.2",
     "dayjs": "^1.11.10",
+    "ramda": "^0.29.1",
+    "@types/ramda": "^0.29.10",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
