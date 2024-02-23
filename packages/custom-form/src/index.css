@@ -36,7 +36,8 @@
   cursor: grab;
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .custom-form-item {
   width: 100%;
@@ -48,8 +49,8 @@
 .canvas .custom-form-item:last-child {
   margin-bottom: 0px;
 }
-.canvas::-webkit-scrollbar{
-    width: 1px;
+.canvas::-webkit-scrollbar-thumb{
+    width: 4px;
 }
 .custom-form-item-selected {
     border: 1px solid #ccc;

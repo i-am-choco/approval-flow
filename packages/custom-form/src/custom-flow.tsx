@@ -86,6 +86,25 @@ export const CustomForm = React.memo(() => {
     if (!droppable || !draggingId) return;
     if (component.every((item) => item.id !== draggingId)) {
       // 新增组件
+      const currentIndex = R.findIndex((value) => value.id === id, component);
+
+      const result = R.insert(
+        currentIndex,
+        {
+          id: `custom-form-${component.length}`,
+          render: () => <Button>按钮</Button>,
+          droppable: true,
+        },
+        component,
+      );
+
+      setComponent(
+        result.map((item, index) => ({
+          ...item,
+          id: `custom-form-${index}`,
+        })),
+      );
+      setDraggingId(`custom-form-${currentIndex}`);
     } else if (component.some((item) => item.id === draggingId)) {
       // 移动组件模块，组件内部组件不接收处理
       const currentIndex = R.findIndex((value) => value.id === id, component);
