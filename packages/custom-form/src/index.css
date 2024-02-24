@@ -5,11 +5,11 @@
   width: 100vw;
   height: 100vh;
 }
-.left-sider {
+.custom-form-left-sider {
   width: 25%;
   height: 100%;
 }
-.main {
+.custom-form-canvas-layout {
   width: 50%;
   height: 100%;
   position: relative;
@@ -19,7 +19,7 @@
   background: #ccc;
   cursor: not-allowed;
 }
-.header {
+.custom-form-canvas-header {
   position: absolute;
   width: 100%;
   top: 0;
@@ -29,8 +29,9 @@
   display: flex;
   justify-content: left;
   align-items: center;
+  cursor: default;
 }
-.canvas {
+#custom-form-canvas {
   padding: 8px;
   background: #fff;
   cursor: grab;
@@ -46,17 +47,17 @@
   justify-content: start;
   margin-bottom: 8px;
 }
-.canvas .custom-form-item:last-child {
+#custom-form-canvas .custom-form-item:last-child {
   margin-bottom: 0px;
 }
-.canvas::-webkit-scrollbar-thumb{
+#custom-form-canvas::-webkit-scrollbar-thumb{
     width: 4px;
 }
 .custom-form-item-selected {
     border: 1px solid #ccc;
     cursor: grab;
 }
-.right {
+.custom-form-right-sider {
   width: 25%;
   height: 100%;
 }

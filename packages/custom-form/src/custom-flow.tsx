@@ -2,13 +2,13 @@ import "./index.css";
 
 import { InputNumber } from "antd";
 import * as R from "ramda";
-import React, { useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 
-import { compoents, getFormItem } from "./compoents";
+import { COMPONENTS, getFormItem, getRuleForm } from "./components/components";
+import { Tabs } from "./components/tabs/tabs";
 import { FormItemConfigType } from "./types/index.types";
-export const CustomForm = React.memo(() => {
-  const canvasRef = useRef<HTMLDivElement | null>(null);
 
+export const CustomForm = React.forwardRef(() => {
   const [x, setX] = useState<number>(375);
 
   const [y, setY] = useState<number>(600);
@@ -16,6 +16,8 @@ export const CustomForm = React.memo(() => {
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
   const [form, setForm] = useState<FormItemConfigType[]>([]);
+
+  const [tabKey, setTabKey] = useState<string>("control");
 
   // 拖拽游标为抓手
   const handleCursorGrabbing = () => {
@@ -45,16 +47,15 @@ export const CustomForm = React.memo(() => {
   const handleCanvasDrop = () => {
     if (form.every((item) => item.customFormId !== draggingId)) {
       // 新增组件
-      setForm([
-        ...form,
-        {
-          id: crypto.randomUUID(),
-          customFormId: `custom-form-${form.length}`,
-          type: "Input",
-          droppable: true,
-        },
-      ]);
-      setDraggingId(`custom-form-${form.length}`);
+      const formItem = {
+        id: crypto.randomUUID(),
+        customFormId: `custom-form-${form.length}`,
+        type: "Input",
+        droppable: true,
+      };
+
+      setForm([...form, formItem]);
+      setDraggingId(formItem.customFormId);
     } else if (form.some((item) => item.customFormId === draggingId)) {
       // 当前组件移动到画布的最后
       const index = R.findIndex(
@@ -62,15 +63,13 @@ export const CustomForm = React.memo(() => {
         form,
       );
 
-      const result = R.move(index, -1, form);
+      const result = R.move(index, -1, form).map((item, index) => ({
+        ...item,
+        customFormId: `custom-form-${index}`,
+      }));
 
-      setForm(
-        result.map((item, index) => ({
-          ...item,
-          customFormId: `custom-form-${index}`,
-        })),
-      );
-      setDraggingId(`custom-form-${form.length - 1}`);
+      setForm(result);
+      setDraggingId(R.pathOr(null, [result.length - 1], result));
     }
   };
 
@@ -105,15 +104,13 @@ export const CustomForm = React.memo(() => {
           droppable: true,
         },
         form,
-      );
+      ).map((item, index) => ({
+        ...item,
+        customFormId: `custom-form-${index}`,
+      }));
 
-      setForm(
-        result.map((item, index) => ({
-          ...item,
-          customFormId: `custom-form-${index}`,
-        })),
-      );
-      setDraggingId(`custom-form-${currentIndex}`);
+      setForm(result);
+      setDraggingId(R.pathOr(null, [currentIndex], result));
     } else if (form.some((item) => item.customFormId === draggingId)) {
       // 移动组件模块，组件内部组件不接收处理
       const currentIndex = R.findIndex(
@@ -126,15 +123,13 @@ export const CustomForm = React.memo(() => {
         form,
       );
 
-      const result = R.move(index, currentIndex, form);
+      const result = R.move(index, currentIndex, form).map((item, index) => ({
+        ...item,
+        customFormId: `custom-form-${index}`,
+      }));
 
-      setForm(
-        result.map((item, index) => ({
-          ...item,
-          customFormId: `custom-form-${index}`,
-        })),
-      );
-      setDraggingId(`custom-form-${currentIndex}`);
+      setForm(result);
+      setDraggingId(R.pathOr(null, [currentIndex], result));
     }
   };
 
@@ -151,45 +146,74 @@ export const CustomForm = React.memo(() => {
     handleCursorGrabbing();
   };
 
+  const handleUpdateRule = (id: string, value: any) => {
+    const result = form.map((item) =>
+      item.id === id ? { ...item, rule: value } : item,
+    );
+
+    setForm(result);
+  };
+
+  const canvasHeader = useMemo(
+    () => (
+      <>
+        <span style={{ marginLeft: 8 }}>画布x宽度：</span>
+        <InputNumber
+          value={x}
+          onChange={(value) => setX(value || 0)}
+          max={800}
+        />
+        <span style={{ marginLeft: 8 }}>画布y宽度：</span>
+        <InputNumber key="y" value={y} onChange={(value) => setY(value || 0)} />
+      </>
+    ),
+    [x, y],
+  );
+
+  // 右侧栏菜单
+  const tabsOptions = [
+    {
+      value: "control",
+      label: "控件属性",
+      render: () => {
+        const item = form.find((item) => item.customFormId === draggingId);
+
+        const handleChange = (value: any) =>
+          item && handleUpdateRule(item.id, value);
+
+        return (
+          item &&
+          getRuleForm(item.type, `${draggingId}-rule`, item?.rule, handleChange)
+        );
+      },
+    },
+    { value: "form", label: "表单属性" },
+  ];
+
   return (
     <div className="custom-form-layout">
-      <div className="left-sider">
-        {compoents.map((item) => {
+      <div className="custom-form-left-sider">
+        {COMPONENTS.map((item) => {
           return (
             <div
               key={item.type}
               id={item.id}
               draggable
               style={{ cursor: "grab" }}
-              onDragStart={() => handleComponentDragStart(item.id)}
+              onDragStart={() => handleComponentDragStart(item.customFormId)}
             >
               {item.title}
             </div>
           );
         })}
       </div>
-      <div className="main">
-        <div className="header">
-          <span style={{ marginLeft: 8 }}>画布x宽度：</span>
-          <InputNumber
-            value={x}
-            onChange={(value) => setX(value || 0)}
-            max={800}
-          />
-          <span style={{ marginLeft: 8 }}>画布y宽度：</span>
-          <InputNumber
-            key="y"
-            value={y}
-            onChange={(value) => setY(value || 0)}
-          />
-        </div>
+      <div className="custom-form-canvas-layout">
+        <div className="custom-form-canvas-header">{canvasHeader}</div>
         <div
           id="custom-form-canvas"
-          className="canvas"
           style={{ width: x, height: y }}
           onDragLeave={handleCursorNotAllowed}
           onDragOver={handleCanvasDragOver}
-          ref={canvasRef}
           onDrop={handleCanvasDrop}
         >
           {form.map((item) => (
@@ -202,12 +226,14 @@ export const CustomForm = React.memo(() => {
               onDragStart={() => hanldeDragStart(item.customFormId)}
               onMouseDown={() => setDraggingId(item.customFormId)}
             >
-              {getFormItem(item.type)}
+              {getFormItem(item.type, item.rule)}
             </div>
           ))}
         </div>
       </div>
-      <div className="right-sider">sider</div>
+      <div className="custom-form-right-sider">
+        <Tabs value={tabKey} options={tabsOptions} onChange={setTabKey} />
+      </div>
     </div>
   );
 });
