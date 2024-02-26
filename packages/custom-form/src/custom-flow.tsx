@@ -46,12 +46,18 @@ export const CustomForm = React.forwardRef(() => {
 
   const handleCanvasDrop = () => {
     if (form.every((item) => item.customFormId !== draggingId)) {
-      // 新增组件
+      // 新增组件 待优化
+      const config = COMPONENTS.find(
+        (item) => item.customFormId === draggingId,
+      );
+
+      if (!config) return;
+
       const formItem = {
         id: crypto.randomUUID(),
         customFormId: `custom-form-${form.length}`,
-        type: "Input",
-        droppable: true,
+        type: config.type,
+        droppable: config.droppable,
       };
 
       setForm([...form, formItem]);
@@ -95,13 +101,17 @@ export const CustomForm = React.forwardRef(() => {
         form,
       );
 
+      const config = COMPONENTS.find((value) => value.customFormId === id);
+
+      if (!config) return;
+
       const result = R.insert(
         currentIndex,
         {
           id: crypto.randomUUID(),
           customFormId: `custom-form-${form.length}`,
-          type: "Input",
-          droppable: true,
+          type: config.type,
+          droppable: config.droppable,
         },
         form,
       ).map((item, index) => ({
@@ -193,19 +203,22 @@ export const CustomForm = React.forwardRef(() => {
   return (
     <div className="custom-form-layout">
       <div className="custom-form-left-sider">
-        {COMPONENTS.map((item) => {
-          return (
-            <div
-              key={item.type}
-              id={item.id}
-              draggable
-              style={{ cursor: "grab" }}
-              onDragStart={() => handleComponentDragStart(item.customFormId)}
-            >
-              {item.title}
-            </div>
-          );
-        })}
+        <div className="custom-form-component-layout">
+          {COMPONENTS.map((item) => {
+            return (
+              <div
+                className="custom-form-component"
+                key={item.type}
+                id={item.id}
+                draggable
+                style={{ cursor: "grab" }}
+                onDragStart={() => handleComponentDragStart(item.customFormId)}
+              >
+                {item.title}
+              </div>
+            );
+          })}
+        </div>
       </div>
       <div className="custom-form-canvas-layout">
         <div className="custom-form-canvas-header">{canvasHeader}</div>

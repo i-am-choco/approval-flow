@@ -50,14 +50,29 @@
 #custom-form-canvas .custom-form-item:last-child {
   margin-bottom: 0px;
 }
-#custom-form-canvas::-webkit-scrollbar-thumb{
-    width: 4px;
+#custom-form-canvas::-webkit-scrollbar-thumb {
+  width: 4px;
 }
 .custom-form-item-selected {
-    border: 1px solid #ccc;
-    cursor: grab;
+  border: 1px solid #ccc;
+  cursor: grab;
 }
 .custom-form-right-sider {
   width: 25%;
   height: 100%;
+}
+.custom-form-component-layout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+  text-align: center;
+}
+.custom-form-component {
+  width: calc(50% - 20px);
+  border: 1px solid #ccc;
+  padding: 10px 0px;
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }

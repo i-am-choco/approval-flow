@@ -13,6 +13,18 @@ export const COMPONENTS: FormComponentType[] = [
     renderForm: () => <Input />,
     renderRuleForm: (props) => <InputRule {...props} />,
   },
+  {
+    type: "InputArea",
+    customFormId: "custom-form-input-area",
+    droppable: true,
+    title: "多行输入框",
+  },
+  {
+    type: "dateRange",
+    customFormId: "custom-form-date-range",
+    droppable: true,
+    title: "日期选择器",
+  },
 ];
 
 export const getFormItem = (type: string, rule: any) => {

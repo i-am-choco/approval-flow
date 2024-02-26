@@ -9,7 +9,14 @@ const pkg = JSON.parse(readFileSync("./package.json"));
 
 export default [
   {
-    external: ["react", "react-dom", "dayjs", "antd", "@ant-design/icons"],
+    external: [
+      "react",
+      "react-dom",
+      "dayjs",
+      "antd",
+      "@ant-design/icons",
+      "ramda",
+    ],
     input: "./src/index.ts",
     output: [
       {
