@@ -46,12 +46,11 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.0",
     "@sj-distributor/eslint-plugin-react": "^0.7.1",
+    "@types/ramda": "^0.29.10",
     "@typescript-eslint/eslint-plugin": "^6.18.1",
     "@typescript-eslint/parser": "^6.18.1",
     "antd": "^5.13.2",
     "dayjs": "^1.11.10",
-    "ramda": "^0.29.1",
-    "@types/ramda": "^0.29.10",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
@@ -60,7 +59,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-unicorn": "^50.0.1",
-    "prettier": "^3.1.1"
+    "prettier": "^3.1.1",
+    "ramda": "^0.29.1"
   },
   "repository": {
     "type": "git",
@@ -69,7 +69,6 @@
   "scripts": {
     "test": "node ./__tests__/custom-form.test.js",
     "build": "rollup -c"
-
   },
   "bugs": {
     "url": "https://github.com/i-am-choco/approval-flow/issues"

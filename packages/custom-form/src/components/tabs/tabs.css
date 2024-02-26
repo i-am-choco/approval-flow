@@ -1,0 +1,22 @@
+.custom-form-tabs {
+  display: flex;
+  flex-direction: column;
+}
+.custom-form-tabs-header {
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: row;
+}
+.custom-form-tab-item {
+  flex: 1;
+  padding: 8px 16px;
+  border-right: 1px solid #ccc;
+  cursor: pointer;
+}
+.custom-form-tabs .custom-form-tabs-header .custom-form-tab-item:last-child {
+  border-right: none;
+}
+.custom-form-tab-active {
+  background-color: plum;
+  color: #fff;
+}
