@@ -46,7 +46,11 @@ export const UseStore = () => {
   const handleAdd = (currentIndex: number) => {
     const config = COMPONENTS.find((item) => item.customFormId === draggingId);
 
-    if (!config) return;
+    if (!config) {
+      throw new Error(
+        "Can't not find that component.Please check whether is exit.",
+      );
+    }
 
     const result = R.insert(
       currentIndex,
