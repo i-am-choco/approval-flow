@@ -11,9 +11,21 @@ interface IRuleListProps<Rule extends BaseRuleType> {
   formConfig: FormItemConfigType<Rule>[];
   onChange: (value: FormItemConfigType<Rule>[]) => void;
 }
+export enum RuleActionEnum {
+  add,
+  edit,
+  copy,
+}
+
 export const RuleList = React.memo(
   <Rule extends BaseRuleType>(props: IRuleListProps<Rule>) => {
     const { formConfig, onChange } = props;
+
+    const [actionType, setActionType] = useState<RuleActionEnum>(
+      RuleActionEnum.add,
+    );
+
+    const [current, setCurrent] = useState<Rule | null>(null);
 
     // 列表展示的数据
     const list: Rule[] = useMemo(
@@ -32,6 +44,7 @@ export const RuleList = React.memo(
 
     const handleSave = () => {
       setOpen(false);
+      console.log(current, actionType);
     };
 
     const handleDelete = (id: string) => {
@@ -44,17 +57,35 @@ export const RuleList = React.memo(
       onChange(result);
     };
 
-    const handleCopy = (id: string) => {
+    const handleCopy = (value: Rule) => {
       setOpen(true);
+      setCurrent(value);
+      setActionType(RuleActionEnum.copy);
     };
 
-    const handleEdit = (id: string) => {
+    const handleEdit = (value: Rule) => {
       setOpen(true);
+      setCurrent(value);
+      setActionType(RuleActionEnum.edit);
     };
 
     const handleAdd = () => {
       setOpen(true);
+      setActionType(RuleActionEnum.add);
     };
+
+    const title = useMemo(() => {
+      switch (actionType) {
+        case RuleActionEnum.add:
+          return "增加";
+        case RuleActionEnum.edit:
+          return "编辑";
+        case RuleActionEnum.copy:
+          return "复制";
+        default:
+          return "";
+      }
+    }, [actionType]);
 
     const footer = useMemo(
       () => (
@@ -73,18 +104,24 @@ export const RuleList = React.memo(
           <div key={`${item.id}`} className="custom-form-rule-list-item">
             <div>{item.displayRule}</div>
             <div className="custom-form-rule-list-operation">
-              <EditOutlined onClick={() => handleEdit(item.id)} />
-              <CopyOutlined onClick={() => handleCopy(item.id)} />
+              <EditOutlined onClick={() => handleEdit(item)} />
+              <CopyOutlined onClick={() => handleCopy(item)} />
               <DeleteOutlined onClick={() => handleDelete(item.id)} />
             </div>
           </div>
         ))}
         <Button onClick={handleAdd}>添加顯隱規則</Button>
-        <Drawer open={open} footer={footer} onClose={handleClose}>
+        <Drawer
+          title={title}
+          width={980}
+          open={open}
+          footer={footer}
+          onClose={handleClose}
+        >
           <div>满足一下所有条件时</div>
           <RuleBuilder />
           <p>显示以下字段</p>
-          <Select />
+          <Select style={{ width: 300 }} />
         </Drawer>
       </div>
     );
