@@ -4,6 +4,7 @@ import { InputNumber } from "antd";
 import React, { useMemo } from "react";
 
 import { COMPONENTS, getFormItem } from "./components/components";
+import { RuleList } from "./components/rule-list";
 import { Tabs } from "./components/tabs/tabs";
 import { UseStore } from "./use-store";
 
@@ -17,6 +18,7 @@ export const CustomForm = React.forwardRef(() => {
     setX,
     setY,
     setTabKey,
+    setForm,
     setDraggingId,
     handleCursorNotAllowed,
     handleRenderRuleForm,
@@ -51,7 +53,11 @@ export const CustomForm = React.forwardRef(() => {
       label: "控件属性",
       render: handleRenderRuleForm,
     },
-    { value: "form", label: "表单属性" },
+    {
+      value: "form",
+      label: "表单属性",
+      render: () => <RuleList formConfig={form} onChange={setForm} />,
+    },
   ];
 
   return (

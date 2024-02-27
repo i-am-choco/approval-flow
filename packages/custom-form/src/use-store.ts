@@ -11,7 +11,7 @@ export const UseStore = () => {
 
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
-  const [form, setForm] = useState<FormItemConfigType[]>([]);
+  const [form, setForm] = useState<FormItemConfigType<any>[]>([]);
 
   const [tabKey, setTabKey] = useState<string>("control");
 
@@ -52,13 +52,16 @@ export const UseStore = () => {
       );
     }
 
+    const id = crypto.randomUUID();
+
     const result = R.insert(
       currentIndex,
       {
-        id: crypto.randomUUID(),
+        id,
         customFormId: `custom-form-${form.length}`,
         type: config.type,
         droppable: config.droppable,
+        rule: { id, name: config.title },
       },
       form,
     ).map((item, index) => ({
