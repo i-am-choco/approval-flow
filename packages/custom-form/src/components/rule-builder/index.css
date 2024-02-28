@@ -1,6 +1,24 @@
-.custom-form-query-builder-hidden{
-    display: none;
+.custom-form-query-builder-hidden {
+  display: none;
 }
-.custom-form-query-builder-rule{
-    display: flex;
+.custom-form-query-builder-rule {
+  display: flex;
+  margin-bottom: 8px;
+}
+.custom-form-query-builder-fields {
+  margin-right: 8px;
+}
+.custom-form-query-builder-operator {
+  margin-right: 8px;
+}
+.custom-form-query-builder-delete {
+  font-size: 18px;
+  margin-left: 8px;
+  color: #bbb;
+}
+.custom-form-query-builder-value {
+  flex: 1;
+  .ant-select {
+    width: 100%;
+  }
 }

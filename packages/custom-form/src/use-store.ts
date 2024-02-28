@@ -52,7 +52,7 @@ export const UseStore = () => {
       );
     }
 
-    const id = crypto.randomUUID();
+    const id = crypto.randomUUID().toString().replace(/-/g, "");
 
     const result = R.insert(
       currentIndex,

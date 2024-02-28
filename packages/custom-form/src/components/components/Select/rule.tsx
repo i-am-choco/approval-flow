@@ -13,11 +13,10 @@ export const SelectRule = React.memo((props: IRenderRuleFormProps) => {
           onChange({
             ...rule,
             options: [
-              { label: "a", key: "a" },
-              { label: "b", key: "b" },
-              { label: "c", key: "b" },
+              { label: "a", value: "a" },
+              { label: "b", value: "b" },
+              { label: "c", value: "c" },
             ],
-            displayRule: "a",
           });
       }}
     >
