@@ -3,6 +3,8 @@ import React from "react";
 import { FormComponentType } from "../../types/index.types";
 import { Input } from "./Input/input";
 import { InputRule } from "./Input/input-rule";
+import { Select } from "./Select";
+import { SelectRule } from "./Select/rule";
 
 export const COMPONENTS: FormComponentType[] = [
   {
@@ -24,6 +26,14 @@ export const COMPONENTS: FormComponentType[] = [
     customFormId: "custom-form-date-range",
     droppable: true,
     title: "日期选择器",
+  },
+  {
+    type: "Select",
+    customFormId: "custom-form-select",
+    droppable: true,
+    title: "单选框",
+    renderForm: () => <Select />,
+    renderRuleForm: (props) => <SelectRule {...props} />,
   },
 ];
 

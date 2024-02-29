@@ -16,6 +16,8 @@ export default [
       "antd",
       "@ant-design/icons",
       "ramda",
+      "react-querybuilder",
+      "@react-querybuilder/antd",
     ],
     input: "./src/index.ts",
     output: [

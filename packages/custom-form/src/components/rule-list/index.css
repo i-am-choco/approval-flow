@@ -1,0 +1,29 @@
+.custom-form-rule-list {
+  margin: 8px;
+  text-align: left;
+}
+.custom-form-rule-list-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+.custom-form-rule-list-operation {
+  font-size: 18px;
+  color: #bbb;
+  span {
+    margin-right: 4px;
+    cursor: pointer;
+  }
+}
+.custom-form-rule-list-text p {
+  margin: 0;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.custom-form-rule-list-text p:last-child {
+  margin-bottom: 0px;
+}
