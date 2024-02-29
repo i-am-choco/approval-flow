@@ -172,6 +172,39 @@ export const RuleList = React.memo(
       setActionType(RuleActionEnum.add);
     };
 
+    const transformRuleToText = (rule: string, data: Rule[]) => {
+      const rules: RuleGroupType = parseCEL(rule);
+
+      const getName = (id: string) =>
+        formConfig.find((item) => item.id === id)?.rule?.name || "undefined";
+
+      const getOperator = (value: string) =>
+        SELECT_OPERATORS.find((item) => item.name === value)?.label ||
+        "undefined";
+
+      return (
+        <div className="custom-form-rule-list-text">
+          {rules.rules.map((item, index) => {
+            const value = item as {
+              field: string;
+              value: string;
+              operator: string;
+            };
+
+            return (
+              <p key={index}>
+                当{getName(value.field)}
+                {getOperator(value.operator)}
+                {value.value}
+                {index === rules.rules.length - 1 ? "时" : "且"}
+              </p>
+            );
+          })}
+          <p>显示{data.map((item) => item.name)}</p>
+        </div>
+      );
+    };
+
     const title = useMemo(() => {
       switch (actionType) {
         case RuleActionEnum.add:
@@ -244,7 +277,7 @@ export const RuleList = React.memo(
         <p>字段隱藏規則</p>
         {list?.map((item, index) => (
           <div key={index} className="custom-form-rule-list-item">
-            <div>{item.rules}</div>
+            {transformRuleToText(item.rules, item.value)}
             {!item.disabled && (
               <div className="custom-form-rule-list-operation">
                 <EditOutlined onClick={() => handleEdit(item)} />
