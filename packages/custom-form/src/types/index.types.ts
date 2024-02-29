@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 export type BaseRuleType = {
   id: string;
-  name: string;
+  label: string;
   displayRule?: string;
   displayRuleId?: string;
   displayRuleDisabled?: boolean;

@@ -176,7 +176,7 @@ export const RuleList = React.memo(
       const rules: RuleGroupType = parseCEL(rule);
 
       const getName = (id: string) =>
-        formConfig.find((item) => item.id === id)?.rule?.name || "undefined";
+        formConfig.find((item) => item.id === id)?.rule?.label || "undefined";
 
       const getOperator = (value: string) =>
         SELECT_OPERATORS.find((item) => item.name === value)?.label ||
@@ -200,7 +200,7 @@ export const RuleList = React.memo(
               </p>
             );
           })}
-          <p>显示{data.map((item) => item.name)}</p>
+          <p>显示{data.map((item) => item.label)}</p>
         </div>
       );
     };
@@ -236,7 +236,7 @@ export const RuleList = React.memo(
           .map((item) => ({
             name: item.rule.id,
             id: item.rule.id,
-            label: item.rule.name,
+            label: item.rule.label,
             valueEditorType: "multiselect",
             operators: SELECT_OPERATORS,
             validator,
@@ -267,7 +267,7 @@ export const RuleList = React.memo(
             !selectedField.includes(item.id) && !listField.includes(item.id),
         )
         .map((item) => ({
-          label: item.rule.name,
+          label: item.rule.label,
           value: item.id,
         }));
     }, [actionType, current, formConfig, list, query.rules]);
