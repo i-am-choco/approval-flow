@@ -1,10 +1,10 @@
 import * as R from "ramda";
-import { useState } from "react";
+import { ForwardedRef, useImperativeHandle, useState } from "react";
 
 import { COMPONENTS, getRuleForm } from "./components/components";
-import { FormItemConfigType } from "./types/index.types";
+import { CustomFormRef, FormItemConfigType } from "./types/index.types";
 
-export const UseStore = () => {
+export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
   const [x, setX] = useState<number>(375);
 
   const [y, setY] = useState<number>(600);
@@ -147,6 +147,10 @@ export const UseStore = () => {
       getRuleForm(item.type, `${draggingId}-rule`, item?.rule, handleChange)
     );
   };
+
+  useImperativeHandle(ref, () => ({
+    getFormConfigData: () => form,
+  }));
 
   return {
     x,

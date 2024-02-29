@@ -39,3 +39,11 @@ export type DataType = {
   formData: any;
   children: DataType[];
 };
+
+export interface ICustomFormProps {
+  width: string;
+  height: string;
+}
+export type CustomFormRef = {
+  getFormConfigData: () => FormItemConfigType<any>[];
+};
