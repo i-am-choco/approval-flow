@@ -32,6 +32,7 @@ export enum RuleActionEnum {
 type RuleListType<T extends BaseRuleType> = {
   key: string;
   rules: string;
+  disabled: boolean;
   value: T[];
 };
 
@@ -64,7 +65,12 @@ export const RuleList = React.memo(
       const result: RuleListType<Rule>[] = [];
 
       R.mapObjIndexed((value: Rule[], key: string) => {
-        result.push({ key, rules: value[0].displayRule || "", value });
+        result.push({
+          key,
+          rules: value[0].displayRule || "",
+          disabled: !!value[0].displayRuleDisabled,
+          value,
+        });
       }, group);
 
       return result;
@@ -239,11 +245,13 @@ export const RuleList = React.memo(
         {list?.map((item, index) => (
           <div key={index} className="custom-form-rule-list-item">
             <div>{item.rules}</div>
-            <div className="custom-form-rule-list-operation">
-              <EditOutlined onClick={() => handleEdit(item)} />
-              <CopyOutlined onClick={() => handleCopy(item)} />
-              <DeleteOutlined onClick={() => handleDelete(item)} />
-            </div>
+            {!item.disabled && (
+              <div className="custom-form-rule-list-operation">
+                <EditOutlined onClick={() => handleEdit(item)} />
+                <CopyOutlined onClick={() => handleCopy(item)} />
+                <DeleteOutlined onClick={() => handleDelete(item)} />
+              </div>
+            )}
           </div>
         ))}
         <Button onClick={handleAdd}>添加顯隱規則</Button>

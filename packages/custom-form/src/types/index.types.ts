@@ -5,6 +5,7 @@ export type BaseRuleType = {
   name: string;
   displayRule?: string;
   displayRuleId?: string;
+  displayRuleDisabled?: boolean;
   options?: Array<{ label: string; value: string }>;
 };
 export interface IRenderRuleFormProps {
