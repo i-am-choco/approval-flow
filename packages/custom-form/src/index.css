@@ -44,10 +44,6 @@
 #custom-form-canvas::-webkit-scrollbar-thumb {
   width: 4px;
 }
-.custom-form-item-selected {
-  border: 1px solid #ccc;
-  cursor: grab;
-}
 .custom-form-right-sider {
   width: 25%;
   height: 100%;

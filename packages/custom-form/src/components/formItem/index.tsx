@@ -117,7 +117,7 @@ export const FormItem = React.memo((props: IFormItemProps) => {
     <div
       id={id}
       draggable
-      className={`custom-form-item`}
+      className={`custom-form-item ${draggingId === id ? "custom-form-item-selected" : ""}`}
       onMouseDown={handleMouseDown}
       onDrop={(e) => handleDrop(false, e)}
       onDragStart={handleCursorGrabbing}

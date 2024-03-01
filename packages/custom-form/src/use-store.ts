@@ -70,16 +70,46 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
     }
   };
 
-  const handleUpdateRule = (id: string, value: any) => {
-    const result = form.map((item) =>
-      item.id === id ? { ...item, rule: value } : item,
-    );
+  const handleUpdateRule = (id: string, rule: any) => {
+    let flag = false;
 
-    setForm(result);
+    const update = (
+      list: FormItemConfigType<any>[],
+    ): FormItemConfigType<any>[] =>
+      list.map((item) => {
+        if (flag) return item;
+        if (item.id === id) {
+          flag = true;
+
+          return { ...item, rule };
+        } else {
+          return { ...item, children: item.children && update(item.children) };
+        }
+      });
+
+    setForm(update(form));
+  };
+
+  const getFormConfigData = (
+    list: FormItemConfigType<any>[],
+  ): FormItemConfigType<any> | undefined => {
+    let result = undefined;
+
+    list.some((item) => {
+      const value =
+        list.find((item) => item.id === draggingId) ||
+        (item.children && getFormConfigData(item.children));
+
+      result = value;
+
+      return !!value;
+    });
+
+    return result;
   };
 
   const handleRenderRuleForm = () => {
-    const item = form.find((item) => item.id === draggingId);
+    const item = draggingId && getFormConfigData(form);
 
     const handleChange = (value: any) =>
       item && handleUpdateRule(item.id, value);
