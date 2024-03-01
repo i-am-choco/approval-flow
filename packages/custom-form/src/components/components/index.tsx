@@ -10,40 +10,42 @@ import { SelectRule } from "./Select/rule";
 export const COMPONENTS: FormComponentType[] = [
   {
     type: "Input",
-    customFormId: "custom-form-input",
-    droppable: true,
+    id: "custom-form-input",
     title: "输入框",
     renderForm: () => <Input />,
     renderRuleForm: (props) => <InputRule {...props} />,
   },
   {
     type: "InputArea",
-    customFormId: "custom-form-input-area",
-    droppable: true,
+    id: "custom-form-input-area",
     title: "多行输入框",
   },
   {
     type: "dateRange",
-    customFormId: "custom-form-date-range",
-    droppable: true,
+    id: "custom-form-date-range",
     title: "日期选择器",
   },
   {
     type: "Select",
-    customFormId: "custom-form-select",
-    droppable: true,
+    id: "custom-form-select",
     title: "单选框",
     renderForm: () => <Select />,
     renderRuleForm: (props) => <SelectRule {...props} />,
   },
   {
     type: "List",
-    customFormId: "custom-form-list",
+    id: "custom-form-list",
     droppable: true,
     title: "列表",
-    renderForm: (props) => <List {...props} />,
+    renderForm: () => <List />,
   },
 ];
+
+export const getForm = (type: string) => {
+  const result = COMPONENTS.find((item) => item.type === type);
+
+  return (result?.renderForm && result?.renderForm()) ?? <p>需要维护</p>;
+};
 
 export const getFormItem = (type: string, params: IRenderFormProps<any>) => {
   const result = COMPONENTS.find((item) => item.type === type);

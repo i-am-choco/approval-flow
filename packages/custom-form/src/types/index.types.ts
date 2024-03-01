@@ -23,11 +23,10 @@ export interface IRenderFormProps<T extends BaseRuleType> {
 
 export type FormComponentType = {
   type: string;
-  id?: string;
-  customFormId: string;
-  droppable: boolean;
+  id: string;
+  droppable?: boolean;
   title: string;
-  renderForm?: (props: IRenderFormProps<any>) => ReactNode;
+  renderForm?: (props?: IRenderFormProps<any>) => ReactNode;
   renderRuleForm?: (props: IRenderRuleFormProps) => ReactNode;
 };
 
@@ -35,8 +34,7 @@ export type FormItemConfigType<Rule extends BaseRuleType> = {
   id: string; // 关联数据流的唯一id
   type: string; // 组件类型
   rule: Rule;
-  customFormId: string; // 控制面板拖放事件id
-  droppable: boolean; // 该表单是否可以被放置
+  droppable?: boolean; // 该表单是否可以被放置
   dragable?: boolean;
   children?: FormItemConfigType<Rule>[];
 };

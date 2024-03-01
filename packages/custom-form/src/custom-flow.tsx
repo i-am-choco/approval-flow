@@ -3,7 +3,8 @@ import "./index.css";
 import { InputNumber } from "antd";
 import React, { ForwardedRef, useMemo } from "react";
 
-import { COMPONENTS, getFormItem } from "./components/components";
+import { COMPONENTS } from "./components/components";
+import { FormItem } from "./components/formItem";
 import { RuleList } from "./components/rule-list";
 import { Tabs } from "./components/tabs/tabs";
 import { CustomFormRef, ICustomFormProps } from "./types/index.types";
@@ -29,10 +30,6 @@ export const CustomForm = React.forwardRef(
       handleCanvasDragOver,
       handleCanvasDrop,
       handleComponentDragStart,
-      handleDrop,
-      hanldeDragStart,
-      handleDragOver,
-      handleChildrenChange,
     } = UseStore(ref);
 
     const canvasHeader = useMemo(
@@ -81,9 +78,7 @@ export const CustomForm = React.forwardRef(
                   id={item.id}
                   draggable
                   style={{ cursor: "grab" }}
-                  onDragStart={() =>
-                    handleComponentDragStart(item.customFormId)
-                  }
+                  onDragStart={() => handleComponentDragStart(item.id)}
                 >
                   {item.title}
                 </div>
@@ -101,24 +96,15 @@ export const CustomForm = React.forwardRef(
             onDrop={handleCanvasDrop}
           >
             {form.map((item) => (
-              <div
-                className={`${item.id} custom-form-item ${draggingId === item.customFormId ? "custom-form-item-selected" : ""}`}
-                draggable
+              <FormItem
                 key={item.id}
-                onDrop={(e) => handleDrop(item.customFormId, item.droppable, e)}
-                onDragOver={(e) => handleDragOver(item.droppable, e)}
-                onDragStart={() => hanldeDragStart(item.customFormId)}
-                onMouseDown={() => setDraggingId(item.customFormId)}
-              >
-                {getFormItem(item.type, {
-                  draggingId,
-                  onChangeDraggingId: setDraggingId,
-                  rule: item.rule,
-                  children: item.children,
-                  onChildrenChange: (value) =>
-                    handleChildrenChange(item.id, value),
-                })}
-              </div>
+                current={item}
+                brother={form}
+                componentList={COMPONENTS}
+                onChange={setForm}
+                draggingId={draggingId}
+                onChangeDraggingId={setDraggingId}
+              />
             ))}
           </div>
         </div>

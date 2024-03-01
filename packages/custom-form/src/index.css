@@ -38,13 +38,6 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
-.custom-form-item {
-  width: 100%;
-  height: auto;
-  display: flex;
-  justify-content: start;
-  margin-bottom: 8px;
-}
 #custom-form-canvas .custom-form-item:last-child {
   margin-bottom: 0px;
 }
