@@ -13,6 +13,13 @@ export interface IRenderRuleFormProps {
   rule?: any;
   onChange?: (value: any) => void;
 }
+export interface IRenderFormProps<T extends BaseRuleType> {
+  draggingId?: string | null;
+  rule?: T;
+  children?: FormItemConfigType<T>[];
+  onChildrenChange?: (value: any) => void;
+  onChangeDraggingId?: (id: string | null) => void;
+}
 
 export type FormComponentType = {
   type: string;
@@ -20,7 +27,7 @@ export type FormComponentType = {
   customFormId: string;
   droppable: boolean;
   title: string;
-  renderForm?: (rule?: any) => ReactNode;
+  renderForm?: (props: IRenderFormProps<any>) => ReactNode;
   renderRuleForm?: (props: IRenderRuleFormProps) => ReactNode;
 };
 

@@ -32,6 +32,7 @@ export const CustomForm = React.forwardRef(
       handleDrop,
       hanldeDragStart,
       handleDragOver,
+      handleChildrenChange,
     } = UseStore(ref);
 
     const canvasHeader = useMemo(
@@ -109,7 +110,14 @@ export const CustomForm = React.forwardRef(
                 onDragStart={() => hanldeDragStart(item.customFormId)}
                 onMouseDown={() => setDraggingId(item.customFormId)}
               >
-                {getFormItem(item.type, item.rule)}
+                {getFormItem(item.type, {
+                  draggingId,
+                  onChangeDraggingId: setDraggingId,
+                  rule: item.rule,
+                  children: item.children,
+                  onChildrenChange: (value) =>
+                    handleChildrenChange(item.id, value),
+                })}
               </div>
             ))}
           </div>

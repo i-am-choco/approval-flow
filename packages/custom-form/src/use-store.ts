@@ -148,6 +148,17 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
     );
   };
 
+  const handleChildrenChange = (
+    id: string,
+    value: FormItemConfigType<any>[],
+  ) => {
+    setForm(
+      form.map((item) =>
+        item.id === id ? { ...item, children: value } : item,
+      ),
+    );
+  };
+
   useImperativeHandle(ref, () => ({
     getFormConfigData: () => form,
   }));
@@ -172,5 +183,6 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
     hanldeDragStart,
     handleDragOver,
     handleRenderRuleForm,
+    handleChildrenChange,
   };
 };

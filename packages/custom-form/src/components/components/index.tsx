@@ -1,8 +1,9 @@
 import React from "react";
 
-import { FormComponentType } from "../../types/index.types";
+import { FormComponentType, IRenderFormProps } from "../../types/index.types";
 import { Input } from "./Input/input";
 import { InputRule } from "./Input/input-rule";
+import { List } from "./List";
 import { Select } from "./Select";
 import { SelectRule } from "./Select/rule";
 
@@ -35,12 +36,19 @@ export const COMPONENTS: FormComponentType[] = [
     renderForm: () => <Select />,
     renderRuleForm: (props) => <SelectRule {...props} />,
   },
+  {
+    type: "List",
+    customFormId: "custom-form-list",
+    droppable: true,
+    title: "列表",
+    renderForm: (props) => <List {...props} />,
+  },
 ];
 
-export const getFormItem = (type: string, rule: any) => {
+export const getFormItem = (type: string, params: IRenderFormProps<any>) => {
   const result = COMPONENTS.find((item) => item.type === type);
 
-  return (result?.renderForm && result?.renderForm(rule)) ?? <p>需要维护</p>;
+  return (result?.renderForm && result?.renderForm(params)) ?? <p>需要维护</p>;
 };
 
 export const getRuleForm = (

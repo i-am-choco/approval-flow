@@ -51,6 +51,19 @@ export const RuleList = React.memo(
 
     const [displayField, setDisplayField] = useState<string[]>([]);
 
+    // const form: FormItemConfigType<Rule>[] = useMemo(() => {
+    //   const result: FormItemConfigType<Rule>[] = [];
+
+    //   const bfs = (value: FormItemConfigType<Rule>[]) => {
+    //     value.length && result.push(...value);
+    //     value.map((item) => bfs(item.children || []));
+    //   };
+
+    //   bfs(formConfig);
+
+    //   return result;
+    // }, [formConfig]);
+
     // 列表展示的数据
     const list: RuleListType<Rule>[] = useMemo(() => {
       const rules = formConfig
