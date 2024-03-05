@@ -1,12 +1,13 @@
-import "./index.css";
+import "../index.css";
 
 import React from "react";
 import { Handle, NodeProps } from "reactflow";
 export const End = (props: NodeProps) => (
-  <div className="card end">
+  <div className="approval-flow-card approval-flow-card-end">
     {props.targetPosition && (
       <Handle
         type="target"
+        style={{ opacity: 0 }}
         position={props.targetPosition}
         isConnectable={false}
       />

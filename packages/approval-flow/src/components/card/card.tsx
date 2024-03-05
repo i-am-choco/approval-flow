@@ -1,4 +1,4 @@
-import "./index.css";
+import "../index.css";
 
 import { CloseOutlined, CopyOutlined, RightOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
@@ -42,15 +42,15 @@ export const Card = React.memo(
     return (
       <>
         <div
-          className={`card ${getCardStatusClassName(props.data.status)} ${props.className ?? ""}`}
+          className={`approval-flow-card ${getCardStatusClassName(props.data.status)} ${props.className ?? ""}`}
           style={props.styles}
           onMouseOver={() => setHidden(false)}
           onMouseLeave={() => setHidden(true)}
         >
-          <div className="title " style={props.titleStyles}>
+          <div className="approval-flow-card-title" style={props.titleStyles}>
             {props.data.name || props.title}
             <div
-              className="button nodrag"
+              className="approval-flow-card-button nodrag"
               style={{ display: hidden ? "none" : "flex" }}
             >
               {props.displayCopy && (
@@ -59,7 +59,7 @@ export const Card = React.memo(
               {props.displayDelete && <CloseOutlined onClick={handleDelete} />}
             </div>
           </div>
-          <div className="content">
+          <div className="approval-flow-card-content">
             {(props.render && props.render()) || props.data?.description}
             {props?.renderForm && (
               <RightOutlined
@@ -72,6 +72,7 @@ export const Card = React.memo(
         {props.targetPosition && (
           <Handle
             type="target"
+            style={{ opacity: 0 }}
             position={props.targetPosition}
             isConnectable={false}
           />
@@ -79,6 +80,11 @@ export const Card = React.memo(
         {props.sourcePosition && (
           <Handle
             type="source"
+            style={{
+              opacity: 0,
+              // todo: 用这个可以搞间距
+              // marginBottom: "-16px",
+            }}
             position={props.sourcePosition}
             isConnectable={false}
           />

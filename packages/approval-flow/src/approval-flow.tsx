@@ -384,6 +384,7 @@ export const ApprovalFlow = React.forwardRef(
 
     return (
       <ReactFlow
+        style={{ background: "#fff" }}
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}

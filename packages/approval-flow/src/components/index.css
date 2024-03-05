@@ -1,0 +1,54 @@
+:root {
+  --primary-text-color: rgba(50, 50, 73, 1);
+  --gray-border-color: rgba(231, 232, 238, 1);
+  --end-background-color: rgba(231, 232, 238, 1);
+}
+
+.approval-flow-card {
+  border: none;
+  min-width: 200px;
+  border-radius: 8px;
+}
+.approval-flow-card-title {
+  padding: 0px 16px;
+  min-height: 28px;
+  color: #fff;
+  text-align: left;
+  border-radius: 8px 8px 0 0;
+  font-size: 14px;
+  line-height: 21px;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.approval-flow-card-content {
+  padding: 16px;
+  min-height: 54px;
+  text-align: left;
+  color: var(--primary-text-color);
+  font-size: 14px;
+  background: #fff;
+  border-radius: 0 0 8px 8px;
+  border: 1px solid var(--gray-border-color);
+  border-top: none;
+  box-shadow: 0 2px 1px 0 var(--gray-border-color);
+}
+
+.approval-flow-card-end {
+  height: 40px;
+  background: var(--end-background-color);
+  color: var(--primary-text-color);
+  border: 1px solid var(--gray-border-color);
+  box-shadow: 0 2px 1px 0 var(--gray-border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-error {
+  border-color: #ff3b30 !important;
+}
+.approval-flow-card-button {
+  cursor: pointer;
+}

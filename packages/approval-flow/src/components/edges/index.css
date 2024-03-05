@@ -1,6 +1,6 @@
 .add-edge {
   position: absolute;
-  color: #ccc;
+  color: rgba(187, 185, 207, 1);
   font-size: 14px;
   font-weight: 600;
   pointer-events: all;
