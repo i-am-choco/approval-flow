@@ -3,7 +3,6 @@ import { ForwardedRef, useImperativeHandle, useState } from "react";
 
 import { COMPONENTS, getRuleForm } from "./components/components";
 import { CustomFormRef, FormItemConfigType } from "./types/index.types";
-
 export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
   const [x, setX] = useState<number>(375);
 
@@ -43,101 +42,74 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
     handleCursorGrabbing();
   };
 
-  const handleAdd = (currentIndex: number) => {
-    const config = COMPONENTS.find((item) => item.customFormId === draggingId);
-
-    if (!config) {
-      throw new Error(
-        "Can't not find that component.Please check whether is exit.",
-      );
-    }
-
-    const id = crypto.randomUUID().toString().replace(/-/g, "");
-
-    const result = R.insert(
-      currentIndex,
-      {
-        id,
-        customFormId: `custom-form-${form.length}`,
-        type: config.type,
-        droppable: config.droppable,
-        rule: { id, name: config.title },
-      },
-      form,
-    ).map((item, index) => ({
-      ...item,
-      customFormId: `custom-form-${index}`,
-    }));
-
-    setForm(result);
-    setDraggingId(R.pathOr(null, [currentIndex, "customFormId"], result));
-  };
-
-  const handleMove = (toIndex: number) => {
-    const formIndex = R.findIndex(
-      (value) => value.customFormId === draggingId,
-      form,
-    );
-
-    const result = R.move(formIndex, toIndex, form).map((item, index) => ({
-      ...item,
-      customFormId: `custom-form-${index}`,
-    }));
-
-    setForm(result);
-    setDraggingId(R.pathOr(null, [toIndex, "customFormId"], result));
-  };
-
   const handleCanvasDrop = () => {
-    if (form.every((item) => item.customFormId !== draggingId)) {
-      handleAdd(-1);
-    } else if (form.some((item) => item.customFormId === draggingId)) {
-      handleMove(-1);
+    if (form.every((item) => item.id !== draggingId)) {
+      const config = COMPONENTS.find((item) => item.id === draggingId);
+
+      if (!config) {
+        throw new Error(
+          "Can't not find that component.Please check whether is exit.",
+        );
+      }
+
+      const id = crypto.randomUUID().toString().replace(/-/g, "");
+
+      setForm([
+        ...form,
+        {
+          id,
+          type: config.type,
+          droppable: config.droppable,
+          rule: { id, label: config.title },
+        },
+      ]);
+    } else if (form.some((item) => item.id === draggingId)) {
+      const formIndex = R.findIndex((value) => value.id === draggingId, form);
+
+      setForm(R.move(formIndex, -1, form));
     }
   };
 
-  const handleDrop = (
-    id: string,
-    droppable: boolean,
-    e: React.DragEvent<HTMLElement>,
-  ) => {
-    e.stopPropagation();
-    if (!droppable || !draggingId) return;
-    const currentIndex = R.findIndex(
-      (value) => value.customFormId === id,
-      form,
-    );
+  const handleUpdateRule = (id: string, rule: any) => {
+    let flag = false;
 
-    if (form.every((item) => item.customFormId !== draggingId)) {
-      handleAdd(currentIndex);
-    } else if (form.some((item) => item.customFormId === draggingId)) {
-      handleMove(currentIndex);
-    }
+    const update = (
+      list: FormItemConfigType<any>[],
+    ): FormItemConfigType<any>[] =>
+      list.map((item) => {
+        if (flag) return item;
+        if (item.id === id) {
+          flag = true;
+
+          return { ...item, rule };
+        } else {
+          return { ...item, children: item.children && update(item.children) };
+        }
+      });
+
+    setForm(update(form));
   };
 
-  const handleDragOver = (
-    droppable: boolean,
-    e: React.DragEvent<HTMLDivElement>,
-  ) => {
-    e.preventDefault();
-    droppable ? handleCursorGrabbing() : handleCursorNotAllowed();
-  };
+  const getFormConfigData = (
+    list: FormItemConfigType<any>[],
+  ): FormItemConfigType<any> | undefined => {
+    let result = undefined;
 
-  const hanldeDragStart = (id: string) => {
-    setDraggingId(id);
-    handleCursorGrabbing();
-  };
+    list.some((item) => {
+      const value =
+        list.find((item) => item.id === draggingId) ||
+        (item.children && getFormConfigData(item.children));
 
-  const handleUpdateRule = (id: string, value: any) => {
-    const result = form.map((item) =>
-      item.id === id ? { ...item, rule: value } : item,
-    );
+      result = value;
 
-    setForm(result);
+      return !!value;
+    });
+
+    return result;
   };
 
   const handleRenderRuleForm = () => {
-    const item = form.find((item) => item.customFormId === draggingId);
+    const item = draggingId && getFormConfigData(form);
 
     const handleChange = (value: any) =>
       item && handleUpdateRule(item.id, value);
@@ -168,9 +140,6 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
     handleCanvasDragOver,
     handleCanvasDrop,
     handleComponentDragStart,
-    handleDrop,
-    hanldeDragStart,
-    handleDragOver,
     handleRenderRuleForm,
   };
 };

@@ -5,6 +5,7 @@ import { QueryBuilderAntD } from "@react-querybuilder/antd";
 import React, { useCallback } from "react";
 import QueryBuilder, {
   ActionProps,
+  defaultValidator,
   Field,
   RuleGroupType,
   RuleType,
@@ -28,23 +29,6 @@ export const validator = (r: RuleType) => {
 
   return !!r.field && !!r.operator && !!r.value;
 };
-
-export const FIELD_CONFIG: Field[] = [
-  {
-    name: "multiselect",
-    label: "multiselect",
-    valueEditorType: "multiselect",
-    operators: SELECT_OPERATORS,
-    validator,
-  },
-  {
-    name: "select",
-    label: "select",
-    valueEditorType: "select",
-    operators: SELECT_OPERATORS,
-    validator,
-  },
-];
 
 interface IRuleBuilderProps {
   fields: Field[];
@@ -79,6 +63,7 @@ export const RuleBuilder = React.memo((props: IRuleBuilderProps) => {
           operators: "custom-form-query-builder-operator",
           value: "custom-form-query-builder-value",
         }}
+        validator={defaultValidator}
         controlElements={{
           removeRuleAction,
         }}

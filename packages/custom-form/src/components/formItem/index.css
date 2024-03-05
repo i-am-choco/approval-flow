@@ -1,0 +1,12 @@
+.custom-form-item {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-bottom: 8px;
+}
+.custom-form-item-selected {
+  border: 1px solid #ccc;
+  cursor: grab;
+}

@@ -38,22 +38,11 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
-.custom-form-item {
-  width: 100%;
-  height: auto;
-  display: flex;
-  justify-content: start;
-  margin-bottom: 8px;
-}
 #custom-form-canvas .custom-form-item:last-child {
   margin-bottom: 0px;
 }
 #custom-form-canvas::-webkit-scrollbar-thumb {
   width: 4px;
-}
-.custom-form-item-selected {
-  border: 1px solid #ccc;
-  cursor: grab;
 }
 .custom-form-right-sider {
   width: 25%;
