@@ -52,3 +52,6 @@
 .approval-flow-card-button {
   cursor: pointer;
 }
+.approval-flow-card-placeholder{
+  color: rgba(150, 150, 167, 1);
+}

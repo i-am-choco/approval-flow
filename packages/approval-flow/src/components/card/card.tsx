@@ -47,7 +47,7 @@ export const Card = React.memo(
           onMouseOver={() => setHidden(false)}
           onMouseLeave={() => setHidden(true)}
         >
-          <div className="approval-flow-card-title" style={props.titleStyles}>
+          <div className="approval-flow-card-title">
             {props.data.name || props.title}
             <div
               className="approval-flow-card-button nodrag"
@@ -60,7 +60,9 @@ export const Card = React.memo(
             </div>
           </div>
           <div className="approval-flow-card-content">
-            {(props.render && props.render()) || props.data?.description}
+            {(props.render && props.render()) || props.data?.description || (
+              <span className="approval-flow-card-placeholder">待選擇</span>
+            )}
             {props?.renderForm && (
               <RightOutlined
                 style={{ float: "right", cursor: "pointer" }}

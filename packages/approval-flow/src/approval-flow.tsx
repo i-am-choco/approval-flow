@@ -1,4 +1,5 @@
 import "reactflow/dist/style.css";
+import "./approval-flow.css";
 
 import React, {
   ForwardedRef,
@@ -45,6 +46,10 @@ export const ApprovalFlow = React.forwardRef(
       renderConditionForm,
       renderApproverForm,
       renderCcRecipientForm,
+      initiatorClassName,
+      approverClassName,
+      ccClassName,
+      conditionClassName,
     } = addEdgeProps;
 
     const [nodes, setNodes, onNodesChange] = useNodesState<T>([]);
@@ -57,7 +62,7 @@ export const ApprovalFlow = React.forwardRef(
           <Card
             {...rest}
             targetPosition={undefined}
-            titleStyles={{ background: "rgb(158, 170, 242)" }}
+            className={`${initiatorClassName ?? ""}  approval-flow-initiator`}
             title="发起人"
             renderForm={renderInitiatorForm}
           />
@@ -65,7 +70,7 @@ export const ApprovalFlow = React.forwardRef(
         ApproverNode: (rest: NodeProps) => (
           <Card
             {...rest}
-            titleStyles={{ background: "rgb(254, 188, 110)" }}
+            className={`${approverClassName ?? ""}  approval-flow-approver`}
             title="审批人"
             displayDelete={true}
             onDelete={onDelete}
@@ -75,8 +80,8 @@ export const ApprovalFlow = React.forwardRef(
         CcRecipientNode: (rest: NodeProps) => (
           <Card
             {...rest}
-            titleStyles={{ background: "rgb(248, 145, 138)" }}
             title="抄送人"
+            className={`${ccClassName ?? ""}  approval-flow-ccRecipient`}
             displayDelete={true}
             onDelete={onDelete}
             renderForm={renderCcRecipientForm}
@@ -85,7 +90,7 @@ export const ApprovalFlow = React.forwardRef(
         ConditionNode: (rest: NodeProps<T>) => (
           <Card
             {...rest}
-            titleStyles={{ background: "rgb(172, 226, 155)" }}
+            className={`${conditionClassName ?? ""}  approval-flow-condition`}
             title={rest.data.name || "条件"}
             displayCopy={rest.data.draggable}
             displayDelete={rest.data.draggable}
