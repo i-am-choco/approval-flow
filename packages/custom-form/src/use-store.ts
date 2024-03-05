@@ -60,7 +60,7 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
           id,
           type: config.type,
           droppable: config.droppable,
-          rule: { id, name: config.title },
+          rule: { id, label: config.title },
         },
       ]);
     } else if (form.some((item) => item.id === draggingId)) {

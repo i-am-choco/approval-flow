@@ -60,7 +60,7 @@ export const FormItem = React.memo((props: IFormItemProps) => {
         id,
         type: config.type,
         droppable: config.droppable,
-        rule: { id, name: config.title },
+        rule: { id, label: config.title },
       },
       (isChildren ? children : brother) || [],
     );

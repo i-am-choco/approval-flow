@@ -36,7 +36,6 @@ type RuleListType<T extends BaseRuleType> = {
   value: T[];
 };
 
-// TODO: 兼容嵌套组件的表单字段控制
 export const RuleList = React.memo(
   <Rule extends BaseRuleType>(props: IRuleListProps<Rule>) => {
     const { formConfig, onChange } = props;
@@ -51,22 +50,28 @@ export const RuleList = React.memo(
 
     const [displayField, setDisplayField] = useState<string[]>([]);
 
-    // const form: FormItemConfigType<Rule>[] = useMemo(() => {
-    //   const result: FormItemConfigType<Rule>[] = [];
+    const formItems = useMemo(() => {
+      const bfs = (
+        value: FormItemConfigType<Rule>[],
+      ): FormItemConfigType<Rule>[] => {
+        const total: FormItemConfigType<Rule>[] = [];
 
-    //   const bfs = (value: FormItemConfigType<Rule>[]) => {
-    //     value.length && result.push(...value);
-    //     value.map((item) => bfs(item.children || []));
-    //   };
+        value.length && total.push(...value);
+        value.map((item) => {
+          const children = bfs(item.children || []);
 
-    //   bfs(formConfig);
+          total.push(...children);
+        });
 
-    //   return result;
-    // }, [formConfig]);
+        return total;
+      };
+
+      return bfs(formConfig);
+    }, [formConfig]);
 
     // 列表展示的数据
     const list: RuleListType<Rule>[] = useMemo(() => {
-      const rules = formConfig
+      const rules = formItems
         .filter((item) => item.rule.displayRule)
         .map((item) => item.rule);
 
@@ -87,7 +92,7 @@ export const RuleList = React.memo(
       }, group);
 
       return result;
-    }, [formConfig]);
+    }, [formItems]);
 
     const [open, setOpen] = useState<boolean>(false);
 
@@ -101,44 +106,33 @@ export const RuleList = React.memo(
     const handleSave = () => {
       const displayRule = formatQuery(query, "cel");
 
-      if (
-        actionType === RuleActionEnum.add ||
-        actionType === RuleActionEnum.copy
-      ) {
-        onChange(
-          formConfig.map((item) =>
-            displayField.includes(item.id)
-              ? {
-                  ...item,
-                  rule: {
-                    ...item.rule,
-                    displayRule,
-                    displayRuleId: list.length.toString(),
-                  },
-                }
-              : item,
-          ),
-        );
-      } else {
-        const ids = current?.value.map((item) => item.id) || [];
+      const ids =
+        (actionType === RuleActionEnum.edit &&
+          current?.value.map((item) => item.id)) ||
+        [];
 
-        onChange(
-          formConfig.map((item) =>
-            displayField.includes(item.id)
-              ? { ...item, rule: { ...item.rule, displayRule } }
-              : ids.includes(item.id)
-                ? {
-                    ...item,
-                    rule: {
-                      ...item.rule,
-                      displayRule: undefined,
-                      displayRuleId: undefined,
-                    },
-                  }
-                : item,
-          ),
-        );
-      }
+      const update = (
+        value: FormItemConfigType<any>[],
+      ): FormItemConfigType<any>[] =>
+        value.map((item) => ({
+          ...item,
+          rule: displayField.includes(item.id)
+            ? {
+                ...item.rule,
+                displayRule,
+                displayField: list.length.toString(),
+              }
+            : ids.includes(item.id)
+              ? {
+                  ...item.rule,
+                  displayRule: undefined,
+                  displayRuleId: undefined,
+                }
+              : item.rule,
+          children: item.children && update(item.children),
+        }));
+
+      onChange(update(formConfig));
       handleClose();
     };
 
@@ -189,7 +183,7 @@ export const RuleList = React.memo(
       const rules: RuleGroupType = parseCEL(rule);
 
       const getName = (id: string) =>
-        formConfig.find((item) => item.id === id)?.rule?.label || "undefined";
+        formItems.find((item) => item.id === id)?.rule?.label || "undefined";
 
       const getOperator = (value: string) =>
         SELECT_OPERATORS.find((item) => item.name === value)?.label ||
@@ -238,9 +232,10 @@ export const RuleList = React.memo(
       </div>
     );
 
+    // 字段隐藏规则显示关联条件的字段
     const fields: Field[] = useMemo(
       () =>
-        formConfig
+        formItems
           .filter(
             (item) =>
               (item.type === "Select" || item.type === "Multiselect") &&
@@ -254,19 +249,22 @@ export const RuleList = React.memo(
             operators: SELECT_OPERATORS,
             validator,
             values:
-              item.rule.options?.map((item) => ({
-                ...item,
-                name: item.label,
+              item.rule.options?.map((value) => ({
+                ...value,
+                name: value.label,
               })) || [],
           })) || [],
-      [displayField, formConfig],
+      [displayField, formItems],
     );
 
+    // 字段隐藏规则可控制显示隐藏的字段
     const options = useMemo(() => {
+      // 当前条件已选的字段
       const selectedField: string[] = query.rules.map((item) =>
         R.pathOr("", ["field"], item),
       );
 
+      // 规则列表已设置的字段
       const listField = R.flatten(
         R.without(
           actionType === RuleActionEnum.edit ? [current] : [],
@@ -274,7 +272,7 @@ export const RuleList = React.memo(
         ).map((item) => item.value),
       ).map((item) => item.id);
 
-      return formConfig
+      return formItems
         .filter(
           (item) =>
             !selectedField.includes(item.id) && !listField.includes(item.id),
@@ -283,7 +281,7 @@ export const RuleList = React.memo(
           label: item.rule.label,
           value: item.id,
         }));
-    }, [actionType, current, formConfig, list, query.rules]);
+    }, [actionType, current, formItems, list, query.rules]);
 
     return (
       <div className="custom-form-rule-list">
