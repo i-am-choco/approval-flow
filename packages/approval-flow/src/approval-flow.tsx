@@ -19,7 +19,6 @@ import ReactFlow, {
 
 import { Card } from "./components/card/card";
 import { AddEdge } from "./components/edges";
-import { EndEdge } from "./components/edges/end-edge/end-edge";
 import { End } from "./components/nodes/end";
 import {
   ApprovalFlowRefType,
@@ -114,7 +113,14 @@ export const ApprovalFlow = React.forwardRef(
             {...addEdgeProps}
           />
         ),
-        EndEdge,
+        EndEdge: (rest: EdgeProps) => (
+          <AddEdge
+            edge={rest}
+            direction={direction}
+            isEnd={true}
+            {...addEdgeProps}
+          />
+        ),
       }),
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [],

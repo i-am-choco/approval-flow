@@ -7,14 +7,16 @@ import { BaseEdge, EdgeLabelRenderer, getSmoothStepPath } from "reactflow";
 
 import { AddEdgeOptionsType, IAddEdgeProps } from "../../../types/index.types";
 export const AddEdge = React.memo((props: IAddEdgeProps) => {
-  const { edge, direction, isCondition } = props;
+  const { edge, direction, isCondition, isEnd } = props;
 
   const [edgePath, labelX, labelY] = getSmoothStepPath(edge);
 
   const isHorizontal = direction === "TB";
 
   const translateX = isHorizontal
-    ? edge.sourceX
+    ? isEnd
+      ? edge.targetX
+      : edge.sourceX
     : isCondition
       ? edge.sourceX + (labelX - edge.sourceX) / 2
       : labelX;

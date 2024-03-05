@@ -95,6 +95,7 @@ export interface IAddEdgeProps extends IApprovalAddEdgeProps {
   edge: EdgeProps<EdgeDataType>;
   direction: "TB" | "LR";
   isCondition?: boolean;
+  isEnd?: boolean;
 }
 
 export interface IApprovalFlowProps<T> {
