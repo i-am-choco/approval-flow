@@ -7,7 +7,7 @@ export const End = (props: NodeProps) => (
     {props.targetPosition && (
       <Handle
         type="target"
-        style={{ opacity: 0 }}
+        style={{ opacity: 0, marginTop: -4 }}
         position={props.targetPosition}
         isConnectable={false}
       />

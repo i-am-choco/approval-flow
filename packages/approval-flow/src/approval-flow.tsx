@@ -11,6 +11,7 @@ import React, {
 import ReactFlow, {
   Edge,
   EdgeProps,
+  MarkerType,
   Node,
   NodeChange,
   NodePositionChange,
@@ -296,12 +297,24 @@ export const ApprovalFlow = React.forwardRef(
           ...item.data,
           status: getStatus(item.data?.source),
         },
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: 20,
+          height: 20,
+          color: getStatus(item.data?.source) ? "#F06A6A" : "#BBB9CF",
+        },
+        style: {
+          stroke: getStatus(item.data?.source) ? "#F06A6A" : "#BBB9CF",
+        },
       }));
 
       setEdges(current);
     };
 
-    // todo: 优化
+    /**
+     * @description 校验
+     * @note 因为Edge是svg处理的，而箭头是在svg中marker定义，无法动态配置颜色，只能update一遍edge
+     */
     const verify = () => {
       let flag = false;
 

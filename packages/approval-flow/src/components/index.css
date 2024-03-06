@@ -46,8 +46,8 @@
   align-items: center;
   justify-content: center;
 }
-.card-error {
-  border-color: #ff3b30 !important;
+.approval-flow-card-error {
+  border-color: rgba(240, 106, 106, 1) !important;
 }
 .approval-flow-card-button {
   cursor: pointer;

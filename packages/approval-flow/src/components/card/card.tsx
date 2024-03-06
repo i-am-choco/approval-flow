@@ -27,7 +27,7 @@ export const Card = React.memo(
         case "success":
           return "card-success";
         case "error":
-          return "card-error";
+          return "approval-flow-card-error";
         case "warning":
           return "card-warning";
         default:
@@ -74,7 +74,7 @@ export const Card = React.memo(
         {props.targetPosition && (
           <Handle
             type="target"
-            style={{ opacity: 0 }}
+            style={{ opacity: 0, marginTop: -4 }}
             position={props.targetPosition}
             isConnectable={false}
           />
@@ -84,8 +84,7 @@ export const Card = React.memo(
             type="source"
             style={{
               opacity: 0,
-              // todo: 用这个可以搞间距
-              // marginBottom: "-16px",
+              marginBottom: -4,
             }}
             position={props.sourcePosition}
             isConnectable={false}

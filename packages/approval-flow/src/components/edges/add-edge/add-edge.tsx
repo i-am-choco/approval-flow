@@ -9,7 +9,10 @@ import { AddEdgeOptionsType, IAddEdgeProps } from "../../../types/index.types";
 export const AddEdge = React.memo((props: IAddEdgeProps) => {
   const { edge, direction, isCondition, isEnd } = props;
 
-  const [edgePath, labelX, labelY] = getSmoothStepPath(edge);
+  const [edgePath, labelX, labelY] = getSmoothStepPath({
+    ...edge,
+    borderRadius: 16,
+  });
 
   const isHorizontal = direction === "TB";
 
@@ -89,26 +92,13 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
     nodeTypes[0].renderForm && setFormOpen(true);
   };
 
-  const getEdgeColor = (status?: "error" | "warning" | "success") => {
-    switch (status) {
-      case "error":
-        return "#FF3B30";
-      case "warning":
-        return "yellow";
-      case "success":
-        return "green";
-      default:
-        return "#ccc";
-    }
-  };
-
   return (
     <>
       <BaseEdge
         id={edge.id}
         path={edgePath}
         markerEnd={edge.markerEnd}
-        style={{ stroke: getEdgeColor(edge.data?.status) }}
+        style={edge.style}
       />
       <EdgeLabelRenderer>
         <Popover
