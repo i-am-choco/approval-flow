@@ -11,6 +11,7 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
 
   const [edgePath, labelX, labelY] = getSmoothStepPath({
     ...edge,
+    centerY: isEnd ? edge.targetY - 40 : undefined,
     borderRadius: 16,
   });
 
@@ -27,7 +28,9 @@ export const AddEdge = React.memo((props: IAddEdgeProps) => {
   const translateY = isHorizontal
     ? isCondition
       ? edge.sourceY + (labelY - edge.sourceY) / 2
-      : labelY
+      : isEnd
+        ? edge.targetY - 20
+        : labelY
     : edge.sourceY;
 
   const translateConditionX = direction === "TB" ? edge.sourceX : labelX;

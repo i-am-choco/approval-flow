@@ -147,15 +147,34 @@ export const getDagreTree = (
 
     const root = dagreGraph.node("1");
 
+    const parent = nodes.find((item) => item.data.id === node.data.parentId);
+
     node.targetPosition = isHorizontal ? Position.Left : Position.Top;
     node.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
 
+    const getRankDistance = (type?: string) => {
+      switch (type) {
+        case "InitiatorNode":
+          return 100;
+        case "ConditionNode":
+          return 130;
+        case "ApproverNode":
+          return 130;
+        case "CcRecipientNode":
+          return 120;
+        default:
+          return 150;
+      }
+    };
+
     node.position.x = isHorizontal
-      ? root.x + (node.position.y - 1) * (100 + nodeWidth)
+      ? root.x +
+        (node.position.y - 1) * (getRankDistance(parent?.type) + nodeWidth)
       : (node.id === "end" ? root.x : nodeWithPosition.x) - nodeWidth / 2;
     node.position.y = isHorizontal
       ? (node.id === "end" ? root.y : nodeWithPosition.y) - nodeHeight / 2
-      : root.y + (node.position.y - 1) * (100 + nodeHeight);
+      : root.y +
+        (node.position.y - 1) * (getRankDistance(parent?.type) + nodeHeight);
 
     node.data.position = node.position;
   });

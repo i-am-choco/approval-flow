@@ -6,7 +6,7 @@
 
 .approval-flow-card {
   border: none;
-  min-width: 200px;
+  width: 200px;
   border-radius: 8px;
 }
 .approval-flow-card-title {
@@ -34,6 +34,8 @@
   border: 1px solid var(--gray-border-color);
   border-top: none;
   box-shadow: 0 2px 1px 0 var(--gray-border-color);
+  word-break: break-all;
+  word-wrap: break-word;
 }
 
 .approval-flow-card-end {
@@ -52,6 +54,6 @@
 .approval-flow-card-button {
   cursor: pointer;
 }
-.approval-flow-card-placeholder{
+.approval-flow-card-placeholder {
   color: rgba(150, 150, 167, 1);
 }
