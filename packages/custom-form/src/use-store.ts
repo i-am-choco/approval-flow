@@ -63,6 +63,7 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
           rule: { id, label: config.title },
         },
       ]);
+      setDraggingId(id);
     } else if (form.some((item) => item.id === draggingId)) {
       const formIndex = R.findIndex((value) => value.id === draggingId, form);
 

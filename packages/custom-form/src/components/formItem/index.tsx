@@ -1,5 +1,6 @@
 import "./index.css";
 
+import { CloseOutlined } from "@ant-design/icons";
 import * as R from "ramda";
 import React from "react";
 
@@ -65,6 +66,8 @@ export const FormItem = React.memo((props: IFormItemProps) => {
       (isChildren ? children : brother) || [],
     );
 
+    onChangeDraggingId(id);
+
     isChildren ? handleChildrenChange(result) : onChange(result);
   };
 
@@ -113,6 +116,10 @@ export const FormItem = React.memo((props: IFormItemProps) => {
   const handleDragOver = () =>
     droppable ? handleCursorGrabbing() : handleCursorNotAllowed();
 
+  const handleDelete = () => {
+    onChange(brother.filter((item) => item.id !== current.id));
+  };
+
   return (
     <div
       id={id}
@@ -122,6 +129,12 @@ export const FormItem = React.memo((props: IFormItemProps) => {
       onDrop={(e) => handleDrop(false, e)}
       onDragStart={handleCursorGrabbing}
     >
+      {draggingId === id && (
+        <CloseOutlined
+          className={"custom-form-item-delete"}
+          onClick={handleDelete}
+        />
+      )}
       {getForm(type)}
       <div
         id={`${id}-children`}
