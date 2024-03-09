@@ -1,4 +1,5 @@
 import "reactflow/dist/style.css";
+import "./approval-flow.css";
 
 import React, {
   ForwardedRef,
@@ -10,6 +11,7 @@ import React, {
 import ReactFlow, {
   Edge,
   EdgeProps,
+  MarkerType,
   Node,
   NodeChange,
   NodePositionChange,
@@ -19,7 +21,6 @@ import ReactFlow, {
 
 import { Card } from "./components/card/card";
 import { AddEdge } from "./components/edges";
-import { EndEdge } from "./components/edges/end-edge/end-edge";
 import { End } from "./components/nodes/end";
 import {
   ApprovalFlowRefType,
@@ -46,6 +47,10 @@ export const ApprovalFlow = React.forwardRef(
       renderConditionForm,
       renderApproverForm,
       renderCcRecipientForm,
+      initiatorClassName,
+      approverClassName,
+      ccClassName,
+      conditionClassName,
     } = addEdgeProps;
 
     const [nodes, setNodes, onNodesChange] = useNodesState<T>([]);
@@ -58,7 +63,7 @@ export const ApprovalFlow = React.forwardRef(
           <Card
             {...rest}
             targetPosition={undefined}
-            titleStyles={{ background: "rgb(158, 170, 242)" }}
+            className={`${initiatorClassName ?? ""}  approval-flow-initiator`}
             title="发起人"
             renderForm={renderInitiatorForm}
           />
@@ -66,7 +71,7 @@ export const ApprovalFlow = React.forwardRef(
         ApproverNode: (rest: NodeProps) => (
           <Card
             {...rest}
-            titleStyles={{ background: "rgb(254, 188, 110)" }}
+            className={`${approverClassName ?? ""}  approval-flow-approver`}
             title="审批人"
             displayDelete={true}
             onDelete={onDelete}
@@ -76,8 +81,8 @@ export const ApprovalFlow = React.forwardRef(
         CcRecipientNode: (rest: NodeProps) => (
           <Card
             {...rest}
-            titleStyles={{ background: "rgb(248, 145, 138)" }}
             title="抄送人"
+            className={`${ccClassName ?? ""}  approval-flow-ccRecipient`}
             displayDelete={true}
             onDelete={onDelete}
             renderForm={renderCcRecipientForm}
@@ -86,7 +91,7 @@ export const ApprovalFlow = React.forwardRef(
         ConditionNode: (rest: NodeProps<T>) => (
           <Card
             {...rest}
-            titleStyles={{ background: "rgb(172, 226, 155)" }}
+            className={`${conditionClassName ?? ""}  approval-flow-condition`}
             title={rest.data.name || "条件"}
             displayCopy={rest.data.draggable}
             displayDelete={rest.data.draggable}
@@ -114,7 +119,14 @@ export const ApprovalFlow = React.forwardRef(
             {...addEdgeProps}
           />
         ),
-        EndEdge,
+        EndEdge: (rest: EdgeProps) => (
+          <AddEdge
+            edge={rest}
+            direction={direction}
+            isEnd={true}
+            {...addEdgeProps}
+          />
+        ),
       }),
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [],
@@ -285,12 +297,24 @@ export const ApprovalFlow = React.forwardRef(
           ...item.data,
           status: getStatus(item.data?.source),
         },
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: 20,
+          height: 20,
+          color: getStatus(item.data?.source) ? "#F06A6A" : "#BBB9CF",
+        },
+        style: {
+          stroke: getStatus(item.data?.source) ? "#F06A6A" : "#BBB9CF",
+        },
       }));
 
       setEdges(current);
     };
 
-    // todo: 优化
+    /**
+     * @description 校验
+     * @note 因为Edge是svg处理的，而箭头是在svg中marker定义，无法动态配置颜色，只能update一遍edge
+     */
     const verify = () => {
       let flag = false;
 
@@ -378,6 +402,7 @@ export const ApprovalFlow = React.forwardRef(
 
     return (
       <ReactFlow
+        style={{ background: "#fff" }}
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}

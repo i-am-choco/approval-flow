@@ -1,0 +1,23 @@
+.approval-flow-initiator {
+  .approval-flow-card-title {
+    background: rgba(96, 93, 236, 1);
+  }
+}
+
+.approval-flow-approver {
+  .approval-flow-card-title {
+    background: rgba(239, 157, 54, 1);
+  }
+}
+
+.approval-flow-ccRecipient {
+  .approval-flow-card-title {
+    background: rgba(181, 76, 246, 1);
+  }
+}
+
+.approval-flow-condition {
+  .approval-flow-card-title {
+    background: rgba(52, 164, 110, 1);
+  }
+}

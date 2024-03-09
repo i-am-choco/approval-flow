@@ -142,52 +142,50 @@ export const Flow = () => {
             nodeWidth={260}
             data={nodes}
             direction={direction}
-            addEdgeProps={
-              {
-                // renderApproverForm: (parentId, currentId, open, onClose) => {
-                //   return (
-                //     <Modal
-                //       open={open}
-                //       onCancel={() => {
-                //         onClose && onClose();
-                //       }}
-                //       onOk={() => {
-                //         parentId && handlAdd("ApproverNode", parentId);
-                //         onClose && onClose();
-                //       }}
-                //     />
-                //   );
-                // },
-                // renderCcRecipientForm: (parentId, currentId, open, onClose) => {
-                //   return (
-                //     <Modal
-                //       open={open}
-                //       onCancel={() => {
-                //         onClose && onClose();
-                //       }}
-                //       onOk={() => {
-                //         parentId && handlAdd("ApproverNode", parentId);
-                //         onClose && onClose();
-                //       }}
-                //     />
-                //   );
-                // },
-                // renderConditionForm: (parentId, currentId, open, onClose) => {
-                //   return (
-                //     <Modal
-                //       open={open}
-                //       onCancel={() => {
-                //         onClose && onClose();
-                //       }}
-                //       onOk={() => {
-                //         parentId && handleCondition(parentId);
-                //         onClose && onClose();
-                //       }}
-                //     />
-                //   );
-                // },
-              }
-            }
+            addEdgeProps={{
+              renderApproverForm: (parentId, currentId, open, onClose) => {
+                return (
+                  <Modal
+                    open={open}
+                    onCancel={() => {
+                      onClose && onClose();
+                    }}
+                    onOk={() => {
+                      parentId && handlAdd("ApproverNode", parentId);
+                      onClose && onClose();
+                    }}
+                  />
+                );
+              },
+              renderCcRecipientForm: (parentId, currentId, open, onClose) => {
+                return (
+                  <Modal
+                    open={open}
+                    onCancel={() => {
+                      onClose && onClose();
+                    }}
+                    onOk={() => {
+                      parentId && handlAdd("ApproverNode", parentId);
+                      onClose && onClose();
+                    }}
+                  />
+                );
+              },
+              renderConditionForm: (parentId, currentId, open, onClose) => {
+                return (
+                  <Modal
+                    open={open}
+                    onCancel={() => {
+                      onClose && onClose();
+                    }}
+                    onOk={() => {
+                      parentId && handleCondition(parentId);
+                      onClose && onClose();
+                    }}
+                  />
+                );
+              },
+            }}
             onSort={handleSort}
             onDelete={handleDelete}
             onCopy={handleCopy}

@@ -13,7 +13,6 @@ export type CardType = {
   displayCopy?: boolean;
   className?: string;
   styles?: React.CSSProperties;
-  titleStyles?: React.CSSProperties;
   onDelete?: (nodeId: string) => void;
   onCopy?: (nodeId: string) => void;
   render?: () => ReactNode;
@@ -60,6 +59,10 @@ export type AddEdgeOptionsType = {
 };
 
 export interface IApprovalAddEdgeProps {
+  initiatorClassName?: string;
+  approverClassName?: string;
+  ccClassName?: string;
+  conditionClassName?: string;
   onAdd?: (value: IAddProps) => void;
   renderInitiatorForm?: (
     parentId: string,
@@ -95,10 +98,12 @@ export interface IAddEdgeProps extends IApprovalAddEdgeProps {
   edge: EdgeProps<EdgeDataType>;
   direction: "TB" | "LR";
   isCondition?: boolean;
+  isEnd?: boolean;
 }
 
 export interface IApprovalFlowProps<T> {
   data: T[];
+  // LR方向部分樣式邏輯未修復
   direction: "TB" | "LR";
   nodeWidth: number;
   nodeHeight: number;
