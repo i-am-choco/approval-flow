@@ -104,6 +104,14 @@ export const RuleList = React.memo(
     };
 
     const handleSave = () => {
+      if (
+        !query.rules.length ||
+        query.rules.some(
+          (item) => !!R.pathOr(false, ["value"], item) || !displayField.length,
+        )
+      ) {
+        return;
+      }
       const displayRule = formatQuery(query, "cel");
 
       const ids =

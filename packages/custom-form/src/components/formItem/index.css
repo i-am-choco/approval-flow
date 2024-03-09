@@ -5,8 +5,16 @@
   flex-direction: column;
   text-align: left;
   margin-bottom: 8px;
+  position: relative;
 }
 .custom-form-item-selected {
   border: 1px solid #ccc;
   cursor: grab;
+}
+.custom-form-item-delete {
+  position: absolute;
+  font-size: 12px;
+  top: 8px;
+  right: 8px;
+  cursor: pointer;
 }
