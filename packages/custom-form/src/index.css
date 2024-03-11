@@ -47,6 +47,7 @@
 .custom-form-right-sider {
   width: 25%;
   height: 100%;
+  position: relative;
 }
 .custom-form-component-layout {
   display: flex;

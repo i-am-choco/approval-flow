@@ -4,6 +4,7 @@ import { FormComponentType, IRenderFormProps } from "../../types/index.types";
 import { Input } from "./Input/input";
 import { InputRule } from "./Input/input-rule";
 import { List } from "./List";
+import { ListRule } from "./List/list-rule";
 import { Select } from "./Select";
 import { SelectRule } from "./Select/rule";
 
@@ -38,6 +39,7 @@ export const COMPONENTS: FormComponentType[] = [
     droppable: true,
     title: "列表",
     renderForm: () => <List />,
+    renderRuleForm: (props) => <ListRule {...props} />,
   },
 ];
 

@@ -1,11 +1,18 @@
 .custom-form-tabs {
   display: flex;
   flex-direction: column;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 .custom-form-tabs-header {
   border: 1px solid #ccc;
   display: flex;
   flex-direction: row;
+}
+.custom-form-tabs-content{
+  flex: 1;
+  overflow-y: auto;
 }
 .custom-form-tab-item {
   flex: 1;
