@@ -3,22 +3,31 @@ import { ReactNode } from "react";
 export type BaseRuleType = {
   id: string;
   label: string;
+  title?: string[];
+  tips?: string;
+  required?: boolean;
+  decimals?: boolean;
+  precision?: number;
+  formatter?: string;
+  mode?: "custom" | "module";
+  display?: "drop" | "tile";
+  automaticCalculate?: boolean;
+  description?: string;
+  onlyApplication?: boolean;
+  action?: string;
   displayRule?: string;
   displayRuleId?: string;
   displayRuleDisabled?: boolean;
-  options?: Array<{ label: string; value: string }>;
+  options?: string[];
+  moduleOptions?: string[];
 };
 export interface IRenderRuleFormProps {
   ruleId: string;
-  rule?: any;
+  rule?: BaseRuleType;
   onChange?: (value: any) => void;
 }
-export interface IRenderFormProps<T extends BaseRuleType> {
-  draggingId?: string | null;
-  rule?: T;
-  children?: FormItemConfigType<T>[];
-  onChildrenChange?: (value: any) => void;
-  onChangeDraggingId?: (id: string | null) => void;
+export interface IRenderFormProps {
+  rule?: BaseRuleType;
 }
 
 export type FormComponentType = {
@@ -26,7 +35,8 @@ export type FormComponentType = {
   id: string;
   droppable?: boolean;
   title: string;
-  renderForm?: (props?: IRenderFormProps<any>) => ReactNode;
+  data: Omit<BaseRuleType, "id" | "label">;
+  renderForm?: (props?: IRenderFormProps) => ReactNode;
   renderRuleForm?: (props: IRenderRuleFormProps) => ReactNode;
 };
 

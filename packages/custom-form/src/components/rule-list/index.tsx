@@ -258,8 +258,8 @@ export const RuleList = React.memo(
             validator,
             values:
               item.rule.options?.map((value) => ({
-                ...value,
-                name: value.label,
+                label: value,
+                name: value,
               })) || [],
           })) || [],
       [displayField, formItems],

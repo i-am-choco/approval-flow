@@ -61,7 +61,11 @@ export const FormItem = React.memo((props: IFormItemProps) => {
         id,
         type: config.type,
         droppable: config.droppable,
-        rule: { id, label: config.title },
+        rule: {
+          id,
+          label: config.data?.title?.join("-") || config.title,
+          ...config.data,
+        },
       },
       (isChildren ? children : brother) || [],
     );
@@ -135,7 +139,7 @@ export const FormItem = React.memo((props: IFormItemProps) => {
           onClick={handleDelete}
         />
       )}
-      {getForm(type)}
+      {getForm(type, { rule: current.rule })}
       <div
         id={`${id}-children`}
         onDrop={(e) => handleDrop(true, e)}
@@ -156,6 +160,7 @@ export const FormItem = React.memo((props: IFormItemProps) => {
           </div>
         )}
       </div>
+      {current.type === "List" && <div>添加</div>}
     </div>
   );
 });
