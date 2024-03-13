@@ -78,7 +78,7 @@ export const DEFAULT_RULE = {
     onlyApplication: false,
   },
   upload: {
-    title: ["附近"],
+    title: ["附件"],
     required: false,
   },
   list: {
@@ -89,7 +89,7 @@ export const DEFAULT_RULE = {
 
 export const COMPONENTS: FormComponentType[] = [
   {
-    type: "Input",
+    type: "input",
     id: "custom-form-input",
     title: "单行输入框",
     data: DEFAULT_RULE.input,
@@ -97,7 +97,7 @@ export const COMPONENTS: FormComponentType[] = [
     renderRuleForm: (props) => <InputRule {...props} />,
   },
   {
-    type: "TextArea",
+    type: "textArea",
     id: "custom-form-input-area",
     title: "多行输入框",
     data: DEFAULT_RULE.textArea,
@@ -105,7 +105,7 @@ export const COMPONENTS: FormComponentType[] = [
     renderRuleForm: (props) => <TextAreaRule {...props} />,
   },
   {
-    type: "InputNumber",
+    type: "inputNumber",
     id: "custom-form-input-number",
     title: "数字输入框",
     data: DEFAULT_RULE.inputNumber,
@@ -161,7 +161,7 @@ export const COMPONENTS: FormComponentType[] = [
     renderRuleForm: (props) => <UploadRule {...props} />,
   },
   {
-    type: "List",
+    type: "list",
     id: "custom-form-list",
     droppable: true,
     title: "列表",

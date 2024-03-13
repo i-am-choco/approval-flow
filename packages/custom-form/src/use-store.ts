@@ -10,7 +10,7 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
 
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
-  const [form, setForm] = useState<FormItemConfigType<any>[]>([]);
+  const [form, setForm] = useState<FormItemConfigType[]>([]);
 
   const [tabKey, setTabKey] = useState<string>("control");
 
@@ -78,9 +78,7 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
   const handleUpdateRule = (id: string, rule: any) => {
     let flag = false;
 
-    const update = (
-      list: FormItemConfigType<any>[],
-    ): FormItemConfigType<any>[] =>
+    const update = (list: FormItemConfigType[]): FormItemConfigType[] =>
       list.map((item) => {
         if (flag) return item;
         if (item.id === id) {
@@ -96,8 +94,8 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
   };
 
   const getFormConfigData = (
-    list: FormItemConfigType<any>[],
-  ): FormItemConfigType<any> | undefined => {
+    list: FormItemConfigType[],
+  ): FormItemConfigType | undefined => {
     let result = undefined;
 
     list.some((item) => {

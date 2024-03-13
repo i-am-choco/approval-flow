@@ -160,7 +160,7 @@ export const FormItem = React.memo((props: IFormItemProps) => {
           </div>
         )}
       </div>
-      {current.type === "List" && <div>{current?.rule?.action || "添加"}</div>}
+      {current.type === "list" && <div>{current?.rule?.action || "添加"}</div>}
     </div>
   );
 });
