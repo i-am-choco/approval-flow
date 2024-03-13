@@ -40,13 +40,13 @@ export type FormComponentType = {
   renderRuleForm?: (props: IRenderRuleFormProps) => ReactNode;
 };
 
-export type FormItemConfigType<Rule extends BaseRuleType> = {
+export type FormItemConfigType = {
   id: string; // 关联数据流的唯一id
   type: string; // 组件类型
-  rule: Rule;
+  rule: BaseRuleType;
   droppable?: boolean; // 该表单是否可以被放置
   dragable?: boolean;
-  children?: FormItemConfigType<Rule>[];
+  children?: FormItemConfigType[];
 };
 
 export type DataType = {
@@ -60,5 +60,5 @@ export interface ICustomFormProps {
   height: string;
 }
 export type CustomFormRef = {
-  getFormConfigData: () => FormItemConfigType<any>[];
+  getFormConfigData: () => FormItemConfigType[];
 };
