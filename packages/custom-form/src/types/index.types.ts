@@ -30,6 +30,10 @@ export interface IRenderFormProps {
   rule?: BaseRuleType;
 }
 
+export type RuleFormRef = {
+  check: () => boolean;
+};
+
 export type FormComponentType = {
   type: string;
   id: string;
@@ -37,7 +41,10 @@ export type FormComponentType = {
   title: string;
   data: Omit<BaseRuleType, "id" | "label">;
   renderForm?: (props?: IRenderFormProps) => ReactNode;
-  renderRuleForm?: (props: IRenderRuleFormProps) => ReactNode;
+  renderRuleForm?: (
+    props: IRenderRuleFormProps,
+    ref?: React.MutableRefObject<RuleFormRef | null>,
+  ) => ReactNode;
 };
 
 export type FormItemConfigType = {

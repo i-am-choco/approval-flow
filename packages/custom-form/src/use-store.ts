@@ -1,8 +1,12 @@
 import * as R from "ramda";
-import { ForwardedRef, useImperativeHandle, useState } from "react";
+import { ForwardedRef, useImperativeHandle, useRef, useState } from "react";
 
 import { COMPONENTS, getRuleForm } from "./components/components";
-import { CustomFormRef, FormItemConfigType } from "./types/index.types";
+import {
+  CustomFormRef,
+  FormItemConfigType,
+  RuleFormRef,
+} from "./types/index.types";
 export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
   const [x, setX] = useState<number>(375);
 
@@ -13,6 +17,8 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
   const [form, setForm] = useState<FormItemConfigType[]>([]);
 
   const [tabKey, setTabKey] = useState<string>("control");
+
+  const ruleFormRef = useRef<RuleFormRef | null>(null);
 
   // 拖拽游标为抓手
   const handleCursorGrabbing = () => {
@@ -38,7 +44,7 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
   };
 
   const handleComponentDragStart = (id: string) => {
-    setDraggingId(id);
+    handleUpdateDraggingId(id);
     handleCursorGrabbing();
   };
 
@@ -67,7 +73,7 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
           },
         },
       ]);
-      setDraggingId(id);
+      handleUpdateDraggingId(id);
     } else if (form.some((item) => item.id === draggingId)) {
       const formIndex = R.findIndex((value) => value.id === draggingId, form);
 
@@ -119,8 +125,19 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
 
     return (
       item &&
-      getRuleForm(item.type, `${draggingId}-rule`, item?.rule, handleChange)
+      getRuleForm(
+        item.type,
+        `${draggingId}-rule`,
+        item?.rule,
+        handleChange,
+        ruleFormRef,
+      )
     );
+  };
+
+  const handleUpdateDraggingId = (id: string | null) => {
+    if (ruleFormRef.current?.check()) return;
+    setDraggingId(id);
   };
 
   useImperativeHandle(ref, () => ({
@@ -133,8 +150,9 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
     tabKey,
     form,
     draggingId,
+    ruleFormRef,
     setForm,
-    setDraggingId,
+    handleUpdateDraggingId,
     setX,
     setY,
     setTabKey,

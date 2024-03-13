@@ -20,11 +20,12 @@ export const CustomForm = React.forwardRef(
       form,
       draggingId,
       tabKey,
+      ruleFormRef,
       setX,
       setY,
       setTabKey,
       setForm,
-      setDraggingId,
+      handleUpdateDraggingId,
       handleCursorNotAllowed,
       handleRenderRuleForm,
       handleCanvasDragOver,
@@ -76,8 +77,12 @@ export const CustomForm = React.forwardRef(
                   className="custom-form-component"
                   key={item.type}
                   id={item.id}
-                  draggable
-                  style={{ cursor: "grab" }}
+                  draggable={!ruleFormRef.current?.check()}
+                  style={{
+                    cursor: !ruleFormRef.current?.check()
+                      ? "not-allowed"
+                      : "grab",
+                  }}
                   onDragStart={() => handleComponentDragStart(item.id)}
                 >
                   {item.title}
@@ -103,7 +108,7 @@ export const CustomForm = React.forwardRef(
                 componentList={COMPONENTS}
                 onChange={setForm}
                 draggingId={draggingId}
-                onChangeDraggingId={setDraggingId}
+                onChangeDraggingId={handleUpdateDraggingId}
               />
             ))}
           </div>

@@ -1,6 +1,10 @@
 import React from "react";
 
-import { FormComponentType, IRenderFormProps } from "../../types/index.types";
+import {
+  FormComponentType,
+  IRenderFormProps,
+  RuleFormRef,
+} from "../../types/index.types";
 import { Date } from "./date";
 import { DateRule } from "./date/rule";
 import { DateRange } from "./date-range";
@@ -94,7 +98,7 @@ export const COMPONENTS: FormComponentType[] = [
     title: "单行输入框",
     data: DEFAULT_RULE.input,
     renderForm: (props) => <Input {...props} />,
-    renderRuleForm: (props) => <InputRule {...props} />,
+    renderRuleForm: (props, ref) => <InputRule {...props} ref={ref} />,
   },
   {
     type: "textArea",
@@ -102,7 +106,7 @@ export const COMPONENTS: FormComponentType[] = [
     title: "多行输入框",
     data: DEFAULT_RULE.textArea,
     renderForm: (props) => <TextArea {...props} />,
-    renderRuleForm: (props) => <TextAreaRule {...props} />,
+    renderRuleForm: (props, ref) => <TextAreaRule {...props} ref={ref} />,
   },
   {
     type: "inputNumber",
@@ -118,7 +122,7 @@ export const COMPONENTS: FormComponentType[] = [
     title: "单选框",
     data: DEFAULT_RULE.select,
     renderForm: (props) => <Select {...props} />,
-    renderRuleForm: (props) => <SelectRule {...props} />,
+    renderRuleForm: (props, ref) => <SelectRule {...props} ref={ref} />,
   },
   {
     type: "multipleSelect",
@@ -126,7 +130,7 @@ export const COMPONENTS: FormComponentType[] = [
     title: "多选框",
     data: DEFAULT_RULE.multipleSelect,
     renderForm: (props) => <MultipleSelect {...props} />,
-    renderRuleForm: (props) => <MultipleSelectRule {...props} />,
+    renderRuleForm: (props, ref) => <MultipleSelectRule {...props} ref={ref} />,
   },
   {
     type: "date",
@@ -134,7 +138,7 @@ export const COMPONENTS: FormComponentType[] = [
     title: "日期时间",
     data: DEFAULT_RULE.date,
     renderForm: (props) => <Date {...props} />,
-    renderRuleForm: (props) => <DateRule {...props} />,
+    renderRuleForm: (props, ref) => <DateRule {...props} ref={ref} />,
   },
   {
     type: "dateRange",
@@ -142,7 +146,7 @@ export const COMPONENTS: FormComponentType[] = [
     title: "日期时间区间",
     data: DEFAULT_RULE.dateRange,
     renderForm: (props) => <DateRange {...props} />,
-    renderRuleForm: (props) => <DateRangeRule {...props} />,
+    renderRuleForm: (props, ref) => <DateRangeRule {...props} ref={ref} />,
   },
   {
     type: "description",
@@ -150,7 +154,7 @@ export const COMPONENTS: FormComponentType[] = [
     title: "说明文字",
     data: DEFAULT_RULE.description,
     renderForm: (props) => <Description {...props} />,
-    renderRuleForm: (props) => <DescriptionRule {...props} />,
+    renderRuleForm: (props, ref) => <DescriptionRule {...props} ref={ref} />,
   },
   {
     type: "upload",
@@ -158,7 +162,7 @@ export const COMPONENTS: FormComponentType[] = [
     title: "附件",
     data: DEFAULT_RULE.upload,
     renderForm: (props) => <Upload {...props} />,
-    renderRuleForm: (props) => <UploadRule {...props} />,
+    renderRuleForm: (props, ref) => <UploadRule {...props} ref={ref} />,
   },
   {
     type: "list",
@@ -167,7 +171,7 @@ export const COMPONENTS: FormComponentType[] = [
     title: "列表",
     data: DEFAULT_RULE.list,
     renderForm: (props) => <List {...props} />,
-    renderRuleForm: (props) => <ListRule {...props} />,
+    renderRuleForm: (props, ref) => <ListRule {...props} ref={ref} />,
   },
 ];
 
@@ -182,11 +186,14 @@ export const getRuleForm = (
   ruleId: string,
   rule: any,
   onChange: (value: any) => void,
+  ref?: React.MutableRefObject<RuleFormRef | null>,
 ) => {
   const result = COMPONENTS.find((item) => item.type === type);
 
   return (
     (result?.renderRuleForm &&
-      result?.renderRuleForm({ ruleId, rule, onChange })) ?? <p>需要维护</p>
+      result?.renderRuleForm({ ruleId, rule, onChange }, ref)) ?? (
+      <p>需要维护</p>
+    )
   );
 };
