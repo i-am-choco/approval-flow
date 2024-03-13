@@ -7,11 +7,11 @@ import React from "react";
 import { FormComponentType, FormItemConfigType } from "../../types/index.types";
 import { getForm } from "../components";
 interface IFormItemProps {
-  brother: FormItemConfigType<any>[];
-  current: FormItemConfigType<any>;
+  brother: FormItemConfigType[];
+  current: FormItemConfigType;
   draggingId: string | null;
   componentList: FormComponentType[];
-  onChange: (value: FormItemConfigType<any>[]) => void;
+  onChange: (value: FormItemConfigType[]) => void;
   onChangeDraggingId: (id: string | null) => void;
 }
 export const FormItem = React.memo((props: IFormItemProps) => {
@@ -61,7 +61,11 @@ export const FormItem = React.memo((props: IFormItemProps) => {
         id,
         type: config.type,
         droppable: config.droppable,
-        rule: { id, label: config.title },
+        rule: {
+          id,
+          label: config.data?.title?.join("-") || config.title,
+          ...config.data,
+        },
       },
       (isChildren ? children : brother) || [],
     );
@@ -100,7 +104,7 @@ export const FormItem = React.memo((props: IFormItemProps) => {
     }
   };
 
-  const handleChildrenChange = (children: FormItemConfigType<any>[]) => {
+  const handleChildrenChange = (children: FormItemConfigType[]) => {
     const item = { ...current, children };
 
     const result = brother.map((value) => (value.id === id ? item : value));
@@ -135,7 +139,7 @@ export const FormItem = React.memo((props: IFormItemProps) => {
           onClick={handleDelete}
         />
       )}
-      {getForm(type)}
+      {getForm(type, { rule: current.rule })}
       <div
         id={`${id}-children`}
         onDrop={(e) => handleDrop(true, e)}
@@ -156,6 +160,7 @@ export const FormItem = React.memo((props: IFormItemProps) => {
           </div>
         )}
       </div>
+      {current.type === "List" && <div>{current?.rule?.action || "添加"}</div>}
     </div>
   );
 });

@@ -1,15 +1,14 @@
-import "./index.css";
-
 import React from "react";
 
 import { IRenderFormProps } from "../../..";
 
-export const List = React.memo((props: IRenderFormProps) => {
+export const Upload = React.memo((props: IRenderFormProps) => {
   const { rule } = props;
 
   return (
-    <div className="custom-form-component-list">
+    <div>
       <p>{rule?.title?.[0] || ""}</p>
+      <p>上传</p>
     </div>
   );
 });

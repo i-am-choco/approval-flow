@@ -1,16 +1,27 @@
 import React from "react";
 
-import { IRenderRuleFormProps } from "../../../types/index.types";
+import { IRenderRuleFormProps } from "../../..";
 import { RuleOptions } from "../../rules/ruleOptions";
+import { RuleRequired } from "../../rules/ruleRequired";
 import { RuleTips } from "../../rules/ruleTips";
 import { RuleTitle } from "../../rules/ruleTitle";
 
-export const SelectRule = React.memo((props: IRenderRuleFormProps) => {
+export const MultipleSelectRule = React.memo((props: IRenderRuleFormProps) => {
   const { rule, onChange } = props;
 
   return (
     <div>
-      <RuleTitle value={["單選框"]} onChange={() => {}} />
+      <RuleTitle
+        value={rule?.title || [""]}
+        onChange={(value) =>
+          onChange &&
+          onChange({
+            ...rule,
+            title: value,
+            label: value.join("-") || rule?.label,
+          })
+        }
+      />
       <RuleTips
         value={rule?.tips}
         onChange={(tips) => onChange && onChange({ ...rule, tips })}
@@ -25,6 +36,10 @@ export const SelectRule = React.memo((props: IRenderRuleFormProps) => {
         onDisplayChange={(display) =>
           onChange && onChange({ ...rule, display })
         }
+      />
+      <RuleRequired
+        checked={rule?.required || false}
+        onChange={(required) => onChange && onChange({ ...rule, required })}
       />
     </div>
   );

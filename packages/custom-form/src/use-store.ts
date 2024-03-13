@@ -60,7 +60,11 @@ export const UseStore = (ref: ForwardedRef<CustomFormRef>) => {
           id,
           type: config.type,
           droppable: config.droppable,
-          rule: { id, label: config.title },
+          rule: {
+            id,
+            label: config.data?.title?.join("-") || config.title,
+            ...config.data,
+          },
         },
       ]);
       setDraggingId(id);
