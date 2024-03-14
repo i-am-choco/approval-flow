@@ -23,6 +23,7 @@ export const RuleTitle = React.memo((props: IRuleTitleProps) => {
             <span>{value.length === 1 ? "标题" : `标题${index + 1}`}</span>
           </p>
           <Input
+            status={!item ? "error" : ""}
             count={{ show: true, max: 50 }}
             value={item}
             placeholder="请输入"

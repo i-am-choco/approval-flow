@@ -19,9 +19,9 @@ import {
   validator,
 } from "../rule-builder";
 
-interface IRuleListProps<Rule extends BaseRuleType> {
-  formConfig: FormItemConfigType<Rule>[];
-  onChange: (value: FormItemConfigType<Rule>[]) => void;
+interface IRuleListProps {
+  formConfig: FormItemConfigType[];
+  onChange: (value: FormItemConfigType[]) => void;
 }
 export enum RuleActionEnum {
   add,
@@ -29,305 +29,313 @@ export enum RuleActionEnum {
   copy,
 }
 
-type RuleListType<T extends BaseRuleType> = {
+type RuleListType = {
   key: string;
   rules: string;
   disabled: boolean;
-  value: T[];
+  value: BaseRuleType[];
 };
 
-export const RuleList = React.memo(
-  <Rule extends BaseRuleType>(props: IRuleListProps<Rule>) => {
-    const { formConfig, onChange } = props;
+export const RuleList = React.memo((props: IRuleListProps) => {
+  const { formConfig, onChange } = props;
 
-    const [actionType, setActionType] = useState<RuleActionEnum>(
-      RuleActionEnum.add,
+  const [actionType, setActionType] = useState<RuleActionEnum>(
+    RuleActionEnum.add,
+  );
+
+  const [current, setCurrent] = useState<RuleListType | null>(null);
+
+  const [query, setQuery] = useState<RuleGroupType>(DEFAULT_QUERY);
+
+  const [displayField, setDisplayField] = useState<string[]>([]);
+
+  const formItems = useMemo(() => {
+    const bfs = (
+      value: FormItemConfigType[],
+      path: string,
+    ): FormItemConfigType[] => {
+      const total: FormItemConfigType[] = [];
+
+      value.length &&
+        total.push(
+          ...value.map((item) => ({
+            ...item,
+            rule: {
+              ...item.rule,
+              label: `${path}${path && "/"}${item.rule.label}`,
+            },
+          })),
+        );
+      value.map((item) => {
+        const children = bfs(
+          item.children || [],
+          `${path}${path && "/"}${item.rule.label}`,
+        );
+
+        total.push(...children);
+      });
+
+      return total;
+    };
+
+    return bfs(formConfig, "");
+  }, [formConfig]);
+
+  // 列表展示的数据
+  const list: RuleListType[] = useMemo(() => {
+    const rules = formItems
+      .filter((item) => item.rule.displayRule)
+      .map((item) => item.rule);
+
+    const group: Record<string, BaseRuleType[] | undefined> = R.groupBy(
+      (item: BaseRuleType) => item.displayRuleId ?? "",
+      rules,
     );
 
-    const [current, setCurrent] = useState<RuleListType<Rule> | null>(null);
+    const result: RuleListType[] = [];
 
-    const [query, setQuery] = useState<RuleGroupType>(DEFAULT_QUERY);
+    R.mapObjIndexed((value: BaseRuleType[], key: string) => {
+      result.push({
+        key,
+        rules: value[0].displayRule || "",
+        disabled: !!value[0].displayRuleDisabled,
+        value,
+      });
+    }, group);
 
-    const [displayField, setDisplayField] = useState<string[]>([]);
+    return result;
+  }, [formItems]);
 
-    const formItems = useMemo(() => {
-      const bfs = (
-        value: FormItemConfigType<Rule>[],
-      ): FormItemConfigType<Rule>[] => {
-        const total: FormItemConfigType<Rule>[] = [];
+  const [open, setOpen] = useState<boolean>(false);
 
-        value.length && total.push(...value);
-        value.map((item) => {
-          const children = bfs(item.children || []);
+  const handleClose = () => {
+    setOpen(false);
+    setQuery(DEFAULT_QUERY);
+    setCurrent(null);
+    setDisplayField([]);
+  };
 
-          total.push(...children);
-        });
+  const handleSave = () => {
+    if (
+      !query.rules.length ||
+      query.rules.some(
+        (item) => !!R.pathOr(false, ["value"], item) || !displayField.length,
+      )
+    ) {
+      return;
+    }
+    const displayRule = formatQuery(query, "cel");
 
-        return total;
-      };
+    const ids =
+      (actionType === RuleActionEnum.edit &&
+        current?.value.map((item) => item.id)) ||
+      [];
 
-      return bfs(formConfig);
-    }, [formConfig]);
-
-    // 列表展示的数据
-    const list: RuleListType<Rule>[] = useMemo(() => {
-      const rules = formItems
-        .filter((item) => item.rule.displayRule)
-        .map((item) => item.rule);
-
-      const group: Record<string, Rule[] | undefined> = R.groupBy(
-        (item: Rule) => item.displayRuleId ?? "",
-        rules,
-      );
-
-      const result: RuleListType<Rule>[] = [];
-
-      R.mapObjIndexed((value: Rule[], key: string) => {
-        result.push({
-          key,
-          rules: value[0].displayRule || "",
-          disabled: !!value[0].displayRuleDisabled,
-          value,
-        });
-      }, group);
-
-      return result;
-    }, [formItems]);
-
-    const [open, setOpen] = useState<boolean>(false);
-
-    const handleClose = () => {
-      setOpen(false);
-      setQuery(DEFAULT_QUERY);
-      setCurrent(null);
-      setDisplayField([]);
-    };
-
-    const handleSave = () => {
-      if (
-        !query.rules.length ||
-        query.rules.some(
-          (item) => !!R.pathOr(false, ["value"], item) || !displayField.length,
-        )
-      ) {
-        return;
-      }
-      const displayRule = formatQuery(query, "cel");
-
-      const ids =
-        (actionType === RuleActionEnum.edit &&
-          current?.value.map((item) => item.id)) ||
-        [];
-
-      const update = (
-        value: FormItemConfigType<any>[],
-      ): FormItemConfigType<any>[] =>
-        value.map((item) => ({
-          ...item,
-          rule: displayField.includes(item.id)
-            ? {
-                ...item.rule,
-                displayRule,
-                displayField: list.length.toString(),
-              }
-            : ids.includes(item.id)
-              ? {
-                  ...item.rule,
-                  displayRule: undefined,
-                  displayRuleId: undefined,
-                }
-              : item.rule,
-          children: item.children && update(item.children),
-        }));
-
-      onChange(update(formConfig));
-      handleClose();
-    };
-
-    const handleDelete = (item: RuleListType<Rule>) => {
-      const ids = item.value.map((item) => item.id);
-
-      const result = formConfig.map((item) =>
-        ids.includes(item.id)
+    const update = (value: FormItemConfigType[]): FormItemConfigType[] =>
+      value.map((item) => ({
+        ...item,
+        rule: displayField.includes(item.id)
           ? {
-              ...item,
-              rule: {
+              ...item.rule,
+              displayRule,
+              displayField: list.length.toString(),
+            }
+          : ids.includes(item.id)
+            ? {
                 ...item.rule,
                 displayRule: undefined,
                 displayRuleId: undefined,
-              },
-            }
-          : item,
-      );
+              }
+            : item.rule,
+        children: item.children && update(item.children),
+      }));
 
-      onChange(result);
-    };
+    onChange(update(formConfig));
+    handleClose();
+  };
 
-    const handleCopy = (value: RuleListType<Rule>) => {
-      setOpen(true);
-      setCurrent(value);
-      setActionType(RuleActionEnum.copy);
-      setQuery(parseCEL(value.rules));
-    };
+  const handleDelete = (item: RuleListType) => {
+    const ids = item.value.map((item) => item.id);
 
-    const handleEdit = (value: RuleListType<Rule>) => {
-      setOpen(true);
-      setCurrent(value);
-      setActionType(RuleActionEnum.edit);
-      const rule = parseCEL(value.rules);
-
-      const values = value.value.map((item) => item.id);
-
-      setQuery(rule);
-      setDisplayField(values);
-    };
-
-    const handleAdd = () => {
-      setOpen(true);
-      setActionType(RuleActionEnum.add);
-    };
-
-    const transformRuleToText = (rule: string, data: Rule[]) => {
-      const rules: RuleGroupType = parseCEL(rule);
-
-      const getName = (id: string) =>
-        formItems.find((item) => item.id === id)?.rule?.label || "undefined";
-
-      const getOperator = (value: string) =>
-        SELECT_OPERATORS.find((item) => item.name === value)?.label ||
-        "undefined";
-
-      return (
-        <div className="custom-form-rule-list-text">
-          {rules.rules.map((item, index) => {
-            const value = item as {
-              field: string;
-              value: string;
-              operator: string;
-            };
-
-            return (
-              <p key={index}>
-                当{getName(value.field)}
-                {getOperator(value.operator)}
-                {value.value}
-                {index === rules.rules.length - 1 ? "时" : "且"}
-              </p>
-            );
-          })}
-          <p>显示{data.map((item) => item.label)}</p>
-        </div>
-      );
-    };
-
-    const title = useMemo(() => {
-      switch (actionType) {
-        case RuleActionEnum.add:
-          return "增加";
-        case RuleActionEnum.edit:
-          return "编辑";
-        case RuleActionEnum.copy:
-          return "复制";
-        default:
-          return "";
-      }
-    }, [actionType]);
-
-    const footer = (
-      <div>
-        <Button onClick={handleClose}>取消</Button>
-        <Button onClick={handleSave}>保存</Button>
-      </div>
+    const result = formConfig.map((item) =>
+      ids.includes(item.id)
+        ? {
+            ...item,
+            rule: {
+              ...item.rule,
+              displayRule: undefined,
+              displayRuleId: undefined,
+            },
+          }
+        : item,
     );
 
-    // 字段隐藏规则显示关联条件的字段
-    const fields: Field[] = useMemo(
-      () =>
-        formItems
-          .filter(
-            (item) =>
-              (item.type === "Select" || item.type === "Multiselect") &&
-              !displayField.includes(item.id),
-          )
-          .map((item) => ({
-            name: item.rule.id,
-            id: item.rule.id,
-            label: item.rule.label,
-            valueEditorType: "multiselect",
-            operators: SELECT_OPERATORS,
-            validator,
-            values:
-              item.rule.options?.map((value) => ({
-                label: value,
-                name: value,
-              })) || [],
-          })) || [],
-      [displayField, formItems],
-    );
+    onChange(result);
+  };
 
-    // 字段隐藏规则可控制显示隐藏的字段
-    const options = useMemo(() => {
-      // 当前条件已选的字段
-      const selectedField: string[] = query.rules.map((item) =>
-        R.pathOr("", ["field"], item),
-      );
+  const handleCopy = (value: RuleListType) => {
+    setOpen(true);
+    setCurrent(value);
+    setActionType(RuleActionEnum.copy);
+    setQuery(parseCEL(value.rules));
+  };
 
-      // 规则列表已设置的字段
-      const listField = R.flatten(
-        R.without(
-          actionType === RuleActionEnum.edit ? [current] : [],
-          list,
-        ).map((item) => item.value),
-      ).map((item) => item.id);
+  const handleEdit = (value: RuleListType) => {
+    setOpen(true);
+    setCurrent(value);
+    setActionType(RuleActionEnum.edit);
+    const rule = parseCEL(value.rules);
 
-      return formItems
-        .filter(
-          (item) =>
-            !selectedField.includes(item.id) && !listField.includes(item.id),
-        )
-        .map((item) => ({
-          label: item.rule.label,
-          value: item.id,
-        }));
-    }, [actionType, current, formItems, list, query.rules]);
+    const values = value.value.map((item) => item.id);
+
+    setQuery(rule);
+    setDisplayField(values);
+  };
+
+  const handleAdd = () => {
+    setOpen(true);
+    setActionType(RuleActionEnum.add);
+  };
+
+  const transformRuleToText = (rule: string, data: BaseRuleType[]) => {
+    const rules: RuleGroupType = parseCEL(rule);
+
+    const getName = (id: string) =>
+      formItems.find((item) => item.id === id)?.rule?.label || "undefined";
+
+    const getOperator = (value: string) =>
+      SELECT_OPERATORS.find((item) => item.name === value)?.label ||
+      "undefined";
 
     return (
-      <div className="custom-form-rule-list">
-        <p>字段隱藏規則</p>
-        {list?.map((item, index) => (
-          <div key={index} className="custom-form-rule-list-item">
-            {transformRuleToText(item.rules, item.value)}
-            {!item.disabled && (
-              <div className="custom-form-rule-list-operation">
-                <EditOutlined onClick={() => handleEdit(item)} />
-                <CopyOutlined onClick={() => handleCopy(item)} />
-                <DeleteOutlined onClick={() => handleDelete(item)} />
-              </div>
-            )}
-          </div>
-        ))}
-        <Button onClick={handleAdd}>添加顯隱規則</Button>
-        <Drawer
-          title={title}
-          width={980}
-          open={open}
-          footer={footer}
-          onClose={handleClose}
-        >
-          <div>满足一下所有条件时</div>
-          <RuleBuilder fields={fields} query={query} onChange={setQuery} />
-          <p>显示以下字段</p>
-          <Select
-            style={{ width: 300 }}
-            mode="multiple"
-            options={options}
-            value={displayField}
-            onChange={(value) => {
-              setDisplayField(value);
-            }}
-          />
-        </Drawer>
+      <div className="custom-form-rule-list-text">
+        {rules.rules.map((item, index) => {
+          const value = item as {
+            field: string;
+            value: string;
+            operator: string;
+          };
+
+          return (
+            <p key={index}>
+              当{getName(value.field)}
+              {getOperator(value.operator)}
+              {value.value}
+              {index === rules.rules.length - 1 ? "时" : "且"}
+            </p>
+          );
+        })}
+        <p>显示{data.map((item) => item.label)}</p>
       </div>
     );
-  },
-);
+  };
+
+  const title = useMemo(() => {
+    switch (actionType) {
+      case RuleActionEnum.add:
+        return "增加";
+      case RuleActionEnum.edit:
+        return "编辑";
+      case RuleActionEnum.copy:
+        return "复制";
+      default:
+        return "";
+    }
+  }, [actionType]);
+
+  const footer = (
+    <div>
+      <Button onClick={handleClose}>取消</Button>
+      <Button onClick={handleSave}>保存</Button>
+    </div>
+  );
+
+  // 字段隐藏规则显示关联条件的字段
+  const fields: Field[] = useMemo(
+    () =>
+      formItems
+        .filter(
+          (item) =>
+            (item.type === "select" || item.type === "multipleSelect") &&
+            !displayField.includes(item.id),
+        )
+        .map((item) => ({
+          name: item.rule.id,
+          id: item.rule.id,
+          label: item.rule.label,
+          valueEditorType: "multiselect",
+          operators: SELECT_OPERATORS,
+          validator,
+          values:
+            item.rule.options?.map((value) => ({
+              label: value,
+              name: value,
+            })) || [],
+        })) || [],
+    [displayField, formItems],
+  );
+
+  // 字段隐藏规则可控制显示隐藏的字段
+  const options = useMemo(() => {
+    // 当前条件已选的字段
+    const selectedField: string[] = query.rules.map((item) =>
+      R.pathOr("", ["field"], item),
+    );
+
+    // 规则列表已设置的字段
+    const listField = R.flatten(
+      R.without(actionType === RuleActionEnum.edit ? [current] : [], list).map(
+        (item) => item.value,
+      ),
+    ).map((item) => item.id);
+
+    return formItems
+      .filter(
+        (item) =>
+          !selectedField.includes(item.id) && !listField.includes(item.id),
+      )
+      .map((item) => ({
+        label: item.rule.label,
+        value: item.id,
+      }));
+  }, [actionType, current, formItems, list, query.rules]);
+
+  return (
+    <div className="custom-form-rule-list">
+      <p>字段隱藏規則</p>
+      {list?.map((item, index) => (
+        <div key={index} className="custom-form-rule-list-item">
+          {transformRuleToText(item.rules, item.value)}
+          {!item.disabled && (
+            <div className="custom-form-rule-list-operation">
+              <EditOutlined onClick={() => handleEdit(item)} />
+              <CopyOutlined onClick={() => handleCopy(item)} />
+              <DeleteOutlined onClick={() => handleDelete(item)} />
+            </div>
+          )}
+        </div>
+      ))}
+      <Button onClick={handleAdd}>添加顯隱規則</Button>
+      <Drawer
+        title={title}
+        width={980}
+        open={open}
+        footer={footer}
+        onClose={handleClose}
+      >
+        <div>满足一下所有条件时</div>
+        <RuleBuilder fields={fields} query={query} onChange={setQuery} />
+        <p>显示以下字段</p>
+        <Select
+          style={{ width: 300 }}
+          mode="multiple"
+          options={options}
+          value={displayField}
+          onChange={(value) => {
+            setDisplayField(value);
+          }}
+        />
+      </Drawer>
+    </div>
+  );
+});
