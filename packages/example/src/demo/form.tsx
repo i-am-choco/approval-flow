@@ -1,4 +1,4 @@
-import { Button } from "antd";
+// import { Button } from "antd";
 import { CustomForm, CustomFormRef } from "custom-form";
 import React, { useRef } from "react";
 export const Form = () => {
@@ -6,14 +6,14 @@ export const Form = () => {
 
   return (
     <div>
-      <Button
+      {/* <Button
         onClick={() => {
           console.log(ref.current?.getFormConfigData());
         }}
       >
         保存
-      </Button>
-      <CustomForm ref={ref} width="100%" height="calc(100vh - 32px)" />
+      </Button> */}
+      <CustomForm ref={ref} width="100%" height="100vh" />
     </div>
   );
 };

@@ -9,7 +9,7 @@ export const InputNumber = React.memo((props: IRenderFormProps) => {
   return (
     <div>
       <p>{rule?.title?.[0] || ""}</p>
-      <Input />
+      <Input disabled placeholder="請輸入" style={{ pointerEvents: "none" }} />
     </div>
   );
 });

@@ -9,7 +9,11 @@ export const Input = React.memo((props: IRenderFormProps) => {
   return (
     <div>
       <p>{rule?.title?.[0] || ""}</p>
-      <AntdInput />
+      <AntdInput
+        style={{ pointerEvents: "none" }}
+        placeholder="請輸入"
+        disabled
+      />
     </div>
   );
 });

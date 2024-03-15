@@ -1,20 +1,37 @@
+:root{
+  --border-color: rgba(231, 232, 238, 1);
+  --table-color: rgba(246, 246, 250, 1);
+  --title-color: rgba(52, 42, 94, 1);
+  --text-color: rgba(102, 103, 125, 1);
+  --select-color: rgba(96, 93, 236, 1);
+  --word-color: rgba(50, 50, 73, 1);
+}
 .custom-form-item {
-  width: 100%;
   height: auto;
   display: flex;
   flex-direction: column;
   text-align: left;
   margin-bottom: 8px;
   position: relative;
+  padding: 8px 0px;
+  cursor: grab;
+  pointer-events: all;
 }
 .custom-form-item-selected {
-  border: 1px solid #ccc;
-  cursor: grab;
+  padding-left: 16px;
+  border-left: 2px solid var(--select-color);
+  color: rgba(0, 0, 0, 0.45);
 }
 .custom-form-item-delete {
   position: absolute;
-  font-size: 12px;
-  top: 8px;
+  font-size: 14px;
+  top: 14px;
   right: 8px;
   cursor: pointer;
+}
+.custom-form-item p {
+  color: var(--word-color);
+  font-size: 14px;
+  margin-top: 0px;
+  margin-bottom: 8px;
 }

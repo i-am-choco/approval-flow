@@ -1,6 +1,7 @@
 import React from "react";
 
 import {
+  CategoryType,
   FormComponentType,
   IRenderFormProps,
   RuleFormRef,
@@ -94,6 +95,7 @@ export const DEFAULT_RULE = {
 export const COMPONENTS: FormComponentType[] = [
   {
     type: "input",
+    group: "base",
     id: "custom-form-input",
     title: "单行输入框",
     data: DEFAULT_RULE.input,
@@ -102,6 +104,7 @@ export const COMPONENTS: FormComponentType[] = [
   },
   {
     type: "textArea",
+    group: "base",
     id: "custom-form-input-area",
     title: "多行输入框",
     data: DEFAULT_RULE.textArea,
@@ -110,6 +113,7 @@ export const COMPONENTS: FormComponentType[] = [
   },
   {
     type: "inputNumber",
+    group: "base",
     id: "custom-form-input-number",
     title: "数字输入框",
     data: DEFAULT_RULE.inputNumber,
@@ -118,6 +122,7 @@ export const COMPONENTS: FormComponentType[] = [
   },
   {
     type: "select",
+    group: "base",
     id: "custom-form-select",
     title: "单选框",
     data: DEFAULT_RULE.select,
@@ -126,6 +131,7 @@ export const COMPONENTS: FormComponentType[] = [
   },
   {
     type: "multipleSelect",
+    group: "base",
     id: "custom-form-multiple-select",
     title: "多选框",
     data: DEFAULT_RULE.multipleSelect,
@@ -134,6 +140,7 @@ export const COMPONENTS: FormComponentType[] = [
   },
   {
     type: "date",
+    group: "base",
     id: "custom-form-date",
     title: "日期时间",
     data: DEFAULT_RULE.date,
@@ -142,6 +149,7 @@ export const COMPONENTS: FormComponentType[] = [
   },
   {
     type: "dateRange",
+    group: "base",
     id: "custom-form-date-range",
     title: "日期时间区间",
     data: DEFAULT_RULE.dateRange,
@@ -150,6 +158,7 @@ export const COMPONENTS: FormComponentType[] = [
   },
   {
     type: "description",
+    group: "base",
     id: "custom-form-description",
     title: "说明文字",
     data: DEFAULT_RULE.description,
@@ -158,6 +167,7 @@ export const COMPONENTS: FormComponentType[] = [
   },
   {
     type: "upload",
+    group: "base",
     id: "custom-form-upload",
     title: "附件",
     data: DEFAULT_RULE.upload,
@@ -166,12 +176,20 @@ export const COMPONENTS: FormComponentType[] = [
   },
   {
     type: "list",
+    group: "base",
     id: "custom-form-list",
     droppable: true,
     title: "列表",
     data: DEFAULT_RULE.list,
     renderForm: (props) => <List {...props} />,
     renderRuleForm: (props, ref) => <ListRule {...props} ref={ref} />,
+  },
+];
+
+export const CATEGORY: CategoryType = [
+  {
+    type: "base",
+    name: "基礎控件",
   },
 ];
 

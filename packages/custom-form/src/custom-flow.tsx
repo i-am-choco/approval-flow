@@ -1,7 +1,7 @@
 import "./index.css";
 
-import { InputNumber } from "antd";
-import React, { ForwardedRef, useMemo } from "react";
+import { AppstoreOutlined } from "@ant-design/icons";
+import React, { ForwardedRef } from "react";
 
 import { COMPONENTS } from "./components/components";
 import { FormItem } from "./components/formItem";
@@ -15,14 +15,11 @@ export const CustomForm = React.forwardRef(
     const { width, height } = props;
 
     const {
-      x,
-      y,
       form,
       draggingId,
       tabKey,
-      ruleFormRef,
-      setX,
-      setY,
+      category,
+      notAllowed,
       setTabKey,
       setForm,
       handleUpdateDraggingId,
@@ -31,38 +28,18 @@ export const CustomForm = React.forwardRef(
       handleCanvasDragOver,
       handleCanvasDrop,
       handleComponentDragStart,
-    } = UseStore(ref);
-
-    const canvasHeader = useMemo(
-      () => (
-        <>
-          <span style={{ marginLeft: 8 }}>画布x宽度：</span>
-          <InputNumber
-            value={x}
-            onChange={(value) => setX(value || 0)}
-            max={800}
-          />
-          <span style={{ marginLeft: 8 }}>画布y宽度：</span>
-          <InputNumber
-            key="y"
-            value={y}
-            onChange={(value) => setY(value || 0)}
-          />
-        </>
-      ),
-      [setX, setY, x, y],
-    );
+    } = UseStore(props, ref);
 
     // 右侧栏菜单
     const tabsOptions = [
       {
         value: "control",
-        label: "控件属性",
+        label: "控件屬性",
         render: handleRenderRuleForm,
       },
       {
         value: "form",
-        label: "表单属性",
+        label: "表單屬性",
         render: () => <RuleList formConfig={form} onChange={setForm} />,
       },
     ];
@@ -70,47 +47,56 @@ export const CustomForm = React.forwardRef(
     return (
       <div className="custom-form-layout" style={{ width, height }}>
         <div className="custom-form-left-sider">
+          <div className="custom-form-left-sider-header">控件</div>
           <div className="custom-form-component-layout">
-            {COMPONENTS.map((item) => {
-              return (
-                <div
-                  className="custom-form-component"
-                  key={item.type}
-                  id={item.id}
-                  draggable={!ruleFormRef.current?.check()}
-                  style={{
-                    cursor: !ruleFormRef.current?.check()
-                      ? "not-allowed"
-                      : "grab",
-                  }}
-                  onDragStart={() => handleComponentDragStart(item.id)}
-                >
-                  {item.title}
+            {category.map((item) => (
+              <div key={item.type}>
+                <div className="custom-form-component-category">
+                  {item.name}
                 </div>
-              );
-            })}
+                <div className="custom-form-component-category-layout">
+                  {item.component.map(({ type, id, title, icont }) => (
+                    <div
+                      className="custom-form-component"
+                      key={type}
+                      id={id}
+                      draggable={!notAllowed}
+                      style={{
+                        cursor: notAllowed ? "not-allowed" : "grab",
+                      }}
+                      onDragStart={() => handleComponentDragStart(id)}
+                    >
+                      {icont || <AppstoreOutlined />}
+                      <span className="custom-form-component-name">
+                        {title}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
         <div className="custom-form-canvas-layout">
-          <div className="custom-form-canvas-header">{canvasHeader}</div>
           <div
             id="custom-form-canvas"
-            style={{ width: x, height: y }}
             onDragLeave={handleCursorNotAllowed}
             onDragOver={handleCanvasDragOver}
             onDrop={handleCanvasDrop}
           >
-            {form.map((item) => (
-              <FormItem
-                key={item.id}
-                current={item}
-                brother={form}
-                componentList={COMPONENTS}
-                onChange={setForm}
-                draggingId={draggingId}
-                onChangeDraggingId={handleUpdateDraggingId}
-              />
-            ))}
+            <div style={{ margin: 16 }}>
+              {form.map((item) => (
+                <FormItem
+                  key={item.id}
+                  current={item}
+                  brother={form}
+                  componentList={COMPONENTS}
+                  onChange={setForm}
+                  draggingId={draggingId}
+                  onChangeDraggingId={handleUpdateDraggingId}
+                />
+              ))}
+            </div>
           </div>
         </div>
         <div className="custom-form-right-sider">

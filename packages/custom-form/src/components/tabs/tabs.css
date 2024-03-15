@@ -1,3 +1,9 @@
+:root {
+  --border-color: rgba(231, 232, 238, 1);
+  --table-color: rgba(246, 246, 250, 1);
+  --title-color: rgba(52, 42, 94, 1);
+  --text-color: rgba(102, 103, 125, 1);
+}
 .custom-form-tabs {
   display: flex;
   flex-direction: column;
@@ -6,24 +12,34 @@
   height: 100%;
 }
 .custom-form-tabs-header {
-  border: 1px solid #ccc;
   display: flex;
   flex-direction: row;
+  position: relative;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
 }
 .custom-form-tabs-content{
   flex: 1;
   overflow-y: auto;
 }
 .custom-form-tab-item {
-  flex: 1;
   padding: 8px 16px;
-  border-right: 1px solid #ccc;
   cursor: pointer;
+  color: var(--text-color);
 }
 .custom-form-tabs .custom-form-tabs-header .custom-form-tab-item:last-child {
   border-right: none;
 }
 .custom-form-tab-active {
-  background-color: plum;
-  color: #fff;
+  color: var(--title-color);
+  font-weight: 600;
+}
+.custom-form-tab-active::before{
+  background-color: var(--title-color);
+  content: " ";
+  width: 64px;
+  height: 4px;
+  position: absolute;
+  bottom: 0px;
+  border-radius: 2px;
 }

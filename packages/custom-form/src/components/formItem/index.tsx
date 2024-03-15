@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { CloseOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import * as R from "ramda";
 import React from "react";
 
@@ -134,7 +134,7 @@ export const FormItem = React.memo((props: IFormItemProps) => {
       onDragStart={handleCursorGrabbing}
     >
       {draggingId === id && (
-        <CloseOutlined
+        <DeleteOutlined
           className={"custom-form-item-delete"}
           onClick={handleDelete}
         />
