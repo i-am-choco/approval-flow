@@ -110,9 +110,9 @@
   .ant-input-outlined.ant-input-disabled {
     color: #000;
   }
-
-  .custom-form-item:has(.custom-form-component-data-range) {
-    background-color: var(--table-color);
-    border-radius: 0px 4px 4px 0px;
-  }
+}
+.custom-form-canvas-empty{
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
+  padding: 32px 0px;
 }

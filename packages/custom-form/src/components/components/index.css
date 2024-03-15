@@ -63,9 +63,27 @@
 }
 
 .custom-form-component-data-range{
-  margin: 8px 16px;
+  padding: 16px;
+  margin: -8px 0px;
+  background-color: var(--table-color);
+  border-radius: 4px;
 }
 
-.custom-form-item-selected .custom-form-component-data-range{
-  margin: 8px 16px 8px 0;
+.custom-form-item-selected .custom-form-component-data-range {
+  background-color: var(--table-color);
+  margin: -8px 0px -8px -16px;
+  padding: 16px;
+  border-radius: 0px 4px 4px 0px;
+}
+
+.custom-form-component-upload{
+  .upload-button {
+    width: max-content;
+    margin-top: 8px;
+    font-size: 12px;
+    padding: 8px 32px;
+    border-radius: 4px;
+    color: rgba(150, 150, 167, 1);
+    border: 1px dashed rgba(231, 232, 238, 1);
+  }
 }

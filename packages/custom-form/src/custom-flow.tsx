@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { AppstoreOutlined } from "@ant-design/icons";
+import { AppstoreOutlined, PlusOutlined } from "@ant-design/icons";
 import React, { ForwardedRef } from "react";
 
 import { COMPONENTS } from "./components/components";
@@ -9,6 +9,12 @@ import { RuleList } from "./components/rule-list";
 import { Tabs } from "./components/tabs/tabs";
 import { CustomFormRef, ICustomFormProps } from "./types/index.types";
 import { UseStore } from "./use-store";
+
+const Empty = () => (
+  <p className="custom-form-canvas-empty">
+    <PlusOutlined /> 點擊或拖拽空間添加到此處
+  </p>
+);
 
 export const CustomForm = React.forwardRef(
   (props: ICustomFormProps, ref: ForwardedRef<CustomFormRef>) => {
@@ -85,17 +91,21 @@ export const CustomForm = React.forwardRef(
             onDrop={handleCanvasDrop}
           >
             <div style={{ margin: 16 }}>
-              {form.map((item) => (
-                <FormItem
-                  key={item.id}
-                  current={item}
-                  brother={form}
-                  componentList={COMPONENTS}
-                  onChange={setForm}
-                  draggingId={draggingId}
-                  onChangeDraggingId={handleUpdateDraggingId}
-                />
-              ))}
+              {form.length ? (
+                form.map((item) => (
+                  <FormItem
+                    key={item.id}
+                    current={item}
+                    brother={form}
+                    componentList={COMPONENTS}
+                    onChange={setForm}
+                    draggingId={draggingId}
+                    onChangeDraggingId={handleUpdateDraggingId}
+                  />
+                ))
+              ) : (
+                <Empty />
+              )}
             </div>
           </div>
         </div>
