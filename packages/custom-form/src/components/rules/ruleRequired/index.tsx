@@ -8,8 +8,8 @@ export const RuleRequired = React.memo((props: IRuleRequiredProps) => {
   const { checked, onChange } = props;
 
   return (
-    <div>
-      <p>校验</p>
+    <div className="custom-form-rule-item">
+      <p className="custom-form-rule-title">校验</p>
       <Checkbox
         checked={checked}
         title="必填"

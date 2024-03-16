@@ -11,9 +11,10 @@ export const RuleNumberFormat = React.memo((props: IRuleNumberFormatProps) => {
   const { value, checked, onChange } = props;
 
   return (
-    <div>
-      <p>格式</p>
+    <div className="custom-form-rule-item">
+      <p className="custom-form-rule-title">格式</p>
       <Select
+        style={{ width: "100%", marginBottom: 8 }}
         options={[{ value: "number", label: "數值" }]}
         defaultValue={"number"}
       />
@@ -24,10 +25,11 @@ export const RuleNumberFormat = React.memo((props: IRuleNumberFormatProps) => {
             onChange(e.target.checked, e.target.checked ? value : 0)
           }
         />
-        <span>保留小數位數</span>
+        <span style={{ marginLeft: 4, marginRight: 4 }}>保留小數位數</span>
         {checked && (
           <InputNumber
             value={value}
+            min={0}
             onChange={(e) => onChange(checked, e || 0)}
             precision={0}
           />

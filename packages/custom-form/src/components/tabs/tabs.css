@@ -20,6 +20,7 @@
 }
 .custom-form-tabs-content{
   flex: 1;
+  margin: 20px;
   overflow-y: auto;
 }
 .custom-form-tab-item {

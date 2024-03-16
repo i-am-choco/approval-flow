@@ -49,7 +49,7 @@ export const DEFAULT_RULE = {
   select: {
     title: ["單選框"],
     tips: undefined,
-    options: [],
+    options: ["選項1", "選項2", "選項3"],
     mode: "custom",
     display: "drop",
     formatter: "custom",
@@ -58,7 +58,7 @@ export const DEFAULT_RULE = {
   multipleSelect: {
     title: ["多選框"],
     tips: undefined,
-    options: [],
+    options: ["選項1", "選項2", "選項3"],
     mode: "custom",
     display: "drop",
     formatter: "custom",

@@ -1,7 +1,6 @@
 import { Input } from "antd";
 import { update } from "ramda";
 import React from "react";
-
 interface IRuleTitleProps {
   value: string[];
   onChange: (value: string[]) => void;
@@ -17,16 +16,16 @@ export const RuleTitle = React.memo((props: IRuleTitleProps) => {
   return (
     <div>
       {value.map((item, index) => (
-        <div key={`rule-title-${index}`}>
-          <p>
-            <span>*</span>
-            <span>{value.length === 1 ? "标题" : `标题${index + 1}`}</span>
+        <div className="custom-form-rule-item" key={`rule-title-${index}`}>
+          <p className="custom-form-rule-title">
+            <span className="required">*</span>
+            <span>{value.length === 1 ? "標題" : `標題${index + 1}`}</span>
           </p>
           <Input
             status={!item ? "error" : ""}
             count={{ show: true, max: 50 }}
             value={item}
-            placeholder="请输入"
+            placeholder="請輸入"
             onChange={(e) => handleChange(e.target.value, index)}
           />
         </div>

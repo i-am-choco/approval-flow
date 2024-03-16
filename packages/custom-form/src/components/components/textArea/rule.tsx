@@ -15,7 +15,7 @@ export const TextAreaRule = React.forwardRef(
     }));
 
     return (
-      <div>
+      <div className="custom-form-rule-item">
         <RuleTitle
           value={rule?.title || [""]}
           onChange={(title) =>
