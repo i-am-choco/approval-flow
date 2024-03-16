@@ -1,7 +1,12 @@
 import "./index.css";
 
-import { CopyOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Drawer, Select } from "antd";
+import {
+  CopyOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { Button, Drawer, Modal, Row, Select } from "antd";
 import * as R from "ramda";
 import React, { useMemo, useState } from "react";
 import {
@@ -14,6 +19,7 @@ import {
 import { BaseRuleType, FormItemConfigType } from "../../types/index.types";
 import {
   DEFAULT_QUERY,
+  getRule,
   RuleBuilder,
   SELECT_OPERATORS,
   validator,
@@ -108,8 +114,10 @@ export const RuleList = React.memo((props: IRuleListProps) => {
 
   const [open, setOpen] = useState<boolean>(false);
 
+  const [formOpen, setFormOpen] = useState<boolean>(false);
+
   const handleClose = () => {
-    setOpen(false);
+    setFormOpen(false);
     setQuery(DEFAULT_QUERY);
     setCurrent(null);
     setDisplayField([]);
@@ -197,6 +205,10 @@ export const RuleList = React.memo((props: IRuleListProps) => {
     setActionType(RuleActionEnum.add);
   };
 
+  const handleAddRule = () => {
+    setQuery({ ...query, rules: [...query.rules, getRule()] });
+  };
+
   const transformRuleToText = (rule: string, data: BaseRuleType[]) => {
     const rules: RuleGroupType = parseCEL(rule);
 
@@ -230,24 +242,15 @@ export const RuleList = React.memo((props: IRuleListProps) => {
     );
   };
 
-  const title = useMemo(() => {
-    switch (actionType) {
-      case RuleActionEnum.add:
-        return "增加";
-      case RuleActionEnum.edit:
-        return "编辑";
-      case RuleActionEnum.copy:
-        return "复制";
-      default:
-        return "";
-    }
-  }, [actionType]);
-
   const footer = (
-    <div>
-      <Button onClick={handleClose}>取消</Button>
-      <Button onClick={handleSave}>保存</Button>
-    </div>
+    <>
+      <div className="cancel" onClick={handleClose}>
+        取消
+      </div>
+      <div className="save" onClick={handleSave}>
+        保存
+      </div>
+    </>
   );
 
   // 字段隐藏规则显示关联条件的字段
@@ -302,32 +305,61 @@ export const RuleList = React.memo((props: IRuleListProps) => {
 
   return (
     <div className="custom-form-rule-list">
-      <p>字段隱藏規則</p>
-      {list?.map((item, index) => (
-        <div key={index} className="custom-form-rule-list-item">
-          {transformRuleToText(item.rules, item.value)}
-          {!item.disabled && (
-            <div className="custom-form-rule-list-operation">
-              <EditOutlined onClick={() => handleEdit(item)} />
-              <CopyOutlined onClick={() => handleCopy(item)} />
-              <DeleteOutlined onClick={() => handleDelete(item)} />
-            </div>
-          )}
-        </div>
-      ))}
-      <Button onClick={handleAdd}>添加顯隱規則</Button>
+      <p className="custom-form-rule-list-title">字段隱藏規則</p>
+
+      <Button className="custom-form-rule-list-button" onClick={handleAdd}>
+        編輯
+      </Button>
       <Drawer
-        title={title}
-        width={980}
+        title={"字段隱藏規則"}
+        width={960}
         open={open}
-        footer={footer}
-        onClose={handleClose}
+        maskClosable={false}
+        className="custom-form-fields-drawer"
+        onClose={() => setOpen(false)}
       >
-        <div>满足一下所有条件时</div>
+        <Button type="primary" onClick={() => setFormOpen(true)}>
+          <PlusOutlined />
+          添加顯隱規則
+        </Button>
+        {list?.map((item, index) => (
+          <div key={index} className="custom-form-rule-list-item">
+            {transformRuleToText(item.rules, item.value)}
+            {!item.disabled && (
+              <div className="custom-form-rule-list-operation">
+                <EditOutlined onClick={() => handleEdit(item)} />
+                <CopyOutlined onClick={() => handleCopy(item)} />
+                <DeleteOutlined onClick={() => handleDelete(item)} />
+              </div>
+            )}
+          </div>
+        ))}
+      </Drawer>
+      <Modal
+        title={"字段隱藏規則"}
+        width={750}
+        open={formOpen}
+        footer={footer}
+        maskClosable={false}
+        onCancel={handleClose}
+        className="custom-form-fields-modal"
+      >
+        <div className="custom-form-fields-title">
+          满足一下所有条件时
+          <span onClick={handleAddRule} className="custom-form-add-condition">
+            添加條件
+          </span>
+        </div>
+        <Row style={{ cursor: "default", marginBottom: 8 }}>
+          <div style={{ width: 180, marginRight: 16 }}>字段</div>
+          <div style={{ width: 180, marginRight: 16 }}>關係</div>
+          <div>目標值</div>
+        </Row>
         <RuleBuilder fields={fields} query={query} onChange={setQuery} />
-        <p>显示以下字段</p>
+        <p>顯示以下字段</p>
         <Select
-          style={{ width: 300 }}
+          className="custom-form-fields-select"
+          style={{ width: "100%" }}
           mode="multiple"
           options={options}
           value={displayField}
@@ -335,7 +367,7 @@ export const RuleList = React.memo((props: IRuleListProps) => {
             setDisplayField(value);
           }}
         />
-      </Drawer>
+      </Modal>
     </div>
   );
 });

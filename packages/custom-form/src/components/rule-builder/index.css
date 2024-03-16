@@ -7,9 +7,23 @@
 }
 .custom-form-query-builder-fields {
   margin-right: 8px;
+  margin-right: 16px;
+  .ant-select {
+    width: 180px;
+  }
+  .ant-select-selector {
+    border-color: var(--border-color) !important;
+  }
 }
 .custom-form-query-builder-operator {
   margin-right: 8px;
+  margin-right: 16px;
+  .ant-select {
+    width: 180px;
+  }
+  .ant-select-selector {
+    border-color: var(--border-color) !important;
+  }
 }
 .custom-form-query-builder-delete {
   font-size: 18px;
@@ -20,5 +34,8 @@
   flex: 1;
   .ant-select {
     width: 100%;
+  }
+  .ant-select-selector {
+    border-color: var(--border-color) !important;
   }
 }

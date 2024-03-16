@@ -1,6 +1,22 @@
+:root {
+  --title-color: rgba(50, 50, 73, 1);
+  --border-color: rgba(231, 232, 238, 1);
+  --close-color: rgba(187, 185, 207, 1);
+  --button-color: rgba(96, 93, 236, 1);
+}
+
 .custom-form-rule-list {
-  margin: 8px;
   text-align: left;
+}
+.custom-form-rule-list-title {
+  font-size: 14px;
+  margin-top: 0px;
+  color: var(--title-color);
+}
+.custom-form-rule-list-button {
+  color: var(--title-color);
+  border: 1px solid var(--title-color);
+  border-radius: 24px;
 }
 .custom-form-rule-list-item {
   display: flex;
@@ -26,4 +42,91 @@
 
 .custom-form-rule-list-text p:last-child {
   margin-bottom: 0px;
+}
+.custom-form-fields-drawer {
+  .ant-drawer-header-title {
+    flex-direction: row-reverse;
+    font-size: 20px;
+  }
+  .ant-drawer-body .ant-btn-primary {
+    background: var(--title-color);
+    border-radius: 24px;
+    &:hover {
+      background: var(--title-color);
+    }
+  }
+}
+.custom-form-fields-modal {
+  position: relative;
+  .ant-modal-content {
+    padding: 0px;
+  }
+  .ant-modal-title {
+    color: var(--title-color);
+  }
+  .ant-modal-header {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .ant-modal-close {
+    position: absolute;
+    top: -24px;
+    right: 0px;
+    border-radius: 50%;
+    border: 1px solid var(--close-color);
+    width: 16px;
+    height: 16px;
+  }
+  .ant-modal-close-x {
+    color: var(--close-color);
+    font-size: 8px;
+  }
+  .ant-modal-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 24px;
+
+    .cancel {
+      padding: 8px 16px;
+      color: var(--title-color);
+      font-size: 14px;
+      margin-right: 32px;
+      cursor: pointer;
+    }
+    .save {
+      text-align: center;
+      cursor: pointer;
+      background-color: var(--title-color);
+      color: #fff;
+      border-radius: 24px;
+      padding: 8px 16px;
+      width: 60px;
+    }
+  }
+
+  .ant-modal-body {
+    padding: 16px 24px;
+  }
+
+  .custom-form-fields-title {
+    margin-bottom: 16px;
+  }
+  .custom-form-add-condition {
+    color: var(--button-color);
+    border: 1px solid var(--button-color);
+    padding: 8px 16px;
+    border-radius: 24px;
+    margin-left: 16px;
+    cursor: pointer;
+  }
+
+  .custom-form-fields-select {
+    .ant-select-selector {
+      border-color: var(--border-color) !important;
+    }
+  }
 }
