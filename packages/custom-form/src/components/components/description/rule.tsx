@@ -13,21 +13,25 @@ export const DescriptionRule = React.forwardRef(
 
     return (
       <div>
-        <p>说明文字</p>
-        <Input.TextArea
-          value={rule?.description || ""}
-          onChange={(e) =>
-            onChange && onChange({ ...rule, description: e.target.value })
-          }
-          count={{ show: true, max: 1000 }}
-        />
-        <p>仅在申请页面显示</p>
-        <Switch
-          value={rule?.onlyApplication || false}
-          onChange={(onlyApplication) =>
-            onChange && onChange({ ...rule, onlyApplication })
-          }
-        />
+        <div className="custom-form-rule-item">
+          <p className="custom-form-rule-title">说明文字</p>
+          <Input.TextArea
+            value={rule?.description || ""}
+            onChange={(e) =>
+              onChange && onChange({ ...rule, description: e.target.value })
+            }
+            count={{ show: true, max: 1000 }}
+          />
+        </div>
+        <div className="custom-form-rule-item">
+          <p className="custom-form-rule-title">仅在申请页面显示</p>
+          <Switch
+            value={rule?.onlyApplication || false}
+            onChange={(onlyApplication) =>
+              onChange && onChange({ ...rule, onlyApplication })
+            }
+          />
+        </div>
       </div>
     );
   },

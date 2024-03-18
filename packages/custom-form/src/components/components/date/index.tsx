@@ -8,7 +8,11 @@ export const Date = React.memo((props: IRenderFormProps) => {
   return (
     <div>
       <p>{rule?.title?.[0] || ""}</p>
-      <DatePicker />
+      <DatePicker
+        disabled
+        placeholder="請選擇"
+        style={{ width: "100%", pointerEvents: "none" }}
+      />
     </div>
   );
 });

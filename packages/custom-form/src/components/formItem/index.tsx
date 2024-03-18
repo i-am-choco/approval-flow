@@ -1,6 +1,6 @@
 import "./index.css";
 
-import { CloseOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import * as R from "ramda";
 import React from "react";
 
@@ -134,33 +134,45 @@ export const FormItem = React.memo((props: IFormItemProps) => {
       onDragStart={handleCursorGrabbing}
     >
       {draggingId === id && (
-        <CloseOutlined
+        <DeleteOutlined
           className={"custom-form-item-delete"}
           onClick={handleDelete}
         />
       )}
       {getForm(type, { rule: current.rule })}
-      <div
-        id={`${id}-children`}
-        onDrop={(e) => handleDrop(true, e)}
-        onDragOver={handleDragOver}
-      >
-        {children?.map((item) => (
-          <FormItem
-            {...props}
-            key={item.id}
-            current={item}
-            brother={children}
-            onChange={handleChildrenChange}
-          />
-        ))}
-        {droppable && (
-          <div className="custom-form-component-list-drag-tips">
-            拖拽控件到此处
-          </div>
-        )}
+      <div className={children?.length ? "custom-form-component-children" : ""}>
+        <div
+          id={`${id}-children`}
+          onDrop={(e) => handleDrop(true, e)}
+          onDragOver={handleDragOver}
+        >
+          {children?.map((item) => (
+            <FormItem
+              {...props}
+              key={item.id}
+              current={item}
+              brother={children}
+              onChange={handleChildrenChange}
+            />
+          ))}
+          {droppable && (
+            <div
+              className={
+                children?.length
+                  ? "custom-form-component-children-tips"
+                  : "custom-form-component-tips"
+              }
+            >
+              拖拽控件添加到此處
+            </div>
+          )}
+        </div>
       </div>
-      {current.type === "list" && <div>{current?.rule?.action || "添加"}</div>}
+      {current.type === "list" && (
+        <p className="custom-form-component-add">
+          {current?.rule?.action || "添加"}
+        </p>
+      )}
     </div>
   );
 });

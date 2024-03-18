@@ -36,7 +36,9 @@ export type RuleFormRef = {
 
 export type FormComponentType = {
   type: string;
+  group: string;
   id: string;
+  icont?: ReactNode;
   droppable?: boolean;
   title: string;
   data: Omit<BaseRuleType, "id" | "label">;
@@ -62,9 +64,14 @@ export type DataType = {
   children: DataType[];
 };
 
+export type CategoryType = Array<{ type: string; name: string }>;
+
 export interface ICustomFormProps {
   width: string;
   height: string;
+  initalValue?: FormItemConfigType[];
+  customsComponent?: FormComponentType[];
+  customsCategory?: CategoryType;
 }
 export type CustomFormRef = {
   getFormConfigData: () => FormItemConfigType[];

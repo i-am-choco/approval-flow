@@ -3,13 +3,3 @@
     padding: 8px;
     text-align: left;
 }
-.custom-form-component-list-drag-tips{
-    border: 1px dashed #ccc;
-    min-height: 60px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #ccc;
-    margin-top: 8px;
-}

@@ -9,7 +9,11 @@ export const TextArea = React.memo((props: IRenderFormProps) => {
   return (
     <div>
       <p>{rule?.title?.[0] || ""}</p>
-      <Input.TextArea />
+      <Input.TextArea
+        disabled
+        placeholder="請輸入"
+        style={{ pointerEvents: "none" }}
+      />
     </div>
   );
 });

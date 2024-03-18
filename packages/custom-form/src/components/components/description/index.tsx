@@ -5,6 +5,10 @@ import { IRenderFormProps } from "../../../types/index.types";
 
 export const Description = React.memo((props: IRenderFormProps) => (
   <div>
-    <Input.TextArea value={props.rule?.description} />
+    <Input.TextArea
+      disabled
+      value={props.rule?.description}
+      style={{ pointerEvents: "none" }}
+    />
   </div>
 ));

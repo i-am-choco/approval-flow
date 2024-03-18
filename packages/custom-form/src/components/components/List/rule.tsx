@@ -22,14 +22,16 @@ export const ListRule = React.forwardRef(
             onChange({ ...rule, title, label: title?.join("-") || rule?.label })
           }
         />
-        <p>動作名稱</p>
-        <Input
-          value={rule?.action}
-          onChange={(e) =>
-            onChange && onChange({ ...rule, action: e.target.value })
-          }
-          count={{ show: true, max: 50 }}
-        />
+        <div className="custom-form-rule-item">
+          <p className="custom-form-rule-title">動作名稱</p>
+          <Input
+            value={rule?.action}
+            onChange={(e) =>
+              onChange && onChange({ ...rule, action: e.target.value })
+            }
+            count={{ show: true, max: 50 }}
+          />
+        </div>
       </div>
     );
   },

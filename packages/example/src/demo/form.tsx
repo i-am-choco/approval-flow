@@ -5,7 +5,7 @@ export const Form = () => {
   const ref = useRef<CustomFormRef | null>(null);
 
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column" }}>
       <Button
         onClick={() => {
           console.log(ref.current?.getFormConfigData());
@@ -13,7 +13,7 @@ export const Form = () => {
       >
         保存
       </Button>
-      <CustomForm ref={ref} width="100%" height="calc(100vh - 32px)" />
+      <CustomForm ref={ref} width="100%" height="100%" />
     </div>
   );
 };

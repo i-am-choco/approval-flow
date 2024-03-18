@@ -11,10 +11,17 @@ import QueryBuilder, {
   RuleType,
 } from "react-querybuilder";
 
+export const getRule = () => ({
+  id: crypto.randomUUID(),
+  field: "",
+  operator: "",
+  value: "",
+});
+
 export const DEFAULT_QUERY: RuleGroupType = {
   id: crypto.randomUUID(),
   combinator: "and",
-  rules: [],
+  rules: [getRule()],
 };
 
 export const SELECT_OPERATORS = [
@@ -56,6 +63,7 @@ export const RuleBuilder = React.memo((props: IRuleBuilderProps) => {
         query={query}
         fields={fields}
         controlClassnames={{
+          addRule: "custom-form-query-builder-hidden",
           addGroup: "custom-form-query-builder-hidden",
           combinators: "custom-form-query-builder-hidden",
           rule: "custom-form-query-builder-rule",

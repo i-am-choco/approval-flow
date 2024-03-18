@@ -49,38 +49,64 @@ export const RuleOptions = React.memo((props: IRuleOptionsProps) => {
   };
 
   return (
-    <div>
-      <p>选项</p>
-      <Select options={[{ value: "custom", label: "自定義" }]} value={value} />
-      {options.map((item, index) => {
-        return (
-          <Row
-            key={`rule-options-${index}`}
-            draggable={draggingIndex === index}
-            onDrop={() => handleDrop(index)}
-            onDragOver={(e) => e.preventDefault()}
-            onDragEnd={() => setDraggingIndex(null)}
-          >
-            <Input
-              disabled={mode === "module"}
-              value={item}
-              onChange={(e) => handleEdit(e.target.value, index)}
-            />
-            <HolderOutlined onMouseDown={() => setDraggingIndex(index)} />
-            <DeleteOutlined onClick={() => handleDelete(index)} />
-          </Row>
-        );
-      })}
-      <span onClick={hanldeAdd}>添加选项</span>
-      <p>展示方式</p>
-      <Radio.Group
-        value={display}
-        onChange={(e) => onDisplayChange(e.target.value)}
-        options={[
-          { value: "drop", label: "下拉" },
-          { value: "tile", label: "平铺" },
-        ]}
-      />
+    <div className="custom-form-rule-select">
+      <div className="custom-form-rule-item">
+        <p className="custom-form-rule-title">选项</p>
+        <Select
+          style={{ width: "100%", marginBottom: 8 }}
+          options={[{ value: "custom", label: "自定義" }]}
+          value={value}
+        />
+        {options.map((item, index) => {
+          return (
+            <Row
+              className="custom-form-rule-select-item"
+              key={`rule-options-${index}`}
+              draggable={draggingIndex === index}
+              onDrop={() => handleDrop(index)}
+              onDragOver={(e) => e.preventDefault()}
+              onDragEnd={() => setDraggingIndex(null)}
+            >
+              <Input
+                disabled={mode === "module"}
+                value={item}
+                style={{ flex: 1 }}
+                onChange={(e) => handleEdit(e.target.value, index)}
+              />
+              <HolderOutlined
+                className="icont"
+                style={{ cursor: "grab" }}
+                onMouseDown={() => setDraggingIndex(index)}
+              />
+              <DeleteOutlined
+                className="icont"
+                onClick={() => handleDelete(index)}
+              />
+            </Row>
+          );
+        })}
+        <span
+          className={
+            mode === "module" && options.length === moduleOptions?.length
+              ? "options-add-disabled"
+              : "options-add"
+          }
+          onClick={hanldeAdd}
+        >
+          添加选项
+        </span>
+      </div>
+      <div className="custom-form-rule-item">
+        <p className="custom-form-rule-title">展示方式</p>
+        <Radio.Group
+          value={display}
+          onChange={(e) => onDisplayChange(e.target.value)}
+          options={[
+            { value: "drop", label: "下拉" },
+            { value: "tile", label: "平铺" },
+          ]}
+        />
+      </div>
     </div>
   );
 });
