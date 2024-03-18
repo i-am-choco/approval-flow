@@ -73,7 +73,7 @@
 .custom-form-component-category-layout {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: start;
 }
 .custom-form-component {
   width: calc(50% - 25px);
@@ -87,6 +87,12 @@
   margin-bottom: 10px;
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+.custom-form-component:nth-child(2n+1){
+  margin-right: 5px;
+}
+.custom-form-component:nth-child(2n){
+  margin-left: 5px;
 }
 .custom-form-component-name {
   margin-left: 10px;
