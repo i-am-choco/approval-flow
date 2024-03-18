@@ -13,7 +13,23 @@ export const Form = () => {
       >
         保存
       </Button>
-      <CustomForm ref={ref} width="100%" height="100%" />
+      <CustomForm
+        initalValue={[
+          {
+            id: "50e53c422bbc41efaf2ddf806affca37",
+            type: "textArea",
+            rule: {
+              id: "50e53c422bbc41efaf2ddf806affca37",
+              label: "多行輸入框",
+              title: ["多行輸入框"],
+              required: false,
+            },
+          },
+        ]}
+        ref={ref}
+        width="100%"
+        height="100%"
+      />
     </div>
   );
 };

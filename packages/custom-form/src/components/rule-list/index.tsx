@@ -126,12 +126,12 @@ export const RuleList = React.memo((props: IRuleListProps) => {
   const handleSave = () => {
     if (
       !query.rules.length ||
-      query.rules.some(
-        (item) => !!R.pathOr(false, ["value"], item) || !displayField.length,
-      )
+      query.rules.some((item) => !R.pathOr(false, ["value"], item)) ||
+      !displayField.length
     ) {
       return;
     }
+
     const displayRule = formatQuery(query, "cel");
 
     const ids =
@@ -182,14 +182,14 @@ export const RuleList = React.memo((props: IRuleListProps) => {
   };
 
   const handleCopy = (value: RuleListType) => {
-    setOpen(true);
+    setFormOpen(true);
     setCurrent(value);
     setActionType(RuleActionEnum.copy);
     setQuery(parseCEL(value.rules));
   };
 
   const handleEdit = (value: RuleListType) => {
-    setOpen(true);
+    setFormOpen(true);
     setCurrent(value);
     setActionType(RuleActionEnum.edit);
     const rule = parseCEL(value.rules);
@@ -229,15 +229,13 @@ export const RuleList = React.memo((props: IRuleListProps) => {
           };
 
           return (
-            <p key={index}>
-              当{getName(value.field)}
-              {getOperator(value.operator)}
-              {value.value}
-              {index === rules.rules.length - 1 ? "时" : "且"}
-            </p>
+            <span key={index}>
+              當[{getName(value.field)}]{getOperator(value.operator)}[
+              {value.value}]{index === rules.rules.length - 1 ? "時，" : "且，"}
+            </span>
           );
         })}
-        <p>显示{data.map((item) => item.label)}</p>
+        <span>顯示[{data.map((item) => item.label)}]</span>
       </div>
     );
   };
@@ -318,7 +316,11 @@ export const RuleList = React.memo((props: IRuleListProps) => {
         className="custom-form-fields-drawer"
         onClose={() => setOpen(false)}
       >
-        <Button type="primary" onClick={() => setFormOpen(true)}>
+        <Button
+          style={{ marginBottom: 24 }}
+          type="primary"
+          onClick={() => setFormOpen(true)}
+        >
           <PlusOutlined />
           添加顯隱規則
         </Button>
