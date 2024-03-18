@@ -69,6 +69,7 @@ export type CategoryType = Array<{ type: string; name: string }>;
 export interface ICustomFormProps {
   width: string;
   height: string;
+  initalValue?: FormItemConfigType[];
   customsComponent?: FormComponentType[];
   customsCategory?: CategoryType;
 }

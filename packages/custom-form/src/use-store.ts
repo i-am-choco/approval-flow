@@ -22,7 +22,9 @@ export const UseStore = (
 ) => {
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
-  const [form, setForm] = useState<FormItemConfigType[]>([]);
+  const [form, setForm] = useState<FormItemConfigType[]>(
+    props.initalValue || [],
+  );
 
   const [tabKey, setTabKey] = useState<string>("control");
 
