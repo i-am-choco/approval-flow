@@ -26,6 +26,7 @@
 #custom-form-canvas {
   width: 381px;
   height: 584px;
+  margin: 20px;
   border-radius: 1px;
   border: 1px solid var(--border-color);
   background: #fff;

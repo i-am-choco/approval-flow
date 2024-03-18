@@ -7,7 +7,6 @@
 .custom-form-tabs {
   display: flex;
   flex-direction: column;
-  position: absolute;
   width: 100%;
   height: 100%;
 }
@@ -21,7 +20,6 @@
 .custom-form-tabs-content{
   flex: 1;
   margin: 20px;
-  overflow-y: auto;
 }
 .custom-form-tab-item {
   padding: 8px 16px;
