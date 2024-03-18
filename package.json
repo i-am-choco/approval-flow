@@ -10,9 +10,11 @@
     "packages/*"
   ],
   "scripts": {
+    "dev:approval-flow": "lerna exec --scope=approval-flow -- npm run dev",
+    "dev:custom-form": "lerna exec --scope=custom-form -- npm run dev",
+    "dev:example": "lerna exec --scope=example -- npm run start",
     "build:approval-flow": "lerna exec --scope=approval-flow -- npm run build",
     "build:custom-form": "lerna exec --scope=custom-form -- npm run build",
-    "dev:example": "lerna exec --scope=example -- npm run start",
     "lint": "lerna exec -- eslint ."
   },
   "author": "Choco Leong",

@@ -69,6 +69,7 @@
     "url": "git+https://github.com/i-am-choco/approval-flow.git"
   },
   "scripts": {
+    "dev": "rollup -c -w",
     "test": "node ./__tests__/custom-form.test.js",
     "build": "rollup -c"
   },

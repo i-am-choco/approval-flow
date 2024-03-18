@@ -42,6 +42,9 @@ export default [
       }),
       postcss(),
     ],
+    watch: {
+      buildDelay: 500,
+    },
   },
   {
     input: "./dist/esm/index.d.ts",
